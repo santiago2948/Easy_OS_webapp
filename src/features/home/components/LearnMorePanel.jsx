@@ -1,6 +1,10 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Turnstile } from '@marsidev/react-turnstile'
+import { createLead } from '../api/createLead'
 import { QUOTE_PATH } from '../content/landingNarrative'
+
+const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
 const DIAL_CODES = [
   { value: '+57', label: '+57' },
@@ -16,8 +20,21 @@ const DIAL_CODES = [
 export default function LearnMorePanel() {
   const [step, setStep] = useState(1)
   const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState('')
+  const [captchaToken, setCaptchaToken] = useState('')
   const [contact, setContact] = useState({ countryCode: '+57', phone: '' })
   const nameInputRef = useRef(null)
+  const turnstileRef = useRef(null)
+
+  const clearCaptcha = () => {
+    setCaptchaToken('')
+  }
+
+  const resetCaptcha = () => {
+    clearCaptcha()
+    turnstileRef.current?.reset()
+  }
 
   const handlePhoneStep = (event) => {
     event.preventDefault()
@@ -27,27 +44,37 @@ export default function LearnMorePanel() {
 
     if (!phone) return
 
+    setErrorMessage('')
     setContact({ countryCode, phone })
     setStep(2)
     requestAnimationFrame(() => nameInputRef.current?.focus())
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    const name = event.currentTarget.name.value.trim()
-    if (!name) return
+    const form = event.currentTarget
+    const name = form.name.value.trim()
 
-    console.info('[lead]', {
-      name,
-      countryCode: contact.countryCode,
-      phone: contact.phone,
-      fullPhone: `${contact.countryCode}${contact.phone.replace(/\s/g, '')}`,
-    })
+    if (!name || !captchaToken || submitting) return
 
-    setSubmitted(true)
-    setStep(1)
-    setContact({ countryCode: '+57', phone: '' })
-    event.currentTarget.reset()
+    setSubmitting(true)
+    setErrorMessage('')
+
+    const phoneNumber = `${contact.countryCode}${contact.phone.replace(/\s/g, '')}`
+
+    try {
+      await createLead({ name, phoneNumber, captchaToken })
+      setSubmitted(true)
+      setStep(1)
+      setContact({ countryCode: '+57', phone: '' })
+      clearCaptcha()
+      form.reset()
+    } catch (error) {
+      setErrorMessage(error.message || 'No se pudo enviar el formulario')
+      resetCaptcha()
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -96,23 +123,56 @@ export default function LearnMorePanel() {
               </button>
             </form>
           ) : (
-            <form className="lp-trust-cta__form" onSubmit={handleSubmit} noValidate>
-              <label className="visually-hidden" htmlFor="trust-name">
-                Nombre
-              </label>
-              <input
-                ref={nameInputRef}
-                id="trust-name"
-                type="text"
-                name="name"
-                className="lp-trust-cta__input"
-                autoComplete="name"
-                placeholder="Tu nombre"
-                required
-              />
-              <button type="submit" className="btn btn--ghost btn--ghost-light lp-trust-cta__send">
-                Enviar
-              </button>
+            <form className="lp-trust-cta__form lp-trust-cta__form--submit" onSubmit={handleSubmit} noValidate>
+              <div className="lp-trust-cta__fields">
+                <label className="visually-hidden" htmlFor="trust-name">
+                  Nombre
+                </label>
+                <input
+                  ref={nameInputRef}
+                  id="trust-name"
+                  type="text"
+                  name="name"
+                  className="lp-trust-cta__input"
+                  autoComplete="name"
+                  placeholder="Tu nombre"
+                  required
+                  disabled={submitting}
+                />
+                <button
+                  type="submit"
+                  className="btn btn--ghost btn--ghost-light lp-trust-cta__send"
+                  disabled={!captchaToken || submitting || !TURNSTILE_SITE_KEY}
+                >
+                  {submitting ? 'Enviando…' : 'Enviar'}
+                </button>
+              </div>
+
+              {TURNSTILE_SITE_KEY ? (
+                <div className="lp-trust-cta__captcha">
+                  <Turnstile
+                    ref={turnstileRef}
+                    siteKey={TURNSTILE_SITE_KEY}
+                    options={{
+                      theme: 'dark',
+                      size: 'flexible',
+                    }}
+                    onSuccess={setCaptchaToken}
+                    onExpire={clearCaptcha}
+                    onError={clearCaptcha}
+                  />
+                </div>
+              ) : (
+                <p className="lp-trust-cta__error" role="alert">
+                  Falta configurar VITE_TURNSTILE_SITE_KEY.
+                </p>
+              )}
+
+              {errorMessage ? (
+                <p className="lp-trust-cta__error" role="alert">
+                  {errorMessage}
+                </p>
+              ) : null}
             </form>
           )}
 
