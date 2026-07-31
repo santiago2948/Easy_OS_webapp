@@ -1,0 +1,92 @@
+:root {
+  --navy: #003d4c;
+  --navy-deep: #002833;
+  --cyan: #00a4bd;
+  --cyan-bright: #00c4d6;
+  --ink: #1a2b32;
+  --ink-muted: #4a6068;
+  --fog: #e8f4f6;
+  --fog-deep: #c5e4ea;
+  --white: #ffffff;
+  --sea: #007a8f;
+  --sky-top: #003d4c;
+  --sky-mid: #0a6b7c;
+  --sky-low: #b8e4eb;
+
+  --sans: 'Figtree', sans-serif;
+  --display: 'Syne', sans-serif;
+
+  font: 17px/1.5 var(--sans);
+  color: var(--ink);
+  background: var(--white);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  min-height: 100svh;
+  margin: 0;
+  text-align: left;
+  border: none;
+  display: block;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--display);
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

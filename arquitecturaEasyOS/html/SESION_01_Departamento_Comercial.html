@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EASY — Sesión 1: Departamento Comercial</title>
+<style>
+:root {
+  --navy:#1C2B47; --teal:#1BB5D4; --teal-d:#1590AA; --gold:#E8B84B;
+  --bg:#0D1117; --bg2:#161B22; --bg3:#21262D; --border:#30363D;
+  --text:#E6EDF3; --muted:#8B949E; --green:#3FB950; --red:#F85149;
+  --orange:#DB6D28; --purple:#A371F7;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  background:var(--bg);color:var(--text);font-size:13px;line-height:1.6;}
+.topbar{background:var(--navy);border-bottom:2px solid var(--teal);
+  padding:12px 32px;display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;}
+.dept-badge{background:var(--teal);color:#000;font-weight:900;font-size:11px;
+  padding:3px 10px;border-radius:4px;letter-spacing:0.5px;}
+.page{max-width:1160px;margin:0 auto;padding:24px 32px 80px;}
+h2{font-size:17px;font-weight:700;color:var(--text);}
+h3{font-size:13px;font-weight:700;color:var(--teal);margin-bottom:8px;}
+.sh{display:flex;align-items:center;gap:10px;margin-bottom:18px;
+  padding-bottom:10px;border-bottom:1px solid var(--border);}
+.sn{background:var(--teal);color:#000;font-weight:900;font-size:11px;
+  width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ss{font-size:11px;color:var(--muted);}
+.sec{margin-bottom:44px;}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:14px 18px;margin-bottom:10px;}
+.col2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.col3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.col4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:10px;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{background:var(--bg3);color:var(--teal);text-align:left;padding:7px 10px;
+  font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;
+  border-bottom:1px solid var(--border);}
+td{padding:7px 10px;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:last-child td{border:none;}
+.badge{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;margin-right:3px;}
+.v{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3);}
+.h{background:rgba(232,184,75,.15);color:var(--gold);border:1px solid rgba(232,184,75,.3);}
+.p{background:rgba(219,109,40,.15);color:var(--orange);border:1px solid rgba(219,109,40,.3);}
+.chip{display:inline-block;padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;}
+.c-red{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3);}
+.c-green{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3);}
+.c-gold{background:rgba(232,184,75,.15);color:var(--gold);border:1px solid rgba(232,184,75,.3);}
+.c-teal{background:rgba(27,181,212,.15);color:var(--teal);border:1px solid rgba(27,181,212,.3);}
+.c-purple{background:rgba(163,113,247,.15);color:var(--purple);border:1px solid rgba(163,113,247,.3);}
+.note{background:rgba(27,181,212,.07);border-left:3px solid var(--teal);
+  padding:9px 13px;border-radius:0 6px 6px 0;font-size:12px;color:var(--muted);margin:10px 0;}
+.warn{background:rgba(248,81,73,.07);border-left:3px solid var(--red);
+  padding:9px 13px;border-radius:0 6px 6px 0;font-size:12px;margin:10px 0;}
+.krow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:10px 14px;flex:1;min-width:110px;}
+.kl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.kv{font-size:20px;font-weight:800;line-height:1;}
+.ks{font-size:10px;color:var(--muted);margin-top:2px;}
+.ficha{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:16px 20px;margin-bottom:14px;}
+.ficha-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;
+  padding-bottom:10px;border-bottom:1px solid var(--border);}
+.ficha-id{font-size:11px;color:var(--muted);font-family:monospace;}
+.ficha-title{font-size:14px;font-weight:700;}
+.row{display:flex;gap:8px;align-items:flex-start;padding:5px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.row:last-child{border:none;}
+.rl{width:130px;flex-shrink:0;color:var(--muted);font-size:10px;font-weight:700;text-transform:uppercase;padding-top:1px;}
+.rv{flex:1;}
+.state-pill{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;margin:3px;}
+pre{background:var(--bg3);border:1px solid var(--border);border-radius:6px;
+  padding:10px 14px;font-size:11px;color:var(--teal);overflow-x:auto;margin:6px 0;white-space:pre-wrap;}
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:18px 22px;margin:20px 0 36px;}
+.toc-g{display:grid;grid-template-columns:1fr 1fr;gap:5px 24px;}
+.toc-i{font-size:12px;color:var(--muted);display:flex;gap:8px;}
+.toc-n{color:var(--teal);font-weight:700;flex-shrink:0;}
+.diagram-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  padding:16px;margin-bottom:12px;overflow-x:auto;}
+.diagram-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;
+  letter-spacing:1px;margin-bottom:12px;}
+.op-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.op-row:last-child{border:none;}
+.op-who{width:100px;flex-shrink:0;}
+.risk-row{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.risk-row:last-child{border:none;}
+.rn{width:70px;flex-shrink:0;font-weight:700;font-size:11px;}
+.mejora{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-bottom:1px solid var(--border);font-size:12px;}
+.mejora:last-child{border:none;}
+.mprior{width:50px;flex-shrink:0;font-weight:700;}
+.opinion{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px 22px;margin-bottom:12px;}
+.op-t{font-size:14px;font-weight:700;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.dot-g{background:var(--green);} .dot-r{background:var(--red);} .dot-o{background:var(--orange);} .dot-t{background:var(--teal);}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:12px">
+    <div style="color:#fff;font-size:18px;font-weight:900;">easy</div>
+    <div style="color:var(--muted);font-size:11px;">|</div>
+    <span class="dept-badge">SESIÓN 1 — DEPARTAMENTO COMERCIAL</span>
+  </div>
+  <div style="font-size:11px;color:var(--muted)">07-Jul-2026 · CTO Técnico: Claude · DHA SAS</div>
+</div>
+<div class="page">
+<div class="toc" style="margin-top:20px">
+  <div style="font-size:14px;font-weight:700;color:var(--teal);margin-bottom:12px">Índice — Departamento Comercial</div>
+  <div class="toc-g">
+    <div class="toc-i"><span class="toc-n">01</span>Identidad, KPIs y SLA</div>
+    <div class="toc-i"><span class="toc-n">10</span>Diagrama: Arquitectura Técnica</div>
+    <div class="toc-i"><span class="toc-n">02</span>Entradas y Salidas</div>
+    <div class="toc-i"><span class="toc-n">11</span>Diagrama: Secuencia Temporal</div>
+    <div class="toc-i"><span class="toc-n">03</span>Estados del Lead</div>
+    <div class="toc-i"><span class="toc-n">12</span>Diagrama: Flujo de Datos</div>
+    <div class="toc-i"><span class="toc-n">04</span>Canales de Adquisición</div>
+    <div class="toc-i"><span class="toc-n">13</span>Intervención Humana vs. Automatización</div>
+    <div class="toc-i"><span class="toc-n">05</span>Diagrama: BPMN Proceso Comercial</div>
+    <div class="toc-i"><span class="toc-n">14</span>Reglas de Negocio</div>
+    <div class="toc-i"><span class="toc-n">06</span>Diagrama: Swimlanes (Human vs. System)</div>
+    <div class="toc-i"><span class="toc-n">15</span>Riesgos, Fallbacks y Errores Conocidos</div>
+    <div class="toc-i"><span class="toc-n">07</span>Scoring y Calificación de Prospectos</div>
+    <div class="toc-i"><span class="toc-n">16</span>Dependencias</div>
+    <div class="toc-i"><span class="toc-n">08</span>Criterios de Descarte y Avance</div>
+    <div class="toc-i"><span class="toc-n">17</span>Mejoras Posibles</div>
+    <div class="toc-i"><span class="toc-n">09</span>Fichas Técnicas de Automatizaciones</div>
+    <div class="toc-i"><span class="toc-n">18</span>Opinión Arquitectónica</div>
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:var(--muted)">
+    <span class="badge v">VERIFICADO</span> confirmado con API/DB <span class="badge h">HIPÓTESIS</span> inferido con evidencia <span class="badge p">PENDIENTE</span> sin dato disponible
+  </div>
+</div>
+
+<!-- ══ 01 IDENTIDAD ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">1</div><div><h2>Identidad del Departamento</h2><div class="ss">Objetivo, responsables, KPIs y SLA</div></div></div>
+
+  <div class="col2" style="margin-bottom:12px">
+    <div class="card">
+      <h3>Objetivo</h3>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:8px">Identificar, calificar y convertir prospectos (importadores/exportadores colombianos) en oportunidades de cotización formales, pasándolas al Departamento de Pricing con toda la información necesaria para generar una cotización en menos de 24 horas. <span class="badge h">HIPÓTESIS</span></p>
+      <p style="font-size:12px;color:var(--muted)"><strong style="color:var(--text)">Resultado esperado:</strong> Prospecto A+/A identificado → secuencia SDR completada → cliente envía solicitud de cotización por email → QT creada automáticamente → pasa a Pricing. <span class="badge h">HIPÓTESIS</span></p>
+    </div>
+    <div class="card">
+      <h3>Responsables</h3>
+      <table>
+        <tr><td style="width:130px"><strong>CEO / Fundador</strong></td><td>Daniel Hernández — única persona con acceso a cuentas, aprobación de envíos y decisiones de calificación <span class="badge v">VERIFICADO</span></td></tr>
+        <tr><td><strong>CTO Técnico</strong></td><td>Claude — mantiene automatizaciones, monitorea errores, propone mejoras <span class="badge v">VERIFICADO</span></td></tr>
+        <tr><td><strong>SDR Agent</strong></td><td>Automatización Make (escenarios 5435561, 5435567, 5441586, 5442675) — actualmente offline por Bug17 <span class="badge v">VERIFICADO</span></td></tr>
+        <tr><td><strong>Equipo SDR humano</strong></td><td>No existe — toda la prospección automatizada o manual por Daniel <span class="badge v">VERIFICADO</span></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="krow">
+    <div class="kpi"><div class="kl">Meta ingresos / mes</div><div class="kv" style="color:var(--teal)">$13,164</div><div class="ks">USD · Jun 2026 <span class="badge v">VERIFICADO</span></div></div>
+    <div class="kpi"><div class="kl">Meta cotizaciones / mes</div><div class="kv" style="color:var(--teal)">15</div><div class="ks">QTs generadas <span class="badge v">VERIFICADO</span></div></div>
+    <div class="kpi"><div class="kl">Meta cierres / mes</div><div class="kv" style="color:var(--teal)">3</div><div class="ks">QTs ganadas <span class="badge v">VERIFICADO</span></div></div>
+    <div class="kpi"><div class="kl">Meta prospectos nuevos</div><div class="kv" style="color:var(--teal)">10</div><div class="ks">por mes <span class="badge v">VERIFICADO</span></div></div>
+    <div class="kpi"><div class="kl">Tasa cierre objetivo</div><div class="kv" style="color:var(--gold)">20%</div><div class="ks">3 de 15 QTs <span class="badge h">HIPÓTESIS</span></div></div>
+    <div class="kpi"><div class="kl">Ticket promedio objetivo</div><div class="kv" style="color:var(--gold)">$4,388</div><div class="ks">USD / ingreso <span class="badge h">HIPÓTESIS</span></div></div>
+    <div class="kpi"><div class="kl">Clientes activos hoy</div><div class="kv" style="color:var(--red)">0</div><div class="ks">real vía sistema <span class="badge v">VERIFICADO</span></div></div>
+    <div class="kpi"><div class="kl">Ingresos reales vía OS</div><div class="kv" style="color:var(--red)">$0</div><div class="ks">sin ciclo E2E <span class="badge v">VERIFICADO</span></div></div>
+  </div>
+
+  <div class="card">
+    <h3>SLA por etapa <span class="badge h">HIPÓTESIS</span> — no documentado formalmente, valores propuestos como referencia</h3>
+    <table>
+      <thead><tr><th>Etapa</th><th>SLA propuesto</th><th>Responsable</th><th>Consecuencia de incumplimiento</th></tr></thead>
+      <tbody>
+        <tr><td>Prospecto identificado → Score calculado</td><td>Inmediato (Airtable fórmula)</td><td>Sistema</td><td>Ninguna — cálculo automático</td></tr>
+        <tr><td>Prospecto A+/A → primer outreach</td><td>&lt;24h de ser creado</td><td>SDR Agent (offline) / Daniel</td><td>Pierde ventana de oportunidad</td></tr>
+        <tr><td>Outreach enviado → follow-up 1</td><td>3-5 días hábiles sin respuesta</td><td>SDR Agent</td><td>Lead frío si demora más</td></tr>
+        <tr><td>Follow-up 1 → follow-up 2</td><td>5-7 días hábiles sin respuesta</td><td>SDR Agent</td><td>Lead potencialmente perdido</td></tr>
+        <tr><td>Respuesta cliente → calificación</td><td>&lt;4h hábiles</td><td>Daniel</td><td>Percepción de lentitud → pérdida</td></tr>
+        <tr><td>Lead calificado → QT creada en Pricing</td><td>&lt;2h de aprobación</td><td>Sistema (Módulo 1)</td><td>Retraso en respuesta comercial</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 02 ENTRADAS / SALIDAS ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">2</div><div><h2>Entradas y Salidas</h2><div class="ss">Qué consume el departamento y qué produce</div></div></div>
+  <div class="col2">
+    <div class="card">
+      <h3>📥 Entradas</h3>
+      <table>
+        <thead><tr><th>Entrada</th><th>Fuente</th><th>Formato</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td>Prospecto nuevo (empresa + NIT + datos de contacto)</td><td>Daniel / LinkedIn / HubSpot</td><td>Registro en tabla PROSPECTOS</td><td><span class="badge v">VERIFICADO</span></td></tr>
+          <tr><td>Datos de calificación (embarques, volumen, empleados)</td><td>DANE, DIAN, LinkedIn, LEGISCOMEX</td><td>Campos numéricos en PROSPECTOS</td><td><span class="badge h">HIPÓTESIS</span></td></tr>
+          <tr><td>Email entrante de solicitud de cotización</td><td>Cliente / Prospecto</td><td>Email a dhasasdrive Gmail</td><td><span class="badge v">VERIFICADO</span></td></tr>
+          <tr><td>Respuesta a outreach SDR</td><td>Prospecto contactado</td><td>Email reply</td><td><span class="badge h">HIPÓTESIS</span></td></tr>
+          <tr><td>Datos HubSpot de empresas</td><td>HubSpot CRM</td><td>API READ-ONLY</td><td><span class="badge v">VERIFICADO</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>📤 Salidas</h3>
+      <table>
+        <thead><tr><th>Salida</th><th>Destino</th><th>Formato</th><th>Evidencia</th></tr></thead>
+        <tbody>
+          <tr><td>QT creada en Airtable (DHA-QT-#####)</td><td>Departamento Pricing</td><td>Registro tabla QTS + trigger Pricing Agent</td><td><span class="badge v">VERIFICADO</span></td></tr>
+          <tr><td>Draft de outreach personalizado</td><td>Gmail dhasasdrive (para envío por Daniel)</td><td>Gmail DRAFT</td><td><span class="badge v">VERIFICADO</span> (SDR offline pero flujo definido)</td></tr>
+          <tr><td>Draft de follow-up 1 / 2</td><td>Gmail dhasasdrive</td><td>Gmail DRAFT</td><td><span class="badge v">VERIFICADO</span></td></tr>
+          <tr><td>Estado secuencia actualizado en PROSPECTOS</td><td>Tabla PROSPECTOS Airtable</td><td>Campo Estado_secuencia</td><td><span class="badge v">VERIFICADO</span></td></tr>
+          <tr><td>Reporte comercial semanal</td><td>Daniel (Gmail DRAFT)</td><td>HTML en email DRAFT</td><td><span class="badge v">VERIFICADO</span></td></tr>
+          <tr><td>KPIs actualizados en PRESUPUESTO_COMERCIAL</td><td>Tabla Airtable</td><td>Registro mensual actualizado por Budget Agent</td><td><span class="badge v">VERIFICADO</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 03 ESTADOS DEL LEAD ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">3</div><div><h2>Estados del Lead</h2><div class="ss">Ciclo de vida completo desde prospecto hasta oportunidad activa</div></div></div>
+
+  <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:16px">
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(139,148,158,.15);color:var(--muted);border:1px solid rgba(139,148,158,.3)">IDENTIFICADO</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Existe en PROSPECTOS</div>
+    </div>
+    <div style="color:var(--teal);font-size:16px">→</div>
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(163,113,247,.15);color:var(--purple);border:1px solid rgba(163,113,247,.3)">PUNTUADO</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Score_Auto calculado</div>
+    </div>
+    <div style="color:var(--teal);font-size:16px">→</div>
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(27,181,212,.15);color:var(--teal);border:1px solid rgba(27,181,212,.3)">EN SECUENCIA</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">SDR activo</div>
+    </div>
+    <div style="color:var(--teal);font-size:16px">→</div>
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(232,184,75,.15);color:var(--gold);border:1px solid rgba(232,184,75,.3)">CONTACTADO</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Email enviado</div>
+    </div>
+    <div style="color:var(--teal);font-size:16px">→</div>
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(232,184,75,.2);color:var(--gold);border:1px solid rgba(232,184,75,.4)">RESPONDIÓ</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Hay respuesta</div>
+    </div>
+    <div style="color:var(--teal);font-size:16px">→</div>
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3)">CALIFICADO</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Criterios met</div>
+    </div>
+    <div style="color:var(--teal);font-size:16px">→</div>
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(27,181,212,.2);color:var(--teal);border:1px solid rgba(27,181,212,.5)">QT CREADA</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">→ Pricing</div>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:8px;margin-bottom:8px">
+    <div style="text-align:center">
+      <span class="state-pill" style="background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)">DESCARTADO</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">No califica / End-of-Seq sin respuesta</div>
+    </div>
+    <div style="margin-left:8px;text-align:center">
+      <span class="state-pill" style="background:rgba(139,148,158,.1);color:var(--muted);border:1px solid rgba(139,148,158,.2)">EN PAUSA</span>
+      <div style="font-size:10px;color:var(--muted);margin-top:2px">Próximo toque programado futuro</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h3>Descripción de cada estado <span class="badge v">VERIFICADO</span> campo Estado_secuencia en PROSPECTOS</h3>
+    <table>
+      <thead><tr><th>Estado</th><th>Definición</th><th>Campo Airtable</th><th>Quién lo actualiza</th><th>Siguiente estado posible</th></tr></thead>
+      <tbody>
+        <tr><td><span class="c-teal chip">IDENTIFICADO</span></td><td>Prospecto ingresado en tabla. Score_Auto calculado automáticamente por fórmula Airtable. Sin contacto aún.</td><td>Estado_secuencia = vacío/nulo</td><td>Daniel (manual) o Data Enrichment Agent</td><td>EN SECUENCIA / EN PAUSA</td></tr>
+        <tr><td><span class="c-purple chip">PUNTUADO</span></td><td>Score_Auto &gt; 0. Clase_Auto asignada (A+/A/B/C). Listo para priorización.</td><td>Score_Auto (fórmula), Clase_Auto (fórmula)</td><td>Airtable automático</td><td>EN SECUENCIA (si A+/A) / DESCARTADO (si C con bajo potencial)</td></tr>
+        <tr><td><span class="c-teal chip">EN SECUENCIA</span></td><td>SDR Agent ha iniciado la secuencia de outreach. Próximo toque programado.</td><td>Estado_secuencia = "En secuencia", Próximo_toque = fecha</td><td>SDR Agent (5435561)</td><td>CONTACTADO / DESCARTADO</td></tr>
+        <tr><td><span class="c-gold chip">CONTACTADO</span></td><td>Al menos un email de outreach enviado. Esperando respuesta.</td><td>Estado_secuencia = "Contactado"</td><td>SDR Agent después de envío</td><td>RESPONDIÓ / EN SECUENCIA (follow-up)</td></tr>
+        <tr><td><span class="c-gold chip">RESPONDIÓ</span></td><td>Prospecto respondió al outreach. Daniel evalúa si califica o no.</td><td>Estado_secuencia = "Respondió" <span class="badge h">HIPÓTESIS</span></td><td>Daniel (manual)</td><td>CALIFICADO / DESCARTADO / EN PAUSA</td></tr>
+        <tr><td><span class="c-green chip">CALIFICADO</span></td><td>Prospecto cumple criterios de avance. Se crea QT en sistema para Pricing.</td><td>Estado_secuencia = "Calificado"</td><td>Daniel (decisión) + Sistema (crea QT)</td><td>QT CREADA → pasa a Pricing</td></tr>
+        <tr><td><span class="c-red chip">DESCARTADO</span></td><td>No cumple criterios, no respondió tras 3 toques, o segmento equivocado.</td><td>Estado_secuencia = "Descartado"</td><td>End-of-Sequence Handler (5442675) o Daniel</td><td>Final (se puede reactivar manualmente)</td></tr>
+        <tr><td><span class="chip" style="background:rgba(139,148,158,.1);color:var(--muted)">EN PAUSA</span></td><td>Contacto válido pero timing incorrecto. Próximo toque programado a futuro.</td><td>Estado_secuencia = "En pausa", Próximo_toque = fecha futura</td><td>Daniel (manual)</td><td>EN SECUENCIA (cuando llega el próximo toque)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ══ 04 CANALES ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">4</div><div><h2>Canales de Adquisición</h2><div class="ss">Prospección, marketing, referidos y todos los canales de entrada</div></div></div>
+
+  <div class="col2" style="margin-bottom:12px">
+    <div class="card">
+      <h3>📧 Email — canal principal de outreach SDR <span class="badge v">VERIFICADO</span></h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Cuenta Gmail dhasasdrive. Modo DRAFT obligatorio (ADR-004). SDR Agent genera el borrador, Daniel lo revisa y envía manualmente.</div>
+      <div class="row"><div class="rl">Automatización</div><div class="rv">SDR Outreach Inicial (5435561) — Bug17 activo, 77% error</div></div>
+      <div class="row"><div class="rl">Contenido</div><div class="rv">Mensaje personalizado generado por Claude con datos del prospecto (empresa, industria, origen importaciones)</div></div>
+      <div class="row"><div class="rl">Estado actual</div><div class="rv"><span class="c-red chip">BLOQUEADO</span> Bug17 json:ParseJSON</div></div>
+      <div class="row"><div class="rl">Intake reverso</div><div class="rv"><span class="c-green chip">FUNCIONAL</span> Email entrante del prospecto → Módulo 1 (5373407) → QT automática</div></div>
+    </div>
+    <div class="card">
+      <h3>💼 LinkedIn — canal de investigación <span class="badge v">VERIFICADO</span> campo existe</h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Campo LinkedIn (flddBXXupRa64BQAi) en tabla PROSPECTOS. Market Intelligence Agent (5441819) — paused. Sin automatización de outreach LinkedIn activa.</div>
+      <div class="row"><div class="rl">Uso actual</div><div class="rv">Daniel busca manualmente perfiles de decisores. URL almacenada en Airtable.</div></div>
+      <div class="row"><div class="rl">Automatización</div><div class="rv">Market Intelligence Agent (5441819) — PAUSED, blueprint válido. Debería enriquecer datos de LinkedIn.</div></div>
+      <div class="row"><div class="rl">Estado</div><div class="rv"><span class="c-gold chip">MANUAL</span> Sin automatización de outreach vía LinkedIn</div></div>
+    </div>
+  </div>
+  <div class="col2" style="margin-bottom:12px">
+    <div class="card">
+      <h3>📱 WhatsApp — canal identificado, sin automatización <span class="badge h">HIPÓTESIS</span></h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">Campo Teléfono (fldy2p0pN2z7awWzb) en PROSPECTOS. Ningún escenario Make envía WhatsApp. Canal manual de Daniel.</div>
+      <div class="row"><div class="rl">Estado</div><div class="rv"><span class="c-gold chip">MANUAL</span> Solo Daniel usa este canal. Sin integración con el sistema.</div></div>
+      <div class="row"><div class="rl">Oportunidad</div><div class="rv">WhatsApp Business API podría integrarse con Make. No está en roadmap activo.</div></div>
+    </div>
+    <div class="card">
+      <h3>📞 Llamadas — sin integración con sistema <span class="badge h">HIPÓTESIS</span></h3>
+      <div style="font-size:12px;color:var(--muted);margin-bottom:8px">No hay campo de "llamada" en PROSPECTOS. No hay integración con softphone o grabación. Canal 100% manual.</div>
+      <div class="row"><div class="rl">Estado</div><div class="rv"><span class="c-gold chip">MANUAL</span> Sin registro automático en sistema</div></div>
+      <div class="row"><div class="rl">Riesgo</div><div class="rv">Acuerdos verbales no quedan en Airtable. Sin trazabilidad de compromisos.</div></div>
+    </div>
+  </div>
+  <div class="col2" style="margin-bottom:12px">
+    <div class="card">
+      <h3>🔁 Referidos — sin proceso formalizado <span class="badge p">PENDIENTE</span></h3>
+      <div style="font-size:12px;color:var(--muted)">No hay campo "Fuente = Referido" diferenciado en PROSPECTOS (solo campo Fuente genérico: fldeOcWAY92VEEVH6). No hay incentivo documentado para referidos. Canal potencial sin explotar.</div>
+      <div style="margin-top:8px"><span class="c-red chip">NO IMPLEMENTADO</span></div>
+    </div>
+    <div class="card">
+      <h3>📣 Marketing digital — sin canal activo <span class="badge p">PENDIENTE</span></h3>
+      <div style="font-size:12px;color:var(--muted)">HubSpot tiene 0 contactos y 0 deals (ADR-006 en revisión). No hay campañas activas verificadas. No hay landing page vinculada al sistema. Sin embudo de marketing digital documentado.</div>
+      <div style="margin-top:8px"><span class="c-red chip">NO IMPLEMENTADO</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>🏦 HubSpot — CRM en decisión pendiente <span class="badge v">VERIFICADO</span></h3>
+    <div class="col2">
+      <div>
+        <div class="row"><div class="rl">Conexión</div><div class="rv">9450017 — READ-ONLY. Scopes: contacts.read, companies.read, deals.read</div></div>
+        <div class="row"><div class="rl">Scopes faltantes</div><div class="rv">deals.write, contacts.write, associations.write</div></div>
+        <div class="row"><div class="rl">Datos reales</div><div class="rv">0 deals · 0 contactos · 0 companies en HubSpot</div></div>
+      </div>
+      <div>
+        <div class="row"><div class="rl">Scenario</div><div class="rv">HubSpot Intake (5409020) — pausado emergencia, pendiente decisión (T-003)</div></div>
+        <div class="row"><div class="rl">Decisión</div><div class="rv">ADR-006: 3 opciones (reactivar con write scopes / retirar / solo exportación). PENDIENTE Daniel.</div></div>
+        <div class="row"><div class="rl">Impacto hoy</div><div class="rv">Ninguno. Airtable PROSPECTOS es el único CRM efectivo.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 05 BPMN ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">5</div><div><h2>Diagrama BPMN — Proceso Comercial Completo</h2><div class="ss">Desde prospecto identificado hasta QT pasada a Pricing</div></div></div>
+  <div class="diagram-wrap">
+    <div class="diagram-title">BPMN — Flujo comercial EASY Logistics · Departamento Comercial</div>
+    <svg viewBox="0 0 1060 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <!-- Background pools -->
+      <rect x="0" y="0" width="1060" height="520" fill="#161B22"/>
+      <!-- Pool label -->
+      <rect x="0" y="0" width="32" height="520" fill="#1C2B47"/>
+      <text x="16" y="260" text-anchor="middle" font-size="11" font-weight="700" fill="#1BB5D4" transform="rotate(-90,16,260)">DEPARTAMENTO COMERCIAL — EASY LOGISTICS</text>
+
+      <!-- Lane 1: SISTEMA -->
+      <rect x="32" y="0" width="1028" height="170" fill="rgba(27,181,212,0.03)" stroke="#30363D" stroke-width="1"/>
+      <text x="44" y="14" font-size="9" font-weight="700" fill="#1BB5D4" text-transform="uppercase">SISTEMA (Make + Airtable + Claude)</text>
+
+      <!-- Lane 2: DANIEL -->
+      <rect x="32" y="170" width="1028" height="180" fill="rgba(28,43,71,0.3)" stroke="#30363D" stroke-width="1"/>
+      <text x="44" y="184" font-size="9" font-weight="700" fill="#8B949E">DANIEL / FUNDADOR</text>
+
+      <!-- Lane 3: PROSPECTO -->
+      <rect x="32" y="350" width="1028" height="170" fill="rgba(13,17,23,0.5)" stroke="#30363D" stroke-width="1"/>
+      <text x="44" y="364" font-size="9" font-weight="700" fill="#8B949E">PROSPECTO (EXTERNO)</text>
+
+      <!-- START EVENT -->
+      <circle cx="75" cy="245" r="16" fill="none" stroke="#3FB950" stroke-width="2.5"/>
+      <circle cx="75" cy="245" r="10" fill="#3FB950" opacity="0.3"/>
+      <text x="75" y="276" text-anchor="middle" font-size="9" fill="#3FB950">Inicio</text>
+
+      <!-- Task 1: Prospecto agregado a Airtable -->
+      <rect x="108" y="200" width="110" height="44" rx="5" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="163" y="218" text-anchor="middle" font-size="9" fill="#E6EDF3" font-weight="600">Daniel agrega</text>
+      <text x="163" y="230" text-anchor="middle" font-size="9" fill="#E6EDF3">prospecto a</text>
+      <text x="163" y="242" text-anchor="middle" font-size="9" fill="#1BB5D4">PROSPECTOS</text>
+      <line x1="91" y1="245" x2="108" y2="222" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- Task 2: Score_Auto calculated -->
+      <rect x="108" y="60" width="110" height="44" rx="5" fill="#21262D" stroke="#1BB5D4" stroke-width="1.2"/>
+      <text x="163" y="78" text-anchor="middle" font-size="9" fill="#E6EDF3" font-weight="600">Score_Auto</text>
+      <text x="163" y="90" text-anchor="middle" font-size="9" fill="#E6EDF3">calculado</text>
+      <text x="163" y="102" text-anchor="middle" font-size="9" fill="#1BB5D4">(Airtable fórmula)</text>
+      <line x1="163" y1="200" x2="163" y2="104" stroke="#1BB5D4" stroke-width="1.5" marker-end="url(#arrt)"/>
+
+      <!-- Gateway 1: Clase? -->
+      <polygon points="258,82 278,62 298,82 278,102" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="278" y="86" text-anchor="middle" font-size="9" fill="#E8B84B">Clase?</text>
+      <line x1="218" y1="82" x2="258" y2="82" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#arro)"/>
+      <text x="238" y="76" text-anchor="middle" font-size="8" fill="#8B949E">Score</text>
+
+      <!-- A+/A branch (continue) -->
+      <text x="320" y="60" font-size="8" fill="#3FB950">A+ / A</text>
+      <line x1="298" y1="82" x2="355" y2="82" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arrg)"/>
+
+      <!-- C branch (descartado) -->
+      <line x1="278" y1="102" x2="278" y2="145" stroke="#F85149" stroke-width="1.5" marker-end="url(#arrr)"/>
+      <rect x="248" y="145" width="60" height="26" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="278" y="158" text-anchor="middle" font-size="8" fill="#F85149">DESCARTADO</text>
+      <text x="278" y="168" text-anchor="middle" font-size="8" fill="#8B949E">(Score C)</text>
+
+      <!-- Task 3: SDR Outreach -->
+      <rect x="355" y="60" width="115" height="44" rx="5" fill="#21262D" stroke="#F85149" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="412" y="76" text-anchor="middle" font-size="9" fill="#E6EDF3" font-weight="600">SDR Outreach</text>
+      <text x="412" y="88" text-anchor="middle" font-size="9" fill="#F85149">5435561 ⚠️ Bug17</text>
+      <text x="412" y="100" text-anchor="middle" font-size="8" fill="#8B949E">Draft → Daniel envía</text>
+
+      <!-- Gateway 2: Respuesta? -->
+      <polygon points="508,82 528,62 548,82 528,102" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="528" y="86" text-anchor="middle" font-size="9" fill="#E8B84B">Resp?</text>
+      <line x1="470" y1="82" x2="508" y2="82" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- No: Follow-up 1 -->
+      <text x="570" y="60" font-size="8" fill="#8B949E">No (3-5d)</text>
+      <line x1="548" y1="82" x2="600" y2="82" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="600" y="60" width="110" height="44" rx="5" fill="#21262D" stroke="#F85149" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="655" y="76" text-anchor="middle" font-size="9" fill="#E6EDF3">Follow-up 1</text>
+      <text x="655" y="88" text-anchor="middle" font-size="9" fill="#F85149">5435567 ⚠️ Bug17</text>
+      <text x="655" y="100" text-anchor="middle" font-size="8" fill="#8B949E">Draft → Daniel envía</text>
+
+      <!-- Gateway 3: Respuesta? -->
+      <polygon points="748,82 768,62 788,82 768,102" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="768" y="86" text-anchor="middle" font-size="9" fill="#E8B84B">Resp?</text>
+      <line x1="710" y1="82" x2="748" y2="82" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- No: Follow-up 2 -->
+      <text x="810" y="60" font-size="8" fill="#8B949E">No (5-7d)</text>
+      <line x1="788" y1="82" x2="840" y2="82" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="840" y="60" width="110" height="44" rx="5" fill="#21262D" stroke="#F85149" stroke-width="1.5" stroke-dasharray="4,2"/>
+      <text x="895" y="76" text-anchor="middle" font-size="9" fill="#E6EDF3">Follow-up 2</text>
+      <text x="895" y="88" text-anchor="middle" font-size="9" fill="#8B949E">5441586 (isinvalid)</text>
+      <text x="895" y="100" text-anchor="middle" font-size="8" fill="#8B949E">Draft → Daniel envía</text>
+
+      <!-- End-of-Sequence -->
+      <line x1="950" y1="82" x2="1010" y2="82" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="1010" y="60" width="32" height="44" rx="4" fill="rgba(248,81,73,0.1)" stroke="#F85149" stroke-width="1.5"/>
+      <text x="1026" y="87" text-anchor="middle" font-size="8" fill="#F85149">DESC</text>
+
+      <!-- Respuesta Sí flows (from gateways 2 and 3) -->
+      <line x1="528" y1="102" x2="528" y2="240" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arrg)"/>
+      <text x="534" y="175" font-size="8" fill="#3FB950">Sí</text>
+      <line x1="768" y1="102" x2="768" y2="240" stroke="#3FB950" stroke-width="1.5"/>
+      <line x1="528" y1="240" x2="768" y2="240" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="650" y="230" text-anchor="middle" font-size="8" fill="#3FB950">Respondió</text>
+
+      <!-- Task: Daniel califica -->
+      <rect x="590" y="218" width="120" height="44" rx="5" fill="#21262D" stroke="#1C2B47" stroke-width="1.5"/>
+      <text x="650" y="236" text-anchor="middle" font-size="9" fill="#E6EDF3" font-weight="600">Daniel califica</text>
+      <text x="650" y="248" text-anchor="middle" font-size="9" fill="#8B949E">¿Tiene potencial?</text>
+
+      <!-- Gateway: Califica? -->
+      <polygon points="738,240 758,220 778,240 758,260" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="758" y="244" text-anchor="middle" font-size="8" fill="#E8B84B">OK?</text>
+      <line x1="710" y1="240" x2="738" y2="240" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- No → Descartado -->
+      <line x1="758" y1="260" x2="758" y2="310" stroke="#F85149" stroke-width="1.5" marker-end="url(#arrr)"/>
+      <rect x="718" y="310" width="80" height="24" rx="4" fill="rgba(248,81,73,0.1)" stroke="#F85149" stroke-width="1"/>
+      <text x="758" y="326" text-anchor="middle" font-size="9" fill="#F85149">DESCARTADO</text>
+
+      <!-- Sí → Prospecto envía email -->
+      <line x1="778" y1="240" x2="840" y2="240" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arrg)"/>
+      <text x="810" y="230" font-size="8" fill="#3FB950">Sí</text>
+
+      <!-- Prospecto envía solicitud de cotización -->
+      <rect x="840" y="218" width="115" height="44" rx="5" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="897" y="234" text-anchor="middle" font-size="9" fill="#E6EDF3" font-weight="600">Daniel instruye</text>
+      <text x="897" y="246" text-anchor="middle" font-size="9" fill="#8B949E">al prospecto</text>
+      <text x="897" y="258" text-anchor="middle" font-size="9" fill="#8B949E">enviar email</text>
+
+      <!-- Prospecto lane: envía email -->
+      <line x1="897" y1="262" x2="897" y2="390" stroke="#8B949E" stroke-width="1.5" marker-end="url(#arr)"/>
+      <rect x="840" y="390" width="115" height="44" rx="5" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="897" y="408" text-anchor="middle" font-size="9" fill="#E6EDF3">Prospecto envía</text>
+      <text x="897" y="420" text-anchor="middle" font-size="9" fill="#E6EDF3">email cotización</text>
+      <text x="897" y="432" text-anchor="middle" font-size="9" fill="#1BB5D4">→ dhasasdrive</text>
+
+      <!-- Módulo 1 picks it up -->
+      <line x1="897" y1="390" x2="897" y2="140" stroke="#1BB5D4" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <rect x="840" y="110" width="115" height="44" rx="5" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="897" y="128" text-anchor="middle" font-size="9" fill="#E6EDF3" font-weight="600">Módulo 1 (5373407)</text>
+      <text x="897" y="140" text-anchor="middle" font-size="9" fill="#3FB950">Crea QT automática</text>
+      <text x="897" y="152" text-anchor="middle" font-size="8" fill="#8B949E">DHA-QT-##### → Pricing</text>
+
+      <!-- END EVENT -->
+      <circle cx="1030" cy="132" r="16" fill="none" stroke="#3FB950" stroke-width="3"/>
+      <circle cx="1030" cy="132" r="10" fill="#3FB950" opacity="0.5"/>
+      <text x="1030" y="156" text-anchor="middle" font-size="9" fill="#3FB950">→ Pricing</text>
+      <line x1="955" y1="132" x2="1014" y2="132" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arrg)"/>
+
+      <!-- Legend -->
+      <rect x="40" y="460" width="280" height="48" rx="4" fill="rgba(33,38,45,0.8)" stroke="#30363D"/>
+      <text x="52" y="474" font-size="9" fill="#8B949E">Leyenda:</text>
+      <rect x="52" y="480" width="14" height="8" rx="2" fill="#21262D" stroke="#F85149" stroke-width="1.5" stroke-dasharray="3,1"/>
+      <text x="72" y="488" font-size="9" fill="#E6EDF3">Automatización offline (Bug)</text>
+      <rect x="52" y="492" width="14" height="8" rx="2" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="72" y="500" font-size="9" fill="#E6EDF3">Automatización activa</text>
+      <rect x="170" y="480" width="14" height="8" rx="2" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="190" y="488" font-size="9" fill="#E6EDF3">Acción manual (Daniel)</text>
+      <polygon points="172,496 182,488 192,496 182,504" fill="#21262D" stroke="#E8B84B" stroke-width="1"/>
+      <text x="200" y="500" font-size="9" fill="#E6EDF3">Gateway (decisión)</text>
+
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#8B949E"/></marker>
+        <marker id="arrt" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#1BB5D4"/></marker>
+        <marker id="arrg" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#3FB950"/></marker>
+        <marker id="arrr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#F85149"/></marker>
+        <marker id="arro" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#E8B84B"/></marker>
+      </defs>
+    </svg>
+  </div>
+  <div class="warn"><strong style="color:var(--red)">⚠️ Estado real:</strong> Las tareas con borde rojo discontinuo (SDR Outreach, Follow-up 1 y 2) están operativamente offline por Bug17. El flujo <em>completo automático</em> no puede ejecutarse hoy. El intake reverso (email entrante → QT) sí funciona al 100%.</div>
+</div>
+
+<!-- ══ 06 SWIMLANES ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">6</div><div><h2>Diagrama Swimlanes — Responsabilidades por Actor</h2><div class="ss">Quién hace qué en cada etapa del proceso comercial</div></div></div>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Swimlanes — Departamento Comercial EASY Logistics</div>
+    <svg viewBox="0 0 1040 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="1040" height="440" fill="#161B22"/>
+      <!-- Column headers -->
+      <rect x="0" y="0" width="1040" height="36" fill="#1C2B47"/>
+      <text x="520" y="22" text-anchor="middle" font-size="11" font-weight="700" fill="#1BB5D4">SWIMLANES — FLUJO COMERCIAL</text>
+      <!-- Lane labels -->
+      <rect x="0" y="36" width="130" height="404" fill="rgba(27,181,212,0.05)" stroke="#30363D"/>
+      <text x="65" y="120" text-anchor="middle" font-size="10" font-weight="700" fill="#E6EDF3" transform="rotate(-90,65,120)">DANIEL / CEO</text>
+      <rect x="130" y="36" width="170" height="404" fill="rgba(13,17,23,0.3)" stroke="#30363D"/>
+      <text x="215" y="160" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4" transform="rotate(-90,215,160)">MAKE (Orquestador)</text>
+      <rect x="300" y="36" width="180" height="404" fill="rgba(27,43,71,0.2)" stroke="#30363D"/>
+      <text x="390" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#E8B84B" transform="rotate(-90,390,155)">CLAUDE API</text>
+      <rect x="480" y="36" width="180" height="404" fill="rgba(13,17,23,0.2)" stroke="#30363D"/>
+      <text x="570" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E" transform="rotate(-90,570,155)">AIRTABLE</text>
+      <rect x="660" y="36" width="180" height="404" fill="rgba(27,181,212,0.03)" stroke="#30363D"/>
+      <text x="750" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E" transform="rotate(-90,750,155)">GMAIL</text>
+      <rect x="840" y="36" width="200" height="404" fill="rgba(13,17,23,0.15)" stroke="#30363D"/>
+      <text x="940" y="155" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E" transform="rotate(-90,940,155)">PROSPECTO</text>
+
+      <!-- Row: IDENTIFICACIÓN -->
+      <rect x="0" y="36" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="62" font-size="8" fill="#8B949E" font-weight="600">IDENTIFICACIÓN</text>
+      <!-- Daniel agrega prospecto -->
+      <rect x="10" y="50" width="110" height="32" rx="4" fill="#21262D" stroke="#E6EDF3" stroke-width="1"/>
+      <text x="65" y="62" text-anchor="middle" font-size="8" fill="#E6EDF3">Agrega prospecto</text>
+      <text x="65" y="73" text-anchor="middle" font-size="8" fill="#8B949E">manualmente</text>
+      <!-- Airtable crea registro -->
+      <rect x="490" y="50" width="160" height="32" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="570" y="62" text-anchor="middle" font-size="8" fill="#E6EDF3">Crea registro PROSPECTOS</text>
+      <text x="570" y="73" text-anchor="middle" font-size="8" fill="#1BB5D4">Score_Auto calcula automático</text>
+      <!-- Arrow -->
+      <line x1="120" y1="66" x2="490" y2="66" stroke="#8B949E" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#a1)"/>
+
+      <!-- Row: SCORING -->
+      <rect x="0" y="88" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="110" font-size="8" fill="#8B949E" font-weight="600">SCORING AUTOMÁTICO</text>
+      <!-- Airtable calcula score -->
+      <rect x="490" y="96" width="160" height="32" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1"/>
+      <text x="570" y="108" text-anchor="middle" font-size="8" fill="#E6EDF3">Fórmula Score_Auto</text>
+      <text x="570" y="119" text-anchor="middle" font-size="8" fill="#3FB950">Clase A+/A/B/C asignada</text>
+      <!-- Make trigger -->
+      <rect x="140" y="96" width="150" height="32" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="215" y="108" text-anchor="middle" font-size="8" fill="#E6EDF3">Watch Records (5435561)</text>
+      <text x="215" y="119" text-anchor="middle" font-size="8" fill="#F85149">⚠️ Bug17 — Offline</text>
+      <line x1="650" y1="112" x2="290" y2="112" stroke="#8B949E" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#a1)"/>
+
+      <!-- Row: OUTREACH DRAFT -->
+      <rect x="0" y="134" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="156" font-size="8" fill="#8B949E" font-weight="600">OUTREACH (Draft)</text>
+      <!-- Make orchestrates -->
+      <rect x="140" y="142" width="150" height="32" rx="4" fill="rgba(248,81,73,0.1)" stroke="#F85149" stroke-width="1" stroke-dasharray="3,1"/>
+      <text x="215" y="154" text-anchor="middle" font-size="8" fill="#F85149">Llama Claude API</text>
+      <text x="215" y="165" text-anchor="middle" font-size="8" fill="#8B949E">Bug17 — bloqueado</text>
+      <!-- Claude genera -->
+      <rect x="310" y="142" width="160" height="32" rx="4" fill="rgba(248,81,73,0.08)" stroke="#F85149" stroke-width="1" stroke-dasharray="3,1"/>
+      <text x="390" y="154" text-anchor="middle" font-size="8" fill="#F85149">Genera email outreach</text>
+      <text x="390" y="165" text-anchor="middle" font-size="8" fill="#8B949E">Personalizado por Score</text>
+      <!-- Gmail Draft -->
+      <rect x="670" y="142" width="160" height="32" rx="4" fill="rgba(248,81,73,0.08)" stroke="#F85149" stroke-width="1" stroke-dasharray="3,1"/>
+      <text x="750" y="154" text-anchor="middle" font-size="8" fill="#F85149">createADraft</text>
+      <text x="750" y="165" text-anchor="middle" font-size="8" fill="#8B949E">(ADR-004 — no sendEmail)</text>
+      <!-- Daniel revisa -->
+      <rect x="10" y="142" width="110" height="32" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1"/>
+      <text x="65" y="154" text-anchor="middle" font-size="8" fill="#E8B84B">Revisa draft</text>
+      <text x="65" y="165" text-anchor="middle" font-size="8" fill="#E6EDF3">y envía manual</text>
+
+      <!-- Row: RESPUESTA -->
+      <rect x="0" y="182" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="202" font-size="8" fill="#8B949E" font-weight="600">RESPUESTA DEL PROSPECTO</text>
+      <rect x="850" y="190" width="180" height="32" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1"/>
+      <text x="940" y="202" text-anchor="middle" font-size="8" fill="#E6EDF3">Prospecto responde email</text>
+      <text x="940" y="213" text-anchor="middle" font-size="8" fill="#3FB950">→ dhasasdrive@gmail.com</text>
+      <!-- Daniel califica -->
+      <rect x="10" y="190" width="110" height="32" rx="4" fill="#21262D" stroke="#E6EDF3" stroke-width="1"/>
+      <text x="65" y="202" text-anchor="middle" font-size="8" fill="#E6EDF3">Daniel lee, califica</text>
+      <text x="65" y="213" text-anchor="middle" font-size="8" fill="#8B949E">¿hay potencial?</text>
+      <line x1="840" y1="206" x2="120" y2="206" stroke="#3FB950" stroke-width="1.2" marker-end="url(#ag)"/>
+
+      <!-- Row: SOLICITUD COTIZACIÓN -->
+      <rect x="0" y="228" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="248" font-size="8" fill="#8B949E" font-weight="600">SOLICITUD DE COTIZACIÓN</text>
+      <rect x="850" y="236" width="180" height="32" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="940" y="248" text-anchor="middle" font-size="8" fill="#E6EDF3">Prospecto envía email</text>
+      <text x="940" y="259" text-anchor="middle" font-size="8" fill="#1BB5D4">con datos de embarque</text>
+      <!-- Módulo 1 ACTIVO -->
+      <rect x="140" y="236" width="150" height="32" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="215" y="248" text-anchor="middle" font-size="8" fill="#3FB950" font-weight="700">Módulo 1 — 5373407</text>
+      <text x="215" y="259" text-anchor="middle" font-size="8" fill="#3FB950">ACTIVO ✓</text>
+      <line x1="840" y1="252" x2="290" y2="252" stroke="#1BB5D4" stroke-width="1.5" marker-end="url(#at)"/>
+
+      <!-- Row: CREACIÓN QT -->
+      <rect x="0" y="274" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="294" font-size="8" fill="#8B949E" font-weight="600">CREACIÓN QT</text>
+      <!-- Claude extrae datos -->
+      <rect x="310" y="282" width="160" height="32" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="390" y="294" text-anchor="middle" font-size="8" fill="#3FB950">Extrae datos embarque</text>
+      <text x="390" y="305" text-anchor="middle" font-size="8" fill="#E6EDF3">Estructura JSON → QT</text>
+      <!-- Airtable crea QT -->
+      <rect x="490" y="282" width="160" height="32" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="570" y="294" text-anchor="middle" font-size="8" fill="#3FB950">Crea registro QUOTATIONS</text>
+      <text x="570" y="305" text-anchor="middle" font-size="8" fill="#E6EDF3">DHA-QT-##### generado</text>
+      <!-- Daniel notificado -->
+      <rect x="10" y="282" width="110" height="32" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="65" y="294" text-anchor="middle" font-size="8" fill="#1BB5D4">Notificado de</text>
+      <text x="65" y="305" text-anchor="middle" font-size="8" fill="#E6EDF3">nueva QT creada</text>
+      <line x1="140" y1="298" x2="310" y2="298" stroke="#3FB950" stroke-width="1.2" marker-end="url(#ag)"/>
+      <line x1="470" y1="298" x2="490" y2="298" stroke="#3FB950" stroke-width="1.2" marker-end="url(#ag)"/>
+      <line x1="650" y1="298" x2="120" y2="298" stroke="#1BB5D4" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#at)"/>
+
+      <!-- Row: HANDOFF PRICING -->
+      <rect x="0" y="320" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="340" font-size="8" fill="#8B949E" font-weight="600">HANDOFF → PRICING</text>
+      <rect x="490" y="328" width="160" height="32" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="570" y="340" text-anchor="middle" font-size="8" fill="#E8B84B">Estado → "Por Cotizar"</text>
+      <text x="570" y="351" text-anchor="middle" font-size="8" fill="#E6EDF3">Trigger → Pricing Agent</text>
+      <rect x="140" y="328" width="150" height="32" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1"/>
+      <text x="215" y="340" text-anchor="middle" font-size="8" fill="#E8B84B">Escenario Pricing</text>
+      <text x="215" y="351" text-anchor="middle" font-size="8" fill="#E6EDF3">activado (5438649)</text>
+      <line x1="490" y1="344" x2="290" y2="344" stroke="#E8B84B" stroke-width="1.2" marker-end="url(#ao)"/>
+
+      <!-- Row: ACTIVACIÓN HUMANA FINAL -->
+      <rect x="0" y="366" width="1040" height="1" fill="#30363D"/>
+      <text x="8" y="386" font-size="8" fill="#8B949E" font-weight="600">REVISIÓN FINAL</text>
+      <rect x="10" y="374" width="110" height="44" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="65" y="388" text-anchor="middle" font-size="8" fill="#3FB950" font-weight="700">Daniel revisa QT</text>
+      <text x="65" y="400" text-anchor="middle" font-size="8" fill="#E6EDF3">Aprueba / modifica</text>
+      <text x="65" y="412" text-anchor="middle" font-size="8" fill="#8B949E">Draft → Envío cliente</text>
+
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="a1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/></marker>
+        <marker id="ag" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#3FB950"/></marker>
+        <marker id="at" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#1BB5D4"/></marker>
+        <marker id="ao" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#E8B84B"/></marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ══ 07 SCORING ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">7</div><div><h2>Scoring y Calificación de Prospectos</h2><div class="ss">Fórmula Score_Auto · Clases · Criterios · Estado VERIFICADO</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Fórmula Score_Auto (Airtable)</div>
+      <div class="code-block">IF({Embarques_anuales_estimados} >= 50, 50,
+  IF({Embarques_anuales_estimados} >= 20, 35,
+    IF({Embarques_anuales_estimados} >= 5, 20, 5)))
++ IF({Volumen_USD_estimado} >= 500000, 30,
+    IF({Volumen_USD_estimado} >= 100000, 20,
+      IF({Volumen_USD_estimado} >= 20000, 10, 2)))
++ IF({Empleados} >= 50, 10,
+    IF({Empleados} >= 10, 6,
+      IF({Empleados} >= 2, 3, 1)))
++ IF({Cargo_contacto} = "Gerente" OR {Cargo_contacto} = "Director",
+    10, IF({Cargo_contacto} = "Jefe", 6, 2))</div>
+      <div class="badge-verde">VERIFICADO — fórmula Airtable activa</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Clase_Auto (Fórmula Airtable)</div>
+      <div class="code-block">IF({Score_Auto} >= 75, "A+",
+  IF({Score_Auto} >= 50, "A",
+    IF({Score_Auto} >= 25, "B", "C")))</div>
+      <table class="tbl" style="margin-top:12px">
+        <thead><tr><th>Clase</th><th>Score</th><th>Acción SDR</th><th>Prioridad</th></tr></thead>
+        <tbody>
+          <tr><td><span class="badge-verde">A+</span></td><td>≥ 75</td><td>Outreach personalizado prioritario</td><td>Alta</td></tr>
+          <tr><td><span class="badge-azul">A</span></td><td>50 – 74</td><td>Outreach estándar SDR</td><td>Normal</td></tr>
+          <tr><td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 8px;border-radius:4px;font-size:11px">B</span></td><td>25 – 49</td><td>Cola de baja prioridad</td><td>Baja</td></tr>
+          <tr><td><span class="badge-rojo">C</span></td><td>< 25</td><td>DESCARTAR automáticamente</td><td>Ninguna</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Dimensiones del Score (4 variables independientes)</div>
+    <table class="tbl">
+      <thead><tr><th>Dimensión</th><th>Campo Airtable</th><th>Peso máx.</th><th>Escala</th></tr></thead>
+      <tbody>
+        <tr><td>Embarques anuales</td><td>Embarques_anuales_estimados</td><td>50 pts</td><td>≥50=50 / ≥20=35 / ≥5=20 / else=5</td></tr>
+        <tr><td>Volumen USD</td><td>Volumen_USD_estimado</td><td>30 pts</td><td>≥500k=30 / ≥100k=20 / ≥20k=10 / else=2</td></tr>
+        <tr><td>Tamaño empresa</td><td>Empleados</td><td>10 pts</td><td>≥50=10 / ≥10=6 / ≥2=3 / else=1</td></tr>
+        <tr><td>Nivel contacto</td><td>Cargo_contacto</td><td>10 pts</td><td>Gerente/Director=10 / Jefe=6 / else=2</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="warn"><strong>⚠️ Limitación actual:</strong> El score depende de datos ingresados manualmente por Daniel. Sin enriquecimiento automático (Data Enrichment 5441853 en pausa), la calidad del score es proporcional a la calidad del dato de entrada. Si Embarques o Volumen_USD están en blanco, el score cae a mínimo aunque sea un prospecto A+.</div>
+</div>
+
+<!-- ══ 08 CRITERIOS DESCARTE/AVANCE ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">8</div><div><h2>Criterios de Descarte y Avance</h2><div class="ss">Reglas de negocio que gobiernan el movimiento entre estados del lead</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">🚫 Criterios de Descarte</div>
+      <table class="tbl">
+        <thead><tr><th>Criterio</th><th>Valor</th><th>Quién descarta</th></tr></thead>
+        <tbody>
+          <tr><td>Score_Auto < 25 (Clase C)</td><td>< 25 pts</td><td>Sistema (automático)</td></tr>
+          <tr><td>No responde en ≥ 3 secuencias</td><td>3 emails sin respuesta</td><td>Sistema (End-of-Seq 5442675)</td></tr>
+          <tr><td>Solicita no contactar</td><td>Opt-out explícito</td><td>Daniel (manual)</td></tr>
+          <tr><td>No importa a Colombia</td><td>Geografía incorrecta</td><td>Daniel (manual)</td></tr>
+          <tr><td>Solo importa < 2 veces/año</td><td>Volumen insuficiente</td><td>Daniel (criterio)</td></tr>
+          <tr><td>Competidor directo</td><td>Detección manual</td><td>Daniel (manual)</td></tr>
+          <tr><td>No tiene capacidad de pago</td><td>Señales de riesgo financiero</td><td>Daniel (manual)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--teal)">✅ Criterios de Avance</div>
+      <table class="tbl">
+        <thead><tr><th>De → A</th><th>Criterio requerido</th><th>Quién avanza</th></tr></thead>
+        <tbody>
+          <tr><td>IDENTIFICADO → PUNTUADO</td><td>Score_Auto calculado (automático)</td><td>Airtable fórmula</td></tr>
+          <tr><td>PUNTUADO → EN SECUENCIA</td><td>Clase A o A+ (Score ≥ 50)</td><td>Sistema SDR (Bug17)</td></tr>
+          <tr><td>EN SECUENCIA → CONTACTADO</td><td>Al menos 1 email enviado</td><td>Daniel (envío manual)</td></tr>
+          <tr><td>CONTACTADO → RESPONDIÓ</td><td>Respuesta recibida (cualquier tipo)</td><td>Daniel (actualización)</td></tr>
+          <tr><td>RESPONDIÓ → CALIFICADO</td><td>Daniel confirma interés real</td><td>Daniel (juicio)</td></tr>
+          <tr><td>CALIFICADO → QT CREADA</td><td>Email con datos de embarque recibido</td><td>Módulo 1 (automático)</td></tr>
+          <tr><td>QT CREADA → PRICING</td><td>Estado "Por Cotizar" en QUOTATIONS</td><td>Airtable → Make trigger</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Reglas de Negocio Específicas — Descarte</div>
+    <div class="grid-2">
+      <div>
+        <p style="color:#8B949E;font-size:13px;margin:0 0 8px">La secuencia SDR tiene exactamente 3 toques:</p>
+        <ul style="color:#E6EDF3;font-size:13px;line-height:1.7;padding-left:20px">
+          <li>Toque 1: Email inicial (SDR Outreach)</li>
+          <li>Toque 2: Follow-up a los 3-5 días</li>
+          <li>Toque 3: Follow-up final a los 5-7 días</li>
+          <li>Sin respuesta → Estado_secuencia = "Descartado"</li>
+        </ul>
+      </div>
+      <div>
+        <p style="color:#8B949E;font-size:13px;margin:0 0 8px">Clase B (Score 25-49): en pausa operativa</p>
+        <ul style="color:#E6EDF3;font-size:13px;line-height:1.7;padding-left:20px">
+          <li>No ingresan a secuencia SDR automática</li>
+          <li>Pueden activarse manualmente por Daniel</li>
+          <li>Estado = EN PAUSA hasta decisión</li>
+          <li>Revisión mensual recomendada</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 09 FICHAS TÉCNICAS ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">9</div><div><h2>Fichas Técnicas — 8 Automatizaciones Comerciales</h2><div class="ss">Documentación completa de cada escenario Make en el Departamento Comercial</div></div></div>
+
+  <!-- FICHA 1: SDR Outreach -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">SDR Outreach — Generación Primer Contacto</div>
+      <div class="ficha-meta">
+        <span class="badge-rojo">5435561</span>
+        <span class="badge-rojo">Bug17 — OFFLINE</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Generar y guardar como borrador un email de primer contacto personalizado para cada prospecto calificado (Clase A o A+), siguiendo la voz de EASY Logistics y adaptando el mensaje al perfil de la empresa.</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val">Watch Records en tabla PROSPECTOS cuando <code>Clase_Auto = "A" OR "A+"</code> y <code>Estado_secuencia = "Pendiente"</code></div>
+        <div class="ficha-label" style="margin-top:12px">Entradas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Nombre empresa (Airtable)</li>
+          <li>Sector / Industria (Airtable)</li>
+          <li>Nombre contacto (Airtable)</li>
+          <li>Cargo contacto (Airtable)</li>
+          <li>Score_Auto + Clase_Auto</li>
+          <li>LinkedIn URL (si disponible)</li>
+          <li>Teléfono (fldy2p0pN2z7awWzb)</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Salidas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Gmail Draft guardado en dhasasdrive@gmail.com</li>
+          <li>Airtable: Estado_secuencia → "Contactado"</li>
+          <li>Airtable: Fecha_primer_contacto = hoy</li>
+          <li>Airtable: Próximo_toque = hoy + 4 días</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ficha-label">Herramientas</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 12px">
+          <span class="badge-azul">Make.com</span>
+          <span class="badge-azul">Claude API</span>
+          <span class="badge-azul">Gmail API</span>
+          <span class="badge-azul">Airtable API</span>
+        </div>
+        <div class="ficha-label">Prompt (resumen)</div>
+        <div class="code-block" style="font-size:11px">Eres el SDR de EASY Logistics Colombia.
+Empresa prospecto: {{nombre_empresa}} ({{sector}})
+Contacto: {{nombre}}, {{cargo}}
+Score: {{score}} — Clase {{clase}}
+
+Genera un email de primer contacto en español colombiano.
+Tono: profesional-cercano, no vendedor.
+Máximo 150 palabras. Sin emojis.
+Menciona que importamos desde {{origen_probable}}.
+CTA: invitar a una llamada de 15 minutos.
+Asunto (línea 1): máx 8 palabras, sin spam triggers.</div>
+        <div class="ficha-label" style="margin-top:12px">Bug conocido</div>
+        <div class="badge-rojo" style="font-size:12px">Bug 17 — json:ParseJSON · Error rate 77%</div>
+        <div style="color:#8B949E;font-size:12px;margin-top:4px">Módulos json:ParseJSON en el escenario causan fallo al parsear respuesta de Claude API. Solo solucionable desde Make UI. Ver ADR-001.</div>
+        <div class="ficha-label" style="margin-top:12px">ROI estimado</div>
+        <div class="ficha-val">Cuando funcione: 2h/día ahorradas en redacción de emails. A 15 prospectos/mes = 30 emails/mes. Daniel pasa de redactar a revisar+enviar (de 15 min/email a 2 min/email).</div>
+        <div class="ficha-label" style="margin-top:12px">Dependencias</div>
+        <div class="ficha-val">PROSPECTOS table · Claude API key activa · Gmail OAuth (conexión 9371760, vence 2026-08-24) · Corrección Bug17 en Make UI</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 2: SDR Follow-up 1 -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">SDR Follow-up 1 — Segundo Contacto</div>
+      <div class="ficha-meta">
+        <span class="badge-rojo">5435567</span>
+        <span class="badge-rojo">Bug17 — OFFLINE</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Generar un segundo email de seguimiento para prospectos que no respondieron al primer contacto, con un ángulo diferente (caso de uso, pain point específico del sector).</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val">Watch Records: <code>Estado_secuencia = "Contactado"</code> AND <code>Próximo_toque ≤ hoy</code> AND <code>Sin_respuesta = true</code></div>
+        <div class="ficha-label" style="margin-top:12px">Timing</div>
+        <div class="ficha-val">3 a 5 días después del primer contacto (campo Próximo_toque en Airtable)</div>
+        <div class="ficha-label" style="margin-top:12px">Diferenciación vs. Toque 1</div>
+        <div class="ficha-val">El prompt instruye a Claude a NO repetir el mismo ángulo. Debe mencionar un beneficio diferente: velocidad de cotización, red de proveedores, transparencia de costos.</div>
+      </div>
+      <div>
+        <div class="ficha-label">Bug conocido</div>
+        <div class="badge-rojo" style="font-size:12px">Bug 17 — mismo que 5435561 · Error rate 83%</div>
+        <div class="ficha-label" style="margin-top:12px">Salidas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Gmail Draft (ADR-004 — nunca sendEmail)</li>
+          <li>Airtable: Próximo_toque → +5 días</li>
+          <li>Airtable: Contador_toques +1</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Fallback</div>
+        <div class="ficha-val">Si Bug17 activo: Daniel redacta manualmente desde plantilla en Notion. Sin automatización hasta corrección en Make UI.</div>
+        <div class="ficha-label" style="margin-top:12px">ROI estimado</div>
+        <div class="ficha-val">Follow-ups son responsables de ~40% de respuestas en outbound B2B. Con 15 prospectos/mes y 40% conversión: 6 leads calificados adicionales/mes provendrían de seguimiento.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 3: SDR Follow-up 2 -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">SDR Follow-up 2 — Tercer y Último Contacto</div>
+      <div class="ficha-meta">
+        <span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600">5441586</span>
+        <span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:4px 12px;border-radius:4px;font-size:12px">Estado: isinvalid</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO (con error)</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Tercer y último email de la secuencia SDR. Tono más directo. Si no hay respuesta después de este toque, el prospecto pasa a estado DESCARTADO automáticamente.</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val"><code>Estado_secuencia = "Contactado"</code> AND <code>Contador_toques = 2</code> AND <code>Próximo_toque ≤ hoy</code></div>
+        <div class="ficha-label" style="margin-top:12px">Timing</div>
+        <div class="ficha-val">5 a 7 días después del Follow-up 1</div>
+        <div class="ficha-label" style="margin-top:12px">Error actual</div>
+        <div class="ficha-val">Estado "isinvalid" en Make — posiblemente trigger mal configurado o conexión OAuth caída. Requiere revisión en Make UI. No confundir con Bug17 (distinto problema).</div>
+      </div>
+      <div>
+        <div class="ficha-label">Estrategia de cierre del follow-up</div>
+        <div class="ficha-val">Prompt instruye a Claude a usar el "breakup email" strategy: "Si no tiene interés en este momento, no hay problema — lo añado a mi lista para el próximo trimestre." Aumenta respuestas tardías.</div>
+        <div class="ficha-label" style="margin-top:12px">Salidas si no hay respuesta</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Gmail Draft guardado</li>
+          <li>Trigger End-of-Sequence (5442675)</li>
+          <li>Airtable: Estado → DESCARTADO</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Acción requerida</div>
+        <div class="ficha-val"><strong style="color:#E8B84B">Fundador:</strong> Revisar escenario 5441586 en Make UI y corregir configuración de trigger. Estimado: 20 min.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 4: End-of-Sequence -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">End-of-Sequence — Cierre de Secuencia SDR</div>
+      <div class="ficha-meta">
+        <span class="badge-azul">5442675</span>
+        <span class="badge-verde">Estado: Activo</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Ejecutar la limpieza y cierre formal de secuencias SDR agotadas. Actualizar Airtable, archivar el prospecto, generar log de la secuencia completa para análisis posterior.</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val"><code>Estado_secuencia = "Secuencia completada"</code> OR llamado explícito desde Follow-up 2</div>
+        <div class="ficha-label" style="margin-top:12px">Entradas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>ID registro PROSPECTOS</li>
+          <li>Contador_toques (cuántos emails enviados)</li>
+          <li>Respuesta: sí / no</li>
+          <li>Razón descarte (si Daniel la ingresó)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ficha-label">Salidas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Airtable: Estado_secuencia → "Descartado" o "Completado"</li>
+          <li>Airtable: Fecha_fin_secuencia = hoy</li>
+          <li>Log guardado en tabla LOGS_COMERCIAL (hipótesis — tabla no verificada)</li>
+          <li>Notificación a Daniel (Make webhook)</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Nota arquitectónica</div>
+        <div class="ficha-val">Este escenario es el único que funciona en la cadena SDR con Bug17 activo. Puede ejecutarse en aislamiento porque no depende de json:ParseJSON (no llama Claude API en este paso).</div>
+        <div class="ficha-label" style="margin-top:12px">ROI</div>
+        <div class="ficha-val">Elimina trabajo manual de limpieza de pipeline. Mantiene PROSPECTOS limpio para análisis de conversión real vs. intentos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 5: Market Intelligence -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">Market Intelligence — Análisis de Sector y Empresa</div>
+      <div class="ficha-meta">
+        <span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600">5441819</span>
+        <span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:4px 12px;border-radius:4px;font-size:12px">Estado: En pausa</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Enriquecer el perfil de un prospecto con inteligencia de mercado antes de que el SDR haga contacto. Genera un brief ejecutivo con contexto del sector, competidores, flujos de importación probables y angle de venta recomendado.</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val">Llamado manual desde Daniel O automático cuando nuevo prospecto Clase A+ es creado. Estado actual: en pausa por decisión de prioridad.</div>
+        <div class="ficha-label" style="margin-top:12px">Entradas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Nombre empresa</li>
+          <li>Sector/industria</li>
+          <li>LinkedIn URL (si disponible)</li>
+          <li>NIT (si disponible — para búsqueda DIAN)</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ficha-label">Salidas esperadas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Brief ejecutivo en campo Notas_inteligencia de PROSPECTOS</li>
+          <li>Pain points probables del sector</li>
+          <li>Competidores EASY en ese segmento</li>
+          <li>Ángulo de venta recomendado</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Herramientas requeridas</div>
+        <div class="ficha-val">Claude API (análisis) + búsqueda web (Make HTTP module) + LinkedIn field de Airtable (flddBXXupRa64BQAi)</div>
+        <div class="ficha-label" style="margin-top:12px">Estado actual y razón pausa</div>
+        <div class="ficha-val">En pausa por prioridad MVP. No bloquea primer cliente. Activar después de primer cierre comercial confirmado.</div>
+        <div class="ficha-label" style="margin-top:12px">ROI futuro</div>
+        <div class="ficha-val">Aumenta tasa de respuesta del outreach estimado 25-35% al personalizar con contexto real del sector. Impacto en conversión: ALTO una vez tenga volumen de prospectos.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 6: Data Enrichment -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">Data Enrichment — Enriquecimiento Automático de Datos</div>
+      <div class="ficha-meta">
+        <span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600">5441853</span>
+        <span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:4px 12px;border-radius:4px;font-size:12px">Estado: En pausa</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: DISEÑADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Completar automáticamente campos faltantes en PROSPECTOS usando fuentes públicas y la API de Make: website, LinkedIn, número de empleados estimado, sector CIIU, volumen importaciones (VUCE si accesible).</div>
+        <div class="ficha-label" style="margin-top:12px">Problema que resuelve</div>
+        <div class="ficha-val">El Score_Auto pierde precisión cuando Empleados y Volumen_USD_estimado están vacíos. Hoy Daniel ingresa estos datos manualmente — proceso lento y propenso a omisión.</div>
+        <div class="ficha-label" style="margin-top:12px">Fuentes de datos planificadas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>RUES / Cámara de Comercio (API pública)</li>
+          <li>LinkedIn scraping (limitado)</li>
+          <li>Búsqueda web via Make HTTP</li>
+          <li>Claude inferencia desde nombre + sector</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ficha-label">Estado actual</div>
+        <div class="ficha-val">DISEÑADO — no implementado. El blueprint existe en Make pero los módulos de enriquecimiento no están conectados. Requiere 4-6 horas de implementación.</div>
+        <div class="ficha-label" style="margin-top:12px">Dependencia crítica</div>
+        <div class="ficha-val">La calidad del Score_Auto depende de este escenario. Sin enriquecimiento, el scoring es tan bueno como los datos que Daniel ingresa manualmente.</div>
+        <div class="ficha-label" style="margin-top:12px">Prioridad</div>
+        <div class="ficha-val">P2 (después del primer cliente). Implementar antes de escalar SDR a más de 20 prospectos/mes.</div>
+        <div class="ficha-label" style="margin-top:12px">ROI estimado</div>
+        <div class="ficha-val">Mejora precisión del score en ~40%. Reduce tiempo de investigación de Daniel de 15 min/prospecto a ~2 min/prospecto.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 7: Sales Manager -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">Sales Manager Agent — Inteligencia Comercial y Decisión</div>
+      <div class="ficha-meta">
+        <span class="badge-azul">5441614</span>
+        <span class="badge-verde">Estado: Activo</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Actúa como el Director Comercial virtual de EASY Logistics. Analiza el pipeline completo, identifica prospectos que necesitan atención inmediata, genera recomendaciones de acción para Daniel, y produce el reporte comercial semanal/diario.</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val">Scheduled: diario a las 8:00 AM COT. También activable manualmente por Daniel desde Make.</div>
+        <div class="ficha-label" style="margin-top:12px">Entradas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Todos los registros activos de PROSPECTOS</li>
+          <li>QUOTATIONS con estado "Por Cotizar" o pendientes</li>
+          <li>KPIs del mes vs. meta (Budget Agent)</li>
+          <li>Próximos toques vencidos o próximos a vencer</li>
+        </ul>
+      </div>
+      <div>
+        <div class="ficha-label">Salidas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>Reporte comercial (Gmail Draft a Daniel)</li>
+          <li>Lista de acciones prioritarias del día</li>
+          <li>Alertas de prospectos en riesgo de perder</li>
+          <li>Resumen de pipeline: por estado, por clase</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Prompt principal</div>
+        <div class="code-block" style="font-size:11px">Eres el Sales Manager de EASY Logistics.
+Analiza el pipeline actual: {{prospectos_json}}
+Meta del mes: {{meta_usd}} USD / {{meta_qt}} cotizaciones
+Progreso actual: {{progreso_json}}
+
+Genera:
+1. Top 3 acciones urgentes de hoy (con nombre prospecto)
+2. Riesgos del pipeline esta semana
+3. Probabilidad de alcanzar meta del mes (%)
+4. Un párrafo de resumen para el CEO
+Responde en JSON estructurado.</div>
+        <div class="ficha-label" style="margin-top:12px">ROI</div>
+        <div class="ficha-val">Reemplaza 30-45 min/día de revisión manual de pipeline. Daniel recibe el brief al abrir Gmail cada mañana. Impacto en foco y velocidad de decisión: ALTO.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FICHA 8: Budget Agent -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">Budget Agent — Seguimiento de Metas Comerciales</div>
+      <div class="ficha-meta">
+        <span class="badge-azul">5441451</span>
+        <span class="badge-verde">Estado: Activo</span>
+        <span style="background:rgba(13,17,23,0.5);color:#8B949E;padding:2px 8px;border-radius:4px;font-size:11px">Madurez: IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div class="ficha-grid">
+      <div>
+        <div class="ficha-label">Objetivo</div>
+        <div class="ficha-val">Calcular el avance real del mes vs. las metas del Budget Plan. Determina si el equipo va en camino de cumplir, y cuánto falta para cerrar el gap. Alimenta al Sales Manager Agent con contexto financiero actualizado.</div>
+        <div class="ficha-label" style="margin-top:12px">Trigger</div>
+        <div class="ficha-val">Scheduled: diario o semanal. Llamado también como sub-módulo desde Sales Manager Agent (5441614).</div>
+        <div class="ficha-label" style="margin-top:12px">Metas hardcoded (Jun 2026)</div>
+        <table class="tbl" style="margin-top:8px">
+          <thead><tr><th>KPI</th><th>Meta</th></tr></thead>
+          <tbody>
+            <tr><td>Ingresos USD</td><td>$13,164</td></tr>
+            <tr><td>Cotizaciones generadas</td><td>15</td></tr>
+            <tr><td>Cierres (ventas)</td><td>3</td></tr>
+            <tr><td>Ticket promedio</td><td>$4,388</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="ficha-label">Entradas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>QUOTATIONS con estado "Cerrada/Ganada"</li>
+          <li>INVOICES generadas en el mes (Siigo)</li>
+          <li>Prospectos en secuencia activa</li>
+          <li>Tabla PARAMETROS (metas del mes)</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Salidas</div>
+        <ul style="color:#E6EDF3;font-size:13px;padding-left:16px;margin:4px 0">
+          <li>JSON con progreso: {actual, meta, gap, %cumplimiento}</li>
+          <li>Proyección fin de mes si tendencia continúa</li>
+          <li>Alerta si gap > 30% con días restantes < 15</li>
+        </ul>
+        <div class="ficha-label" style="margin-top:12px">Riesgo arquitectónico</div>
+        <div class="ficha-val">Las metas están hardcoded en el escenario Make. Si cambian, requiere modificación manual. T-038: mover metas a tabla PARAMETROS para parametrización dinámica.</div>
+        <div class="ficha-label" style="margin-top:12px">ROI</div>
+        <div class="ficha-val">Visibilidad en tiempo real del estado vs. meta. Elimina hojas de Excel de seguimiento manual. Impacto en velocidad de corrección de curso: ALTO.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 10 ARQUITECTURA TÉCNICA ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">10</div><div><h2>Arquitectura Técnica del Departamento Comercial</h2><div class="ss">Stack, integraciones, flujo de datos técnico y dependencias entre sistemas</div></div></div>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Arquitectura Técnica — Comercial EASY Logistics</div>
+    <svg viewBox="0 0 1020 480" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="1020" height="480" fill="#161B22"/>
+
+      <!-- ── LAYER 1: EXTERNAL INPUTS ── -->
+      <text x="510" y="20" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E">LAYER 1 — ENTRADAS EXTERNAS</text>
+      <!-- LinkedIn -->
+      <rect x="30" y="30" width="120" height="50" rx="6" fill="#21262D" stroke="#0077B5" stroke-width="1.5"/>
+      <text x="90" y="52" text-anchor="middle" font-size="11" fill="#0077B5" font-weight="700">LinkedIn</text>
+      <text x="90" y="68" text-anchor="middle" font-size="9" fill="#8B949E">Prospección manual</text>
+      <!-- Email externo -->
+      <rect x="180" y="30" width="120" height="50" rx="6" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="240" y="52" text-anchor="middle" font-size="11" fill="#E8B84B" font-weight="700">Gmail Entrante</text>
+      <text x="240" y="68" text-anchor="middle" font-size="9" fill="#8B949E">dhasasdrive@gmail.com</text>
+      <!-- WhatsApp / Calls -->
+      <rect x="330" y="30" width="120" height="50" rx="6" fill="#21262D" stroke="#25D366" stroke-width="1.5"/>
+      <text x="390" y="52" text-anchor="middle" font-size="11" fill="#25D366" font-weight="700">WhatsApp</text>
+      <text x="390" y="68" text-anchor="middle" font-size="9" fill="#8B949E">Manual — sin API</text>
+      <!-- HubSpot -->
+      <rect x="480" y="30" width="120" height="50" rx="6" fill="#21262D" stroke="#FF7A59" stroke-width="1.5"/>
+      <text x="540" y="52" text-anchor="middle" font-size="11" fill="#FF7A59" font-weight="700">HubSpot CRM</text>
+      <text x="540" y="68" text-anchor="middle" font-size="9" fill="#F85149">READ-ONLY (ADR-006)</text>
+      <!-- Referidos -->
+      <rect x="630" y="30" width="120" height="50" rx="6" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="690" y="52" text-anchor="middle" font-size="11" fill="#8B949E" font-weight="700">Referidos</text>
+      <text x="690" y="68" text-anchor="middle" font-size="9" fill="#8B949E">Manual — no implementado</text>
+      <!-- Marketing -->
+      <rect x="780" y="30" width="120" height="50" rx="6" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="840" y="52" text-anchor="middle" font-size="11" fill="#8B949E" font-weight="700">Marketing</text>
+      <text x="840" y="68" text-anchor="middle" font-size="9" fill="#8B949E">No implementado</text>
+
+      <!-- ── LAYER 2: AIRTABLE ── -->
+      <rect x="20" y="120" width="430" height="120" rx="8" fill="rgba(27,43,71,0.3)" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="235" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="#1BB5D4">AIRTABLE — BASE DE DATOS OPERACIONAL (appGvhQHWWQRXgmSo)</text>
+      <!-- Tables -->
+      <rect x="35" y="150" width="120" height="52" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="95" y="166" text-anchor="middle" font-size="10" fill="#1BB5D4" font-weight="700">PROSPECTOS</text>
+      <text x="95" y="178" text-anchor="middle" font-size="9" fill="#E6EDF3">tblfo5Jlx4ANVZI8h</text>
+      <text x="95" y="190" text-anchor="middle" font-size="9" fill="#8B949E">Score_Auto · Clase_Auto</text>
+      <rect x="170" y="150" width="120" height="52" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="230" y="166" text-anchor="middle" font-size="10" fill="#1BB5D4" font-weight="700">QUOTATIONS</text>
+      <text x="230" y="178" text-anchor="middle" font-size="9" fill="#E6EDF3">DHA-QT-#####</text>
+      <text x="230" y="190" text-anchor="middle" font-size="9" fill="#8B949E">Link a PROSPECTOS</text>
+      <rect x="305" y="150" width="130" height="52" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="370" y="166" text-anchor="middle" font-size="10" fill="#1BB5D4" font-weight="700">CLIENTES (330)</text>
+      <text x="370" y="178" text-anchor="middle" font-size="9" fill="#8B949E">Parity Siigo</text>
+      <text x="370" y="190" text-anchor="middle" font-size="9" fill="#3FB950">VERIFICADO ✓</text>
+
+      <!-- ── LAYER 2: MAKE ── -->
+      <rect x="480" y="120" width="420" height="120" rx="8" fill="rgba(13,17,23,0.4)" stroke="#8B949E" stroke-width="1.5"/>
+      <text x="690" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="#E6EDF3">MAKE.COM — ORQUESTADOR (Team 2430126)</text>
+      <!-- Escenarios comerciales -->
+      <rect x="495" y="150" width="100" height="52" rx="4" fill="rgba(248,81,73,0.1)" stroke="#F85149" stroke-width="1"/>
+      <text x="545" y="166" text-anchor="middle" font-size="9" fill="#F85149" font-weight="700">SDR Outreach</text>
+      <text x="545" y="178" text-anchor="middle" font-size="9" fill="#F85149">5435561</text>
+      <text x="545" y="190" text-anchor="middle" font-size="9" fill="#F85149">⚠️ Bug17</text>
+      <rect x="605" y="150" width="100" height="52" rx="4" fill="rgba(248,81,73,0.1)" stroke="#F85149" stroke-width="1"/>
+      <text x="655" y="166" text-anchor="middle" font-size="9" fill="#F85149" font-weight="700">FU1 / FU2</text>
+      <text x="655" y="178" text-anchor="middle" font-size="9" fill="#F85149">5435567 / 5441586</text>
+      <text x="655" y="190" text-anchor="middle" font-size="9" fill="#F85149">⚠️ Bug17 / isinvalid</text>
+      <rect x="715" y="150" width="100" height="52" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1"/>
+      <text x="765" y="166" text-anchor="middle" font-size="9" fill="#3FB950" font-weight="700">Sales Mgr</text>
+      <text x="765" y="178" text-anchor="middle" font-size="9" fill="#3FB950">5441614</text>
+      <text x="765" y="190" text-anchor="middle" font-size="9" fill="#3FB950">✓ Activo</text>
+      <rect x="825" y="150" width="65" height="52" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1"/>
+      <text x="857" y="166" text-anchor="middle" font-size="9" fill="#3FB950" font-weight="700">Budget</text>
+      <text x="857" y="178" text-anchor="middle" font-size="9" fill="#3FB950">5441451</text>
+      <text x="857" y="190" text-anchor="middle" font-size="9" fill="#3FB950">✓ Activo</text>
+
+      <!-- ── LAYER 3: CLAUDE API ── -->
+      <rect x="200" y="290" width="280" height="80" rx="8" fill="rgba(27,43,71,0.3)" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="340" y="312" text-anchor="middle" font-size="11" font-weight="700" fill="#E8B84B">CLAUDE API (Anthropic)</text>
+      <text x="340" y="328" text-anchor="middle" font-size="10" fill="#E6EDF3">Generación de emails · Extracción de datos</text>
+      <text x="340" y="344" text-anchor="middle" font-size="10" fill="#E6EDF3">Análisis de pipeline · Market Intelligence</text>
+      <text x="340" y="358" text-anchor="middle" font-size="9" fill="#8B949E">Conectada desde Make via HTTP — ADR-001</text>
+
+      <!-- ── LAYER 3: GMAIL ── -->
+      <rect x="520" y="290" width="240" height="80" rx="8" fill="rgba(13,17,23,0.4)" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="640" y="312" text-anchor="middle" font-size="11" font-weight="700" fill="#E8B84B">GMAIL API</text>
+      <text x="640" y="328" text-anchor="middle" font-size="10" fill="#E6EDF3">createADraft ÚNICAMENTE</text>
+      <text x="640" y="344" text-anchor="middle" font-size="10" fill="#F85149">ADR-004 — NUNCA sendEmail directo</text>
+      <text x="640" y="358" text-anchor="middle" font-size="9" fill="#8B949E">Conexión 9371760 · Vence 2026-08-24</text>
+
+      <!-- ── LAYER 4: DANIEL (intervención humana) ── -->
+      <rect x="350" y="420" width="320" height="50" rx="8" fill="rgba(27,43,71,0.5)" stroke="#E6EDF3" stroke-width="1.5"/>
+      <text x="510" y="442" text-anchor="middle" font-size="11" font-weight="700" fill="#E6EDF3">DANIEL / FUNDADOR — Punto de Control</text>
+      <text x="510" y="458" text-anchor="middle" font-size="10" fill="#8B949E">Revisión drafts · Calificación · Envío final · Decisiones de descarte</text>
+
+      <!-- Arrows: External → Airtable -->
+      <line x1="90" y1="80" x2="90" y2="120" stroke="#1BB5D4" stroke-width="1.2" marker-end="url(#b1)"/>
+      <line x1="240" y1="80" x2="240" y2="120" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#bo)"/>
+      <line x1="540" y1="80" x2="540" y2="120" stroke="#8B949E" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#b1)"/>
+
+      <!-- Airtable → Make -->
+      <line x1="450" y1="185" x2="480" y2="185" stroke="#8B949E" stroke-width="1.5" marker-end="url(#b1)"/>
+
+      <!-- Make → Claude API -->
+      <line x1="545" y1="240" x2="340" y2="290" stroke="#E8B84B" stroke-width="1.2" marker-end="url(#bo)"/>
+
+      <!-- Make → Gmail -->
+      <line x1="700" y1="240" x2="640" y2="290" stroke="#E8B84B" stroke-width="1.2" marker-end="url(#bo)"/>
+
+      <!-- Claude → Gmail (genera draft, Make pasa a Gmail) -->
+      <line x1="480" y1="330" x2="520" y2="330" stroke="#E8B84B" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#bo)"/>
+
+      <!-- Gmail → Daniel -->
+      <line x1="640" y1="370" x2="600" y2="420" stroke="#E6EDF3" stroke-width="1.5" marker-end="url(#bw)"/>
+
+      <!-- Daniel → Gmail (envío manual) -->
+      <line x1="500" y1="420" x2="640" y2="370" stroke="#3FB950" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#bg)"/>
+      <text x="565" y="410" text-anchor="middle" font-size="9" fill="#3FB950">Envío manual</text>
+
+      <!-- Arrow markers -->
+      <defs>
+        <marker id="b1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/></marker>
+        <marker id="bo" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#E8B84B"/></marker>
+        <marker id="bg" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#3FB950"/></marker>
+        <marker id="bw" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#E6EDF3"/></marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ══ 11 DIAGRAMA DE SECUENCIA ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">11</div><div><h2>Diagrama de Secuencia — Temporal</h2><div class="ss">Timeline de eventos desde identificación hasta QT generada</div></div></div>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Secuencia Temporal — Proceso Comercial Completo</div>
+    <svg viewBox="0 0 980 440" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="980" height="440" fill="#161B22"/>
+      <!-- Participant headers -->
+      <rect x="60" y="10" width="100" height="34" rx="4" fill="#1C2B47" stroke="#E6EDF3" stroke-width="1"/>
+      <text x="110" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#E6EDF3">Daniel</text>
+      <rect x="230" y="10" width="100" height="34" rx="4" fill="#1C2B47" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="280" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4">Make</text>
+      <rect x="400" y="10" width="100" height="34" rx="4" fill="#1C2B47" stroke="#E8B84B" stroke-width="1"/>
+      <text x="450" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#E8B84B">Claude API</text>
+      <rect x="570" y="10" width="100" height="34" rx="4" fill="#1C2B47" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="620" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4">Airtable</text>
+      <rect x="740" y="10" width="100" height="34" rx="4" fill="#1C2B47" stroke="#E8B84B" stroke-width="1"/>
+      <text x="790" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#E8B84B">Gmail</text>
+      <rect x="870" y="10" width="100" height="34" rx="4" fill="#1C2B47" stroke="#8B949E" stroke-width="1"/>
+      <text x="920" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E">Prospecto</text>
+
+      <!-- Lifelines -->
+      <line x1="110" y1="44" x2="110" y2="430" stroke="#E6EDF3" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+      <line x1="280" y1="44" x2="280" y2="430" stroke="#1BB5D4" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+      <line x1="450" y1="44" x2="450" y2="430" stroke="#E8B84B" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+      <line x1="620" y1="44" x2="620" y2="430" stroke="#1BB5D4" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+      <line x1="790" y1="44" x2="790" y2="430" stroke="#E8B84B" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+      <line x1="920" y1="44" x2="920" y2="430" stroke="#8B949E" stroke-width="0.7" stroke-dasharray="4,3" opacity="0.3"/>
+
+      <!-- Step 1: Daniel agrega prospecto -->
+      <rect x="60" y="55" width="100" height="18" rx="2" fill="rgba(230,237,243,0.1)"/>
+      <text x="40" y="67" font-size="8" fill="#8B949E">T+0</text>
+      <text x="110" y="68" text-anchor="middle" font-size="8" fill="#E6EDF3">agrega prospecto</text>
+      <line x1="110" y1="68" x2="620" y2="68" stroke="#E6EDF3" stroke-width="1.2" marker-end="url(#c1)"/>
+      <text x="365" y="64" text-anchor="middle" font-size="8" fill="#E6EDF3">crea registro PROSPECTOS</text>
+
+      <!-- Step 2: Airtable calcula score -->
+      <text x="40" y="92" font-size="8" fill="#8B949E">T+0</text>
+      <rect x="570" y="82" width="100" height="18" rx="2" fill="rgba(27,181,212,0.1)"/>
+      <text x="620" y="95" text-anchor="middle" font-size="8" fill="#1BB5D4">Score_Auto calculado</text>
+      <line x1="620" y1="95" x2="110" y2="95" stroke="#1BB5D4" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#ct)"/>
+      <text x="365" y="91" text-anchor="middle" font-size="8" fill="#1BB5D4">notifica Clase A/A+</text>
+
+      <!-- Step 3: Make trigger (Bug17) -->
+      <text x="40" y="120" font-size="8" fill="#8B949E">T+0m</text>
+      <rect x="230" y="110" width="100" height="18" rx="2" fill="rgba(248,81,73,0.08)"/>
+      <text x="280" y="123" text-anchor="middle" font-size="8" fill="#F85149">⚠️ Watch Records (Bug17)</text>
+      <line x1="620" y1="123" x2="280" y2="123" stroke="#F85149" stroke-width="1" stroke-dasharray="2,2" marker-end="url(#cr)"/>
+      <text x="452" y="119" text-anchor="middle" font-size="8" fill="#F85149">trigger (OFFLINE)</text>
+
+      <!-- Step 4: Daniel interviene manualmente -->
+      <text x="40" y="148" font-size="8" fill="#8B949E">T+manual</text>
+      <rect x="60" y="138" width="100" height="18" rx="2" fill="rgba(230,237,243,0.1)"/>
+      <text x="110" y="151" text-anchor="middle" font-size="8" fill="#E6EDF3">redacta email manual</text>
+      <line x1="110" y1="151" x2="790" y2="151" stroke="#E6EDF3" stroke-width="1.2" marker-end="url(#c1)"/>
+      <text x="452" y="147" text-anchor="middle" font-size="8" fill="#E6EDF3">envía Gmail (manual)</text>
+
+      <!-- Step 5: Prospecto recibe -->
+      <text x="40" y="176" font-size="8" fill="#8B949E">T+1h</text>
+      <rect x="870" y="166" width="100" height="18" rx="2" fill="rgba(139,148,158,0.1)"/>
+      <text x="920" y="179" text-anchor="middle" font-size="8" fill="#8B949E">recibe email</text>
+      <line x1="790" y1="179" x2="920" y2="179" stroke="#8B949E" stroke-width="1.2" marker-end="url(#c2)"/>
+
+      <!-- Step 6: Prospecto responde (opcional) -->
+      <text x="40" y="204" font-size="8" fill="#8B949E">T+1 a 7d</text>
+      <text x="920" y="207" text-anchor="middle" font-size="8" fill="#8B949E">responde (opcional)</text>
+      <rect x="870" y="196" width="100" height="18" rx="2" fill="rgba(139,148,158,0.1)"/>
+      <line x1="920" y1="207" x2="110" y2="207" stroke="#8B949E" stroke-width="1.2" stroke-dasharray="4,2" marker-end="url(#c1)"/>
+      <text x="520" y="203" text-anchor="middle" font-size="8" fill="#8B949E">Daniel recibe respuesta</text>
+
+      <!-- Step 7: Prospecto envía email cotización -->
+      <text x="40" y="240" font-size="8" fill="#8B949E">T+N días</text>
+      <text x="920" y="243" text-anchor="middle" font-size="8" fill="#1BB5D4">email cotización</text>
+      <rect x="870" y="232" width="100" height="18" rx="2" fill="rgba(27,181,212,0.1)"/>
+      <line x1="920" y1="243" x2="790" y2="243" stroke="#1BB5D4" stroke-width="1.5" marker-end="url(#ct)"/>
+      <text x="855" y="239" text-anchor="middle" font-size="8" fill="#1BB5D4">Gmail</text>
+
+      <!-- Step 8: Módulo 1 activa -->
+      <text x="40" y="268" font-size="8" fill="#8B949E">T+0m</text>
+      <rect x="230" y="258" width="100" height="18" rx="2" fill="rgba(63,185,80,0.15)"/>
+      <text x="280" y="271" text-anchor="middle" font-size="8" fill="#3FB950">Módulo 1 (5373407) ✓</text>
+      <line x1="790" y1="271" x2="280" y2="271" stroke="#3FB950" stroke-width="1.5" marker-end="url(#cg)"/>
+      <text x="537" y="267" text-anchor="middle" font-size="8" fill="#3FB950">watch email → trigger</text>
+
+      <!-- Step 9: Make llama Claude -->
+      <text x="40" y="296" font-size="8" fill="#8B949E">T+30s</text>
+      <rect x="400" y="286" width="100" height="18" rx="2" fill="rgba(232,184,75,0.1)"/>
+      <text x="450" y="299" text-anchor="middle" font-size="8" fill="#E8B84B">extrae datos embarque</text>
+      <line x1="280" y1="299" x2="450" y2="299" stroke="#E8B84B" stroke-width="1.2" marker-end="url(#co)"/>
+      <text x="365" y="295" text-anchor="middle" font-size="8" fill="#E8B84B">llama Claude API</text>
+
+      <!-- Step 10: Claude → Make (retorna JSON) -->
+      <text x="40" y="324" font-size="8" fill="#8B949E">T+35s</text>
+      <line x1="450" y1="324" x2="280" y2="324" stroke="#E8B84B" stroke-width="1.2" stroke-dasharray="3,2" marker-end="url(#cg)"/>
+      <text x="365" y="320" text-anchor="middle" font-size="8" fill="#E8B84B">JSON estructurado</text>
+
+      <!-- Step 11: Make → Airtable crea QT -->
+      <text x="40" y="352" font-size="8" fill="#8B949E">T+40s</text>
+      <rect x="570" y="342" width="100" height="18" rx="2" fill="rgba(63,185,80,0.15)"/>
+      <text x="620" y="355" text-anchor="middle" font-size="8" fill="#3FB950">crea QT en QUOTATIONS</text>
+      <line x1="280" y1="355" x2="620" y2="355" stroke="#3FB950" stroke-width="1.5" marker-end="url(#cg)"/>
+      <text x="452" y="351" text-anchor="middle" font-size="8" fill="#3FB950">POST createRecord</text>
+
+      <!-- Step 12: Make → Gmail Draft respuesta -->
+      <text x="40" y="380" font-size="8" fill="#8B949E">T+45s</text>
+      <rect x="740" y="370" width="100" height="18" rx="2" fill="rgba(63,185,80,0.15)"/>
+      <text x="790" y="383" text-anchor="middle" font-size="8" fill="#3FB950">Draft de confirmación</text>
+      <line x1="280" y1="383" x2="790" y2="383" stroke="#3FB950" stroke-width="1.2" marker-end="url(#cg)"/>
+
+      <!-- Step 13: Daniel revisa y aprueba -->
+      <text x="40" y="408" font-size="8" fill="#8B949E">T+review</text>
+      <rect x="60" y="398" width="100" height="18" rx="2" fill="rgba(63,185,80,0.2)"/>
+      <text x="110" y="411" text-anchor="middle" font-size="8" fill="#3FB950">aprueba → Pricing</text>
+      <line x1="110" y1="411" x2="620" y2="411" stroke="#3FB950" stroke-width="1.5" stroke-dasharray="4,2" marker-end="url(#cg)"/>
+      <text x="365" y="407" text-anchor="middle" font-size="8" fill="#3FB950">QT → estado "Por Cotizar"</text>
+
+      <!-- Markers -->
+      <defs>
+        <marker id="c1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#E6EDF3"/></marker>
+        <marker id="ct" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#1BB5D4"/></marker>
+        <marker id="cr" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#F85149"/></marker>
+        <marker id="cg" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#3FB950"/></marker>
+        <marker id="co" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#E8B84B"/></marker>
+        <marker id="c2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/></marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ══ 12 FLUJO DE DATOS ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">12</div><div><h2>Flujo de Datos — Transformaciones</h2><div class="ss">Cómo se transforma el dato desde el prospecto hasta la QT creada</div></div></div>
+  <div class="diagram-wrap">
+    <div class="diagram-title">Data Flow — Departamento Comercial</div>
+    <svg viewBox="0 0 960 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="960" height="260" fill="#161B22"/>
+
+      <!-- Data objects -->
+      <!-- 1: Datos crudos prospecto -->
+      <rect x="20" y="80" width="140" height="90" rx="6" fill="#21262D" stroke="#8B949E" stroke-width="1.2"/>
+      <text x="90" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E">Datos Crudos</text>
+      <text x="90" y="114" text-anchor="middle" font-size="9" fill="#E6EDF3">Nombre empresa</text>
+      <text x="90" y="126" text-anchor="middle" font-size="9" fill="#E6EDF3">Contacto / Cargo</text>
+      <text x="90" y="138" text-anchor="middle" font-size="9" fill="#E6EDF3">Sector / Empleados</text>
+      <text x="90" y="150" text-anchor="middle" font-size="9" fill="#8B949E">(ingreso manual Daniel)</text>
+      <text x="90" y="200" text-anchor="middle" font-size="8" fill="#8B949E">ORIGEN</text>
+
+      <!-- Transform 1: Airtable score -->
+      <polygon points="195,130 225,110 225,150" fill="#1BB5D4" opacity="0.7"/>
+      <text x="240" y="118" text-anchor="middle" font-size="8" fill="#1BB5D4">Fórmula</text>
+      <text x="240" y="130" text-anchor="middle" font-size="8" fill="#1BB5D4">Score_Auto</text>
+      <text x="240" y="142" text-anchor="middle" font-size="8" fill="#1BB5D4">Airtable</text>
+
+      <!-- 2: Prospecto enriquecido -->
+      <rect x="280" y="70" width="140" height="110" rx="6" fill="#21262D" stroke="#1BB5D4" stroke-width="1.2"/>
+      <text x="350" y="90" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4">Prospecto Score</text>
+      <text x="350" y="104" text-anchor="middle" font-size="9" fill="#E6EDF3">+ Score_Auto (0-100)</text>
+      <text x="350" y="116" text-anchor="middle" font-size="9" fill="#E6EDF3">+ Clase (A+/A/B/C)</text>
+      <text x="350" y="128" text-anchor="middle" font-size="9" fill="#E6EDF3">+ Estado_secuencia</text>
+      <text x="350" y="140" text-anchor="middle" font-size="9" fill="#E6EDF3">+ Próximo_toque</text>
+      <text x="350" y="152" text-anchor="middle" font-size="9" fill="#8B949E">PROSPECTOS table</text>
+
+      <!-- Transform 2: Claude genera email -->
+      <polygon points="455,130 485,110 485,150" fill="#E8B84B" opacity="0.7"/>
+      <text x="500" y="118" text-anchor="middle" font-size="8" fill="#E8B84B">Claude API</text>
+      <text x="500" y="130" text-anchor="middle" font-size="8" fill="#E8B84B">genera email</text>
+      <text x="500" y="142" text-anchor="middle" font-size="8" fill="#F85149">⚠️ Bug17</text>
+
+      <!-- 3: Email Draft -->
+      <rect x="520" y="80" width="130" height="90" rx="6" fill="rgba(248,81,73,0.08)" stroke="#F85149" stroke-width="1.2" stroke-dasharray="4,2"/>
+      <text x="585" y="100" text-anchor="middle" font-size="10" font-weight="700" fill="#F85149">Draft Email</text>
+      <text x="585" y="114" text-anchor="middle" font-size="9" fill="#E6EDF3">Asunto personalizado</text>
+      <text x="585" y="126" text-anchor="middle" font-size="9" fill="#E6EDF3">Cuerpo ~150 palabras</text>
+      <text x="585" y="138" text-anchor="middle" font-size="9" fill="#E6EDF3">CTA específico</text>
+      <text x="585" y="150" text-anchor="middle" font-size="9" fill="#F85149">createADraft (Gmail)</text>
+      <text x="585" y="165" text-anchor="middle" font-size="8" fill="#F85149">(offline — Bug17)</text>
+
+      <!-- Transform 3: Módulo 1 extrae email entrante -->
+      <polygon points="690,130 720,110 720,150" fill="#3FB950" opacity="0.7"/>
+      <text x="735" y="118" text-anchor="middle" font-size="8" fill="#3FB950">Módulo 1</text>
+      <text x="735" y="130" text-anchor="middle" font-size="8" fill="#3FB950">+ Claude</text>
+      <text x="735" y="142" text-anchor="middle" font-size="8" fill="#3FB950">✓ Activo</text>
+
+      <!-- 4: QT Airtable -->
+      <rect x="760" y="60" width="170" height="130" rx="6" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="845" y="80" text-anchor="middle" font-size="10" font-weight="700" fill="#3FB950">QT Generada</text>
+      <text x="845" y="94" text-anchor="middle" font-size="9" fill="#E6EDF3">DHA-QT-#####</text>
+      <text x="845" y="106" text-anchor="middle" font-size="9" fill="#E6EDF3">Origen embarque</text>
+      <text x="845" y="118" text-anchor="middle" font-size="9" fill="#E6EDF3">Destino embarque</text>
+      <text x="845" y="130" text-anchor="middle" font-size="9" fill="#E6EDF3">Peso / Volumen</text>
+      <text x="845" y="142" text-anchor="middle" font-size="9" fill="#E6EDF3">Mercancía</text>
+      <text x="845" y="154" text-anchor="middle" font-size="9" fill="#E6EDF3">Link CLIENTES / PROSP</text>
+      <text x="845" y="166" text-anchor="middle" font-size="9" fill="#3FB950">Estado: Por Cotizar</text>
+      <text x="845" y="178" text-anchor="middle" font-size="8" fill="#8B949E">→ Depto Pricing</text>
+
+      <!-- Arrows -->
+      <line x1="160" y1="125" x2="195" y2="125" stroke="#8B949E" stroke-width="1.5" marker-end="url(#d1)"/>
+      <line x1="255" y1="125" x2="280" y2="125" stroke="#1BB5D4" stroke-width="1.5" marker-end="url(#dt)"/>
+      <line x1="420" y1="125" x2="455" y2="125" stroke="#8B949E" stroke-width="1.5" marker-end="url(#d1)"/>
+      <line x1="515" y1="125" x2="520" y2="125" stroke="#E8B84B" stroke-width="1.2" marker-end="url(#do)"/>
+      <line x1="650" y1="125" x2="690" y2="125" stroke="#3FB950" stroke-width="1.5" marker-end="url(#dg)"/>
+      <line x1="750" y1="125" x2="760" y2="125" stroke="#3FB950" stroke-width="1.5" marker-end="url(#dg)"/>
+
+      <!-- Labels under transforms -->
+      <text x="90" y="220" text-anchor="middle" font-size="9" fill="#8B949E">1. Ingreso manual</text>
+      <text x="350" y="220" text-anchor="middle" font-size="9" fill="#1BB5D4">2. Enriquecimiento</text>
+      <text x="585" y="220" text-anchor="middle" font-size="9" fill="#F85149">3. Generación email (Bug)</text>
+      <text x="845" y="220" text-anchor="middle" font-size="9" fill="#3FB950">4. QT → Pricing ✓</text>
+
+      <defs>
+        <marker id="d1" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/></marker>
+        <marker id="dt" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#1BB5D4"/></marker>
+        <marker id="do" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#E8B84B"/></marker>
+        <marker id="dg" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0, 7 2.5, 0 5" fill="#3FB950"/></marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+
+<!-- ══ 13 INTERVENCIÓN HUMANA ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">13</div><div><h2>Intervención Humana vs. Automatización</h2><div class="ss">Qué hace el sistema solo, qué requiere a Daniel, y por qué</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>Actividad</th><th>Quién ejecuta</th><th>Frecuencia</th><th>Tiempo estimado</th><th>Razón (automatizado / manual)</th></tr></thead>
+    <tbody>
+      <tr><td>Identificar y agregar prospectos</td><td><strong>Daniel</strong> (manual)</td><td>Diario</td><td>10-20 min/día</td><td>No hay fuente automatizada de prospectos. LinkedIn no tiene API abierta.</td></tr>
+      <tr><td>Calcular Score_Auto y Clase_Auto</td><td><strong>Sistema</strong> (Airtable fórmula)</td><td>Inmediato al crear</td><td>0 min Daniel</td><td>Fórmula determinística en Airtable. Sin intervención.</td></tr>
+      <tr><td>Activar secuencia SDR (trigger)</td><td><strong>Sistema</strong> (Make — OFFLINE Bug17)</td><td>Al cruzar Score ≥ 50</td><td>0 min Daniel (cuando funcione)</td><td>Bug17 lo bloquea. Hoy: Daniel activa manualmente.</td></tr>
+      <tr><td>Generar draft email outreach</td><td><strong>Sistema</strong> (Make + Claude — OFFLINE)</td><td>Por cada prospecto A/A+</td><td>0 min Daniel (cuando funcione)</td><td>Bug17. Hoy: Daniel redacta desde plantilla.</td></tr>
+      <tr><td>Revisar y enviar email</td><td><strong>Daniel</strong> (siempre — ADR-004)</td><td>Por cada email</td><td>2 min/email (con draft)</td><td>ADR-004: Claude NUNCA envía directo. Daniel es el punto de control de comunicaciones.</td></tr>
+      <tr><td>Calificar respuesta de prospecto</td><td><strong>Daniel</strong> (siempre)</td><td>Por cada respuesta</td><td>5-10 min/respuesta</td><td>Juicio de negocio. Requiere contexto que el sistema no tiene (tono, relación, urgencia).</td></tr>
+      <tr><td>Recibir email de solicitud de QT</td><td><strong>Sistema</strong> (Módulo 1 — ACTIVO)</td><td>24/7 automático</td><td>0 min Daniel</td><td>Módulo 1 (5373407) hace watch de Gmail permanentemente. CERTIFICADO.</td></tr>
+      <tr><td>Extraer datos de embarque del email</td><td><strong>Sistema</strong> (Claude API via Make)</td><td>Por cada email entrante</td><td>0 min Daniel</td><td>Claude extrae estructuradamente en ~30 seg. CERTIFICADO.</td></tr>
+      <tr><td>Crear registro QT en Airtable</td><td><strong>Sistema</strong> (Make → Airtable)</td><td>Por cada email válido</td><td>0 min Daniel</td><td>API Airtable. Automático post-extracción Claude.</td></tr>
+      <tr><td>Revisar QT creada automáticamente</td><td><strong>Daniel</strong> (revisión)</td><td>Por cada QT nueva</td><td>3-5 min/QT</td><td>Validación de calidad. Errores de extracción de Claude requieren corrección manual.</td></tr>
+      <tr><td>Reporte comercial diario</td><td><strong>Sistema</strong> (Sales Manager 5441614)</td><td>Diario 8 AM COT</td><td>0 min Daniel (lectura 3 min)</td><td>Sales Manager genera automáticamente. Daniel solo lee y decide.</td></tr>
+      <tr><td>Descarte de prospectos sin respuesta</td><td><strong>Sistema</strong> (End-of-Seq 5442675)</td><td>Post-secuencia completa</td><td>0 min Daniel</td><td>Automático al agotar 3 toques. Daniel puede override manualmente.</td></tr>
+    </tbody>
+  </table>
+  <div class="grid-2" style="margin-top:16px">
+    <div class="kpi-box"><div class="kpi-val">4 de 12</div><div class="kpi-label">Actividades 100% automáticas (hoy)</div></div>
+    <div class="kpi-box"><div class="kpi-val">8 de 12</div><div class="kpi-label">Requieren intervención Daniel (parcial o total)</div></div>
+    <div class="kpi-box" style="border-color:var(--red)"><div class="kpi-val" style="color:var(--red)">3 OFFLINE</div><div class="kpi-label">Automatizaciones bloqueadas por Bug17</div></div>
+    <div class="kpi-box" style="border-color:var(--green)"><div class="kpi-val" style="color:var(--green)">~35 min/día</div><div class="kpi-label">Tiempo Daniel en comercial con Bug17 resuelto</div></div>
+  </div>
+</div>
+
+<!-- ══ 14 REGLAS DE NEGOCIO ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">14</div><div><h2>Reglas de Negocio</h2><div class="ss">Reglas formales que gobiernan el comportamiento del departamento comercial</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">RN-COM-001: ADR-004 — No envío directo</div>
+      <p style="color:#E6EDF3;font-size:13px;line-height:1.6;margin:0">Ningún módulo de Make, ni Claude, ni ningún agente puede ejecutar <code>sendAnEmail()</code> directamente hacia externos. ÚNICAMENTE <code>createADraft()</code>. Daniel es el único autorizado para enviar desde dhasasdrive@gmail.com. Sin excepciones. Sin override. Esta regla no puede ser suspendida aunque el Fundador lo solicite.</p>
+      <div class="badge-verde" style="margin-top:8px">VERIFICADO — ADR-004</div>
+    </div>
+    <div class="card">
+      <div class="card-title">RN-COM-002: Umbral de scoring para secuencia</div>
+      <p style="color:#E6EDF3;font-size:13px;line-height:1.6;margin:0">Solo prospectos con Score_Auto ≥ 50 (Clase A o A+) ingresan a la secuencia SDR automática. Clase B (25-49) va a cola de baja prioridad. Clase C (< 25) se descarta automáticamente sin intervención de Daniel. Esta regla puede ajustarse desde la fórmula Airtable — no requiere cambio en Make.</p>
+      <div class="badge-azul" style="margin-top:8px">HIPÓTESIS — pendiente validación operativa real</div>
+    </div>
+    <div class="card">
+      <div class="card-title">RN-COM-003: Máximo 3 toques por secuencia</div>
+      <p style="color:#E6EDF3;font-size:13px;line-height:1.6;margin:0">Cada prospecto recibe exactamente 3 intentos de contacto (Outreach + FU1 + FU2). Si no hay respuesta en los 3 toques, Estado_secuencia → "Descartado". No se puede reactivar el mismo prospecto en la misma secuencia. Para reactivar: nuevo ingreso con score actualizado, mínimo 90 días de pausa.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">RN-COM-004: QT válida requiere datos mínimos</div>
+      <p style="color:#E6EDF3;font-size:13px;line-height:1.6;margin:0">Una cotización no puede pasar a Pricing si le faltan: origen, destino, tipo mercancía, peso/volumen aproximado. Módulo 1 crea la QT aunque estén vacíos — la validación es responsabilidad de Daniel en la revisión post-creación. Bug conocido: no hay validación automática de campos obligatorios.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">RN-COM-005: HubSpot solo lectura</div>
+      <p style="color:#E6EDF3;font-size:13px;line-height:1.6;margin:0">El conector HubSpot está configurado en READ-ONLY. No se puede escribir a HubSpot desde Make ni desde Claude. Hay 0 deals activos en HubSpot hoy. La decisión de reautorizar con write scopes está pendiente (ADR-006). Hasta que se tome esa decisión, Airtable es la única fuente de verdad del pipeline.</p>
+      <div class="badge-rojo" style="margin-top:8px">VERIFICADO — ADR-006 pendiente</div>
+    </div>
+    <div class="card">
+      <div class="card-title">RN-COM-006: Prospectos ≠ Clientes automáticamente</div>
+      <p style="color:#E6EDF3;font-size:13px;line-height:1.6;margin:0">Un prospecto en PROSPECTOS table no se convierte automáticamente en un registro de CLIENTES. La migración es manual: Daniel crea el cliente en Siigo → se sincroniza a CLIENTES en Airtable. La tabla CLIENTES tiene paridad Siigo (330 registros verificados). PROSPECTOS es pipeline comercial, no clientes.</p>
+      <div class="badge-verde" style="margin-top:8px">VERIFICADO</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 15 RIESGOS Y FALLBACKS ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">15</div><div><h2>Riesgos, Fallbacks y Errores Conocidos</h2><div class="ss">Mapa de riesgo operativo del departamento comercial</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>Riesgo / Error</th><th>Severidad</th><th>Impacto actual</th><th>Fallback</th><th>Solución definitiva</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Bug 17 — json:ParseJSON</strong><br><small style="color:#8B949E">Escenarios 5435561, 5435567</small></td>
+        <td><span class="badge-rojo">CRÍTICO</span></td>
+        <td>SDR Outreach y FU1 offline. 77-83% error rate. Pipeline de outbound completamente manual.</td>
+        <td>Daniel redacta emails manualmente desde plantilla en Gmail</td>
+        <td>Corregir módulos json:ParseJSON en Make UI. No puede hacerse via API (ADR-001). Fundador: 45 min Make UI.</td>
+      </tr>
+      <tr>
+        <td><strong>Follow-up 2 isinvalid</strong><br><small style="color:#8B949E">Escenario 5441586</small></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 8px;border-radius:4px;font-size:11px">ALTO</span></td>
+        <td>Tercer toque de secuencia SDR no ejecuta. Prospectos no reciben el último email de cierre.</td>
+        <td>Daniel envía manualmente tercer email cuando lo identifica</td>
+        <td>Revisar trigger en escenario 5441586 desde Make UI. Estimado: 20 min.</td>
+      </tr>
+      <tr>
+        <td><strong>HubSpot READ-ONLY / 0 deals</strong><br><small style="color:#8B949E">ADR-006 en revisión</small></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 8px;border-radius:4px;font-size:11px">MEDIO</span></td>
+        <td>No se puede usar HubSpot como CRM activo. Pipeline vive únicamente en Airtable.</td>
+        <td>Airtable como fuente de verdad (ya es el fallback en uso)</td>
+        <td>Decisión ADR-006: reautorizar con write scopes o retirar HubSpot. Fundador: T-003.</td>
+      </tr>
+      <tr>
+        <td><strong>Gmail OAuth vence 2026-08-24</strong><br><small style="color:#8B949E">Conexión 9371760</small></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 8px;border-radius:4px;font-size:11px">MEDIO</span></td>
+        <td>El 24 de agosto, todos los escenarios Make que usan Gmail dejarán de funcionar. Incluyendo Módulo 1.</td>
+        <td>N/A — si vence, Módulo 1 cae completamente</td>
+        <td>Renovar OAuth en Make UI antes del 2026-08-24. Fundador: 10 min. Poner reminder julio 15.</td>
+      </tr>
+      <tr>
+        <td><strong>Score_Auto sin datos de enriquecimiento</strong></td>
+        <td><span class="badge-azul">BAJO</span></td>
+        <td>Prospectos con Empleados o Volumen_USD vacíos reciben score mínimo aunque sean buenos prospectos.</td>
+        <td>Daniel ingresa datos manualmente antes de que se calcule el score</td>
+        <td>Implementar Data Enrichment 5441853 (P2 — después del primer cliente).</td>
+      </tr>
+      <tr>
+        <td><strong>QT creada sin link a CLIENTES</strong><br><small style="color:#8B949E">T-037 pendiente</small></td>
+        <td><span class="badge-azul">BAJO</span></td>
+        <td>DHA-QT-25001 no tiene cliente vinculado. No bloquea la cotización pero sí la facturación.</td>
+        <td>Daniel vincula manualmente antes de generar factura</td>
+        <td>T-037: Daniel confirma cuál cliente vincular en DHA-QT-25001. Luego Claude vincula via API.</td>
+      </tr>
+      <tr>
+        <td><strong>Market Intelligence en pausa</strong><br><small style="color:#8B949E">5441819</small></td>
+        <td><span class="badge-azul">BAJO</span></td>
+        <td>Outreach menos personalizado. Tasa de respuesta potencialmente menor.</td>
+        <td>Daniel investiga manualmente antes de contactar prospectos A+</td>
+        <td>Activar después del primer cierre. No bloquea MVP.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ 16 DEPENDENCIAS ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">16</div><div><h2>Dependencias del Departamento Comercial</h2><div class="ss">Qué necesita el departamento para funcionar, de dónde viene, y qué bloquea si falla</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Dependencias Upstream (Entradas)</div>
+      <table class="tbl">
+        <thead><tr><th>Recurso</th><th>Fuente</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td>Prospectos identificados</td><td>Daniel (manual / LinkedIn)</td><td><span class="badge-verde">Disponible</span></td></tr>
+          <tr><td>Claude API key activa</td><td>Anthropic</td><td><span class="badge-verde">Activa</span></td></tr>
+          <tr><td>Gmail OAuth (9371760)</td><td>Google / Make</td><td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">Vence ago 2026</span></td></tr>
+          <tr><td>Airtable base appGvhQHWWQRXgmSo</td><td>Airtable</td><td><span class="badge-verde">Activa</span></td></tr>
+          <tr><td>Make Team 2430126</td><td>Make.com</td><td><span class="badge-verde">Activo</span></td></tr>
+          <tr><td>PARAMETROS table (metas)</td><td>Airtable</td><td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">T-038 pendiente</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Dependencias Downstream (Salidas hacia otros deptos)</div>
+      <table class="tbl">
+        <thead><tr><th>Entrega a</th><th>Qué entrega</th><th>Trigger</th></tr></thead>
+        <tbody>
+          <tr><td>Depto Pricing</td><td>QT con estado "Por Cotizar"</td><td>Automático (Módulo 1)</td></tr>
+          <tr><td>Depto Clientes</td><td>Nuevo prospecto convertido</td><td>Manual (Daniel)</td></tr>
+          <tr><td>Depto Reporting</td><td>KPIs comerciales del mes</td><td>Budget Agent (5441451)</td></tr>
+          <tr><td>Siigo (Facturación)</td><td>Cliente creado y validado</td><td>Manual (Daniel en Siigo)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Mapa de Dependencias Críticas</div>
+    <p style="color:#E6EDF3;font-size:13px;line-height:1.7;margin:0">El Departamento Comercial tiene una dependencia de ciclo crítica: <strong style="color:#1BB5D4">Bug17 bloquea el outbound</strong>, lo que hace que el único flujo activo sea el inbound (email entrante → QT automática). Esto significa que sin corrección de Bug17, el departamento comercial solo puede operar en modo reactivo: esperar que el prospecto escriba primero. La proyección de 15 QTs/mes y 3 cierres/mes asume que el outbound funciona. Con Bug17 activo y modo manual, la capacidad realista es de 4-6 QTs/mes (dependiente de tiempo de Daniel). La corrección de Bug17 es el desbloqueador #1 del departamento.</p>
+  </div>
+</div>
+
+<!-- ══ 17 MEJORAS POSIBLES ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">17</div><div><h2>Mejoras Posibles</h2><div class="ss">Backlog de mejoras priorizadas por impacto en ingresos y esfuerzo de implementación</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>Mejora</th><th>Impacto</th><th>Esfuerzo</th><th>Prioridad</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Fix Bug17 (SDR Outreach)</strong></td>
+        <td><span class="badge-verde">ALTO</span></td>
+        <td>45 min (Make UI)</td>
+        <td><span class="badge-rojo">P0</span></td>
+        <td>Desbloquea outbound completo. Pasa de 4-6 QTs/mes a 15 QTs/mes. ROI inmediato.</td>
+      </tr>
+      <tr>
+        <td><strong>Parametrizar metas en PARAMETROS</strong></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">MEDIO</span></td>
+        <td>2h (Airtable + Make)</td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">P1</span></td>
+        <td>T-038: metas hardcoded en Budget Agent → tabla PARAMETROS. Permite cambiar metas sin tocar Make.</td>
+      </tr>
+      <tr>
+        <td><strong>Activar Data Enrichment 5441853</strong></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">MEDIO</span></td>
+        <td>4-6h</td>
+        <td><span class="badge-azul">P2</span></td>
+        <td>Mejora precisión del score en ~40%. Reduce tiempo Daniel de 15 a 2 min/prospecto en investigación.</td>
+      </tr>
+      <tr>
+        <td><strong>Validación QT obligatoria antes de Pricing</strong></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">MEDIO</span></td>
+        <td>3h (Make)</td>
+        <td><span class="badge-azul">P2</span></td>
+        <td>Agregar módulo de validación: si faltan campos obligatorios en QT, notificar a Daniel antes de pasar a Pricing. Previene QTs incompletas que bloquean la cotización.</td>
+      </tr>
+      <tr>
+        <td><strong>Integración LinkedIn Sales Navigator</strong></td>
+        <td><span class="badge-verde">ALTO</span></td>
+        <td>Alto (API + Make)</td>
+        <td><span class="badge-azul">P3</span></td>
+        <td>Automatizar identificación de prospectos desde LinkedIn. Eliminaria la única actividad 100% manual de Daniel en el proceso. Requiere LinkedIn Sales Navigator (costo mensual ~$100 USD).</td>
+      </tr>
+      <tr>
+        <td><strong>Activar Market Intelligence 5441819</strong></td>
+        <td><span class="badge-azul">BAJO</span></td>
+        <td>2h (verificar y activar)</td>
+        <td><span class="badge-azul">P3</span></td>
+        <td>Aumenta personalización del outreach. Impacto en tasa de respuesta estimado +25-35%. Activar después del primer cierre.</td>
+      </tr>
+      <tr>
+        <td><strong>Integración HubSpot write-scopes</strong></td>
+        <td><span class="badge-azul">BAJO</span></td>
+        <td>4h (OAuth + Make)</td>
+        <td><span class="badge-azul">P3</span></td>
+        <td>Si se reautoriza HubSpot con write scopes, permite sincronización bidireccional Airtable ↔ HubSpot. Valor solo si EASY usa HubSpot como CRM principal. Decisión: ADR-006.</td>
+      </tr>
+      <tr>
+        <td><strong>Módulo de seguimiento WhatsApp</strong></td>
+        <td><span style="background:rgba(232,184,75,0.15);color:#E8B84B;padding:2px 6px;border-radius:4px;font-size:11px">MEDIO</span></td>
+        <td>Alto (WhatsApp API Business)</td>
+        <td><span class="badge-azul">P4</span></td>
+        <td>Integrar WhatsApp Business API para secuencias de mensajes automáticos. Costo adicional pero altísima tasa de apertura en Colombia (>90%). Requiere número business dedicado.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ══ 18 OPINIÓN ARQUITECTÓNICA ══ -->
+<div class="sec">
+  <div class="sh"><div class="sn">18</div><div><h2>Opinión Arquitectónica — Departamento Comercial</h2><div class="ss">Evaluación técnica y estratégica del CTO Técnico · Julio 2026</div></div></div>
+  
+  <div class="opinion-block">
+    <div class="opinion-title">Evaluación General: SÓLIDO EN DISEÑO · FRÁGIL EN EJECUCIÓN</div>
+    
+    <p>El Departamento Comercial de EASY Logistics tiene una arquitectura conceptualmente correcta y bien pensada para una empresa en fase pre-revenue. La elección de Make + Airtable + Claude como stack central es defensible: bajo costo de entrada, alta velocidad de iteración, y buena cobertura de automatización sin ingeniería de software dedicada. El diseño del pipeline (PROSPECTOS → QUOTATIONS → Pricing) es limpio y el flujo de estados está bien definido.</p>
+
+    <p>Sin embargo, hay una brecha importante entre el diseño y la realidad operativa: <strong>el 60% de las automatizaciones comerciales están offline o degradadas</strong>. Bug17 bloquea el outbound completo, convirtiendo un sistema diseñado para escalar de forma autónoma en un proceso dependiente de tiempo de Daniel para cada prospecto. Esto es el problema #1 del departamento y del MVP.</p>
+
+    <p><strong>Lo que funciona bien:</strong> El flujo inbound (email → QT automática via Módulo 1) es el componente más robusto del sistema y merece ser el foco de generación de primer ingreso. Claude extrae datos de embarques con precisión, Airtable crea el registro, y Pricing recibe una QT estructurada en menos de 60 segundos. Este flujo está certificado y opera 24/7. El Sales Manager Agent y el Budget Agent también son buenos ejemplos de automatización de inteligencia de negocio.</p>
+
+    <p><strong>Lo que preocupa estructuralmente:</strong></p>
+
+    <p>Primero, la <strong>dependencia de Daniel como cuello de botella de comunicaciones</strong> (ADR-004) es correcta desde el punto de vista de seguridad y control en esta fase, pero crea un límite superior de capacidad. Con Bug17 resuelto y drafts automáticos, Daniel puede manejar 20-30 prospectos/mes en paralelo. Sin Bug17 resuelto, el límite es de 5-8 con calidad. La corrección de Bug17 no es opcional — es la palanca de mayor ROI en el sistema.</p>
+
+    <p>Segundo, el <strong>scoring sin enriquecimiento automático</strong> es un riesgo silencioso. El Score_Auto es elegante matemáticamente pero sus entradas son manuales. Un prospecto A+ que Daniel ingresó sin datos de volumen o empleados puede clasificar como B y perderse en la cola. La precisión del sistema de calificación es proporcional a la disciplina de ingreso de datos — algo que no escala bien.</p>
+
+    <p>Tercero, la <strong>decisión de HubSpot (ADR-006)</strong> está pendiente hace demasiado tiempo. Con 0 deals activos y modo READ-ONLY, HubSpot no aporta valor hoy. O se reautoriza con write scopes y se convierte en el CRM activo (con la complejidad de sincronizar con Airtable), o se retira definitivamente y Airtable queda como CRM oficial. La ambigüedad tiene costo: ninguna de las dos rutas se puede optimizar mientras la decisión no se tome.</p>
+
+    <p>Cuarto, hay una <strong>ausencia notable de métricas de outbound</strong>: tasa de apertura de emails, tasa de respuesta por sector, efectividad por clase de prospecto, conversión por ángulo de mensaje. El sistema genera actividad comercial pero no la mide con la granularidad necesaria para optimizar. Esto es aceptable en fase 0, pero debe resolverse en la primera iteración post-primer-cliente.</p>
+
+    <p><strong>Recomendación de priorización (no sección de recomendaciones — es parte de la opinión):</strong> El único foco debe ser el primer cliente operativo. El camino más corto no es construir más automatizaciones — es resolver Bug17 para habilitar el outbound, y en paralelo trabajar el inbound con los prospectos que ya están en pipeline. El Marketing Intelligence y el Data Enrichment son mejoras valiosas pero no son el camino crítico. El departamento puede generar primer ingreso con las herramientas que ya tiene, siempre que Bug17 sea corregido.</p>
+
+    <p><strong>Veredicto de madurez del departamento:</strong></p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:12px">
+      <div class="kpi-box" style="flex:1;min-width:160px"><div class="kpi-val" style="color:var(--green)">Diseñado</div><div class="kpi-label">Arquitectura del pipeline</div></div>
+      <div class="kpi-box" style="flex:1;min-width:160px"><div class="kpi-val" style="color:var(--teal)">Implementado</div><div class="kpi-label">Módulos construidos (6/8)</div></div>
+      <div class="kpi-box" style="flex:1;min-width:160px"><div class="kpi-val" style="color:var(--yellow)">Parcial</div><div class="kpi-label">Validado (solo inbound)</div></div>
+      <div class="kpi-box" style="flex:1;min-width:160px;border-color:var(--red)"><div class="kpi-val" style="color:var(--red)">0</div><div class="kpi-label">Componentes certificados (sin ingreso real)</div></div>
+    </div>
+  </div>
+
+  <div class="warn" style="margin-top:20px;border-color:var(--yellow)">
+    <strong>CAMINO CRÍTICO hacia primer ingreso comercial:</strong>
+    1. <span class="badge-rojo">Fundador (45 min)</span> Fix Bug17 en Make UI (escenarios 5435561, 5435567) →
+    2. <span class="badge-azul">Fundador (5 min)</span> Confirmar DHA-QT-25001 (tipo, cliente) →
+    3. <span class="badge-verde">Sistema</span> Claude actualiza blueprint facturación (T-036) →
+    4. <span class="badge-verde">Verificar</span> E2E: email entrante → QT → Cotización → Proveedor → Factura →
+    5. <span class="badge-rojo">Meta: Jul 10, 2026</span> Primer ingreso real confirmado en caja.
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<div style="text-align:center;padding:40px 20px;border-top:1px solid var(--border);margin-top:40px">
+  <div style="font-size:14px;color:var(--text-dim)">EASY Logistics Colombia S.A.S · easy-logistics.co</div>
+  <div style="font-size:12px;color:#484F58;margin-top:6px">SESIÓN 1 — Departamento Comercial · Generado por Claude (CTO Técnico) · Julio 7, 2026</div>
+  <div style="font-size:12px;color:#484F58;margin-top:4px">Clasificaciones: VERIFICADO = confirmado con fuente directa · HIPÓTESIS = inferido, pendiente confirmación · ESTIMACIÓN = calculado con supuestos explícitos</div>
+  <div style="margin-top:16px;display:inline-block;padding:8px 20px;background:rgba(27,181,212,0.1);border:1px solid var(--teal);border-radius:6px;font-size:12px;color:var(--teal)">
+    Para SESIÓN 2: Departamento de Pricing y Cotizaciones
+  </div>
+</div>
+
+</main>
+</body>
+</html>

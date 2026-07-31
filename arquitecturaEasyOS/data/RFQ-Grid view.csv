@@ -1,0 +1,13 @@
+﻿Ref,Servicio,Fecha solicitud,Fecha respuesta,Estado,Moneda,Costo ofertado,Vigencia hasta,Seleccionado,Resultado para el proveedor,Feedback enviado,Notas,QT,Proveedor,Días sin respuesta
+TEST-DHA-QT-90001-S1-P1,FLETE INTERNACIONAL,2026-06-12,,SOLICITADO,,,,,,,TEST - simulado para Ruta 1 (RFQ sin respuesta 48h).,TEST-DHA-QT-90001,,33
+TEST-DHA-QT-90001-S1-P2,FLETE INTERNACIONAL,2026-06-09,,RECORDATORIO ENVIADO,,,,,,,TEST - simulado para Ruta 2 (RFQ sin respuesta 96h ALERTA).,TEST-DHA-QT-90001,,36
+TEST-DHA-QT-90001-S2-P1,ADUANA DESTINO,2026-06-15,,SOLICITADO,,,,,,,"TEST - simulado para Ruta 6 (Solicitud de tarifa). Al ejecutarse la Ruta 6, pasara a Estado=SOLICITADO con Fecha solicitud=hoy, y el modulo 15 generara un borrador/correo dirigido al campo Correo del proveedor simulado (c.hernandez@easy-logistics.co).",TEST-DHA-QT-90001,,30
+TEST-DHA-QT-90001-S1-P3,FLETE INTERNACIONAL,2026-06-16,,SOLICITADO,,,,,,,,TEST-DHA-QT-90001,,29
+TEST-RFQ-FCL-001,FLETE INTERNACIONAL,2026-06-17,,SOLICITADO,USD,,,,,,Registro de prueba FCL - test Pricing Agent 2026-06-17,TEST-DHA-QT-90001,,28
+DHA-QT-00002-S1-P1,FLETE INTERNACIONAL,2026-06-16,2026-06-18,RESPONDIDO,USD,1650.00,2026-07-16,,,,"RFQ para flete LCL Miami-Bogotá. 8 CBM. Proveedor respondió con tarifa de $1,650 USD all-in.",DHA-QT-00002,Pacific Carriers S.A.,
+DHA-QT-00003-S1-P1,FLETE INTERNACIONAL,2026-06-13,,SOLICITADO,USD,,2026-07-13,,,,"RFQ para FCL 20' Dhaka-Medellín. Solicitado a naviera, pendiente respuesta.",DHA-QT-00003,Pacific Carriers S.A.,32
+DHA-QT-00004-S1-P1,FLETE INTERNACIONAL,2026-06-19,,SOLICITADO,USD,,2026-07-19,,,,RFQ para FCL 20' exportación café Bogotá-Rotterdam. Por enviar a Pacific Carriers.,DHA-QT-00004,Pacific Carriers S.A.,26
+DHA-QT-00005-S1-P1,FLETE INTERNACIONAL,2026-06-11,2026-06-13,SELECCIONADO,USD,2800.00,2026-07-11,checked,SELECCIONADO,,"RFQ para FCL 20' Shenzhen-Bogotá. Pacific Carriers respondió $2,800 USD. SELECCIONADO para esta operación.",DHA-QT-00005,Pacific Carriers S.A.,
+DHA-QT-25001-S1-P1,FLETE INTERNACIONAL,2026-06-26,2026-06-26,RESPONDIDO,USD,1200.00,2026-07-10,,,,,DHA-QT-25001,Pacific Carriers S.A.,
+DHA-QT-25001-S2-P1,ADUANA DESTINO,2026-06-26,2026-06-26,RESPONDIDO,USD,800.00,2026-07-10,checked,,,,DHA-QT-25001,Aduanas del Caribe Ltda,
+DHA-QT-25001-S3-P1,TRANSPORTE TERRESTRE DESTINO,2026-06-26,2026-06-26,RESPONDIDO,USD,400.00,2026-07-10,checked,,,,DHA-QT-25001,Translogis Colombia SAS,

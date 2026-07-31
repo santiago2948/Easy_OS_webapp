@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SESIÓN 5 — Departamento de Aduanas · EASY OS</title>
+<style>
+:root{--navy:#1C2B47;--teal:#1BB5D4;--bg:#0D1117;--surface:#161B22;--border:#21262D;--muted:#8B949E;--green:#3FB950;--red:#F85149;--yellow:#E8B84B;--purple:#A371F7;--orange:#DB6D28;--text:#E6EDF3;--accent:#A371F7}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;font-size:14px}
+.hero{background:linear-gradient(135deg,#0D1117 0%,#1A0F2E 50%,#0D1117 100%);padding:60px 40px;border-bottom:1px solid var(--border);text-align:center}
+.hero-session{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-size:36px;font-weight:800;color:var(--text);margin-bottom:8px}
+.hero-sub{font-size:16px;color:var(--muted);margin-bottom:24px}
+.hero-desc{font-size:14px;color:var(--muted);max-width:700px;margin:0 auto 28px}
+.hero-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+.meta-item{display:flex;flex-direction:column;align-items:center}
+.meta-val{font-size:20px;font-weight:700;color:var(--accent)}
+.meta-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100;display:flex;overflow-x:auto}
+.nav a{display:block;padding:12px 16px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+main{max-width:1200px;margin:0 auto;padding:40px}
+.sec{padding:40px 0}
+.sec-div{border-top:1px solid var(--border)}
+.sec-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+.sec-num{font-size:48px;font-weight:800;color:var(--border);line-height:1;min-width:60px}
+.sec-title-wrap h2{font-size:26px;font-weight:700;color:var(--text)}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:var(--navy);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,0.02)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+.kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.kpi-num{font-size:28px;font-weight:800;color:var(--accent)}
+.kpi-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.dw{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.badge-green{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+.badge-yellow{background:rgba(232,184,75,.15);color:var(--yellow);border:1px solid rgba(232,184,75,.3)}
+.badge-red{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+.badge-blue{background:rgba(27,181,212,.15);color:var(--teal);border:1px solid rgba(27,181,212,.3)}
+.badge-purple{background:rgba(163,113,247,.15);color:var(--purple);border:1px solid rgba(163,113,247,.3)}
+.badge-orange{background:rgba(219,109,40,.15);color:var(--orange);border:1px solid rgba(219,109,40,.3)}
+p{margin-bottom:10px;font-size:13px;color:var(--text)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-session">EASY OS · Documentación Técnica · Sesión 5 de 7</div>
+  <h1 class="hero-title">Departamento de Aduanas</h1>
+  <p class="hero-sub">Coordinación del proceso de importación ante la DIAN — 100% manual</p>
+  <p class="hero-desc">Este documento describe cómo EASY Revolution gestiona el proceso aduanero de importación en Colombia — la coordinación entre el agente aduanero, la DIAN, y el cliente para que la carga que llegó al puerto sea legalmente liberada y entregada. Es el departamento más regulado del sistema y el único que opera completamente fuera del control de Make o cualquier automatización interna.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-val">0</div><div class="meta-lbl">Escenarios Make activos</div></div>
+    <div class="meta-item"><div class="meta-val">100%</div><div class="meta-lbl">Manual actualmente</div></div>
+    <div class="meta-item"><div class="meta-val">DIAN</div><div class="meta-lbl">Autoridad reguladora</div></div>
+    <div class="meta-item"><div class="meta-val">Ext.</div><div class="meta-lbl">Agente aduanero externo</div></div>
+    <div class="meta-item"><div class="meta-val">1–5 días</div><div class="meta-lbl">Tiempo típico DTA</div></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#s1">1. Objetivo</a><a href="#s2">2. KPIs y SLA</a><a href="#s3">3. Proceso</a>
+  <a href="#s4">4. BPMN</a><a href="#s5">5. Swimlanes</a><a href="#s6">6. Tipos de Aforo</a>
+  <a href="#s7">7. Documentos Aduaneros</a><a href="#s8">8. Marco Regulatorio DIAN</a>
+  <a href="#s9">9. Ficha Técnica</a><a href="#s10">10. Arquitectura Técnica</a>
+  <a href="#s11">11. Secuencia Temporal</a><a href="#s12">12. Flujo de Datos</a>
+  <a href="#s13">13. Intervención Humana</a><a href="#s14">14. Reglas de Negocio</a>
+  <a href="#s15">15. Riesgos y Fallbacks</a><a href="#s16">16. Dependencias</a>
+  <a href="#s17">17. Mejoras Posibles</a><a href="#s18">18. Opinión Arquitectónica</a>
+</nav>
+
+<main>
+
+<!-- S1 -->
+<div class="sec" id="s1">
+  <div class="sec-header"><div class="sec-num">01</div><div class="sec-title-wrap"><h2>Objetivo del Departamento</h2><div class="sec-sub">Para qué existe · Qué problema resuelve · Qué entrega</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Propósito</div>
+      <p>El Departamento de Aduanas tiene como propósito <strong>garantizar que cada embarque importado por clientes de EASY Revolution cumpla con todos los requisitos legales exigidos por la DIAN para su ingreso al territorio colombiano</strong> — desde la presentación de la declaración de importación hasta la autorización de levante que permite retirar la carga del puerto.</p>
+      <p>Sin este proceso completado correctamente, la carga queda retenida en el puerto o aeropuerto — generando costos de almacenamiento, demoras al cliente, y potencialmente una sanción aduanera que afecta la relación comercial de EASY Revolution con ese cliente.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Por qué es el departamento más crítico del flujo</div>
+      <p>Aduanas es el cuello de botella obligatorio de cualquier importación. No existe ninguna forma de omitirlo: la DIAN tiene plena potestad para retener, aforar, o rechazar cualquier importación. Un error en este proceso puede significar:</p>
+      <p>Costos de almacenamiento portuario que se acumulan por día. Multas o sanciones para el importador. Decomiso de la mercancía en casos extremos. Pérdida del cliente para EASY Revolution.</p>
+      <p>Por esto, aunque EASY no ejecuta el proceso directamente (lo hace el agente aduanero externo), Daniel lo supervisa activamente y es responsable ante el cliente del resultado.</p>
+    </div>
+  </div>
+  <div class="kpi-grid" style="margin-top:16px">
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--yellow)">TRIGGER</div><div class="kpi-label">Carga arriba al puerto de destino</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--accent)">DTA</div><div class="kpi-label">Declaración de importación tramitada</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--teal)">AFORO</div><div class="kpi-label">Revisión DIAN (documental o física)</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--green)">LEVANTE</div><div class="kpi-label">Autorización de retiro de la carga</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--purple)">ENTREGA</div><div class="kpi-label">Carga llega a bodega del cliente</div></div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S2 -->
+<div class="sec" id="s2">
+  <div class="sec-header"><div class="sec-num">02</div><div class="sec-title-wrap"><h2>KPIs y SLA</h2><div class="sec-sub">Indicadores aduaneros · Tiempos regulatorios · Umbrales de alerta</div></div></div>
+  <div class="grid-2">
+    <table class="tbl">
+      <thead><tr><th>KPI</th><th>Objetivo</th><th>Alerta</th><th>Qué mide</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tiempo DTA (arribo → levante)</strong></td><td>1–3 días hábiles</td><td>&gt; 5 días</td><td>Eficiencia del agente aduanero y ausencia de problemas documentales</td></tr>
+        <tr><td><strong>% DTA aceptadas sin correcciones</strong></td><td>&gt; 95%</td><td>&lt; 85%</td><td>Calidad de la documentación preparada por el agente aduanero</td></tr>
+        <tr><td><strong>% operaciones con aforo físico</strong></td><td>Monitoreo (no controlable)</td><td>&gt; 30%</td><td>Alertas de perfil de riesgo o patrones inusuales con la DIAN</td></tr>
+        <tr><td><strong>Tiempo comunicación incidencia → cliente</strong></td><td>&lt; 2h</td><td>&gt; 4h</td><td>Transparencia con el cliente ante problemas aduaneros</td></tr>
+        <tr><td><strong>Costo almacenamiento portuario por retraso</strong></td><td>$0 (meta)</td><td>&gt; $200 USD</td><td>Impacto económico de demoras en el proceso aduanero</td></tr>
+      </tbody>
+    </table>
+    <div class="card">
+      <div class="card-title">Tipos de aforo DIAN y su impacto en tiempo</div>
+      <p><strong>Verde (Automático):</strong> La DTA es aceptada electrónicamente sin revisión. La carga queda autorizada para retiro inmediato. Tiempo adicional: 0 días.</p>
+      <p><strong>Amarillo (Documental):</strong> La DIAN solicita los documentos físicos del embarque para revisión. El agente aduanero los entrega. Tiempo adicional: 1-2 días hábiles.</p>
+      <p><strong>Rojo (Físico):</strong> La DIAN inspecciona físicamente la carga en el puerto o bodega. Requiere presencia del importador o su representante. Tiempo adicional: 2-5 días hábiles.</p>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S3 -->
+<div class="sec" id="s3">
+  <div class="sec-header"><div class="sec-num">03</div><div class="sec-title-wrap"><h2>Proceso Aduanero</h2><div class="sec-sub">Desde el arribo hasta el levante de la mercancía</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Paso</th><th>Responsable</th><th>Herramienta/Sistema</th><th>Input</th><th>Output</th><th>Tiempo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>01</strong></td><td>Daniel recibe confirmación de arribo del proveedor</td><td>Daniel CEO</td><td>Gmail</td><td>Email del proveedor notificando arribo</td><td>Fecha y hora de arribo registrada</td><td>Día de arribo</td></tr>
+      <tr><td><strong>02</strong></td><td>Daniel notifica al agente aduanero que la carga llegó</td><td>Daniel CEO</td><td>Gmail / WhatsApp</td><td>BL o AWB + datos del embarque</td><td>Agente aduanero inicia gestión</td><td>Mismo día del arribo</td></tr>
+      <tr><td><strong>03</strong></td><td>Daniel envía al agente aduanero el paquete documental del embarque</td><td>Daniel CEO</td><td>Gmail</td><td>BL/AWB + packing list + factura comercial + certificado de origen (si aplica)</td><td>Paquete documental en poder del agente</td><td>Día del arribo</td></tr>
+      <tr><td><strong>04</strong></td><td>Agente aduanero clasifica la mercancía arancelariamente</td><td>Agente Aduanero</td><td>MUISCA / Arancel de Aduanas</td><td>Descripción técnica de la mercancía</td><td>Partida arancelaria asignada → determina arancel e IVA a pagar</td><td>1 día hábil</td></tr>
+      <tr><td><strong>05</strong></td><td>Agente elabora y presenta la DTA (Declaración de Importación)</td><td>Agente Aduanero</td><td>MUISCA (sistema DIAN)</td><td>Documentos del embarque + partida arancelaria + valor en aduana</td><td>DTA radicada ante la DIAN con número de referencia</td><td>1-2 días hábiles</td></tr>
+      <tr><td><strong>06</strong></td><td>DIAN determina el tipo de aforo</td><td>DIAN</td><td>Sistema automático DIAN</td><td>DTA + perfil de riesgo del importador + historial</td><td>Canal asignado: Verde / Amarillo / Rojo</td><td>Pocas horas</td></tr>
+      <tr><td><strong>07a</strong></td><td>[Si Verde] Levante automático — carga libre para retiro</td><td>DIAN</td><td>MUISCA</td><td>DTA aceptada</td><td>Autorización de levante. Proceso completo.</td><td>Inmediato</td></tr>
+      <tr><td><strong>07b</strong></td><td>[Si Amarillo] Agente entrega documentos físicos a la DIAN</td><td>Agente Aduanero</td><td>Presencial / Courier</td><td>Documentos originales del embarque</td><td>DIAN revisa y aprueba o solicita correcciones</td><td>1-2 días hábiles adicionales</td></tr>
+      <tr><td><strong>07c</strong></td><td>[Si Rojo] Inspección física de la carga en el puerto</td><td>DIAN + Agente Aduanero</td><td>Puerto / Bodega</td><td>Carga física + documentos</td><td>Aforo físico completado — DIAN aprueba o rechaza</td><td>2-5 días hábiles adicionales</td></tr>
+      <tr><td><strong>08</strong></td><td>Agente paga tributos aduaneros (arancel + IVA) en banco autorizado</td><td>Agente Aduanero / Cliente</td><td>Banco</td><td>Liquidación de tributos de la DTA</td><td>Pago confirmado. DIAN libera la carga.</td><td>Mismo día de aprobación</td></tr>
+      <tr><td><strong>09</strong></td><td>DIAN emite autorización de levante</td><td>DIAN</td><td>MUISCA</td><td>Tributos pagados + DTA aprobada</td><td>Documento de levante — carga libre para retiro del puerto</td><td>Horas post-pago</td></tr>
+      <tr><td><strong>10</strong></td><td>Agente aduanero coordina retiro de la carga del puerto</td><td>Agente Aduanero</td><td>Transportista local</td><td>Autorización de levante</td><td>Carga retirada del puerto y en tránsito a bodega del cliente</td><td>1-2 días hábiles</td></tr>
+      <tr><td><strong>11</strong></td><td>Carga entregada en bodega del cliente</td><td>Transportista</td><td>—</td><td>Carga + documentos</td><td>Cliente firma acta de recibo. Operación cerrada.</td><td>1-3 días post-levante</td></tr>
+      <tr><td><strong>12</strong></td><td>Daniel registra cierre en Airtable</td><td>Daniel CEO</td><td>Airtable</td><td>Confirmación de entrega del cliente</td><td>QT → estado "Entregado" + Fecha_Entrega_Real</td><td>&lt; 24h post-entrega</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- S4 — BPMN -->
+<div class="sec" id="s4">
+  <div class="sec-header"><div class="sec-num">04</div><div class="sec-title-wrap"><h2>Diagrama BPMN</h2><div class="sec-sub">Flujo aduanero con gateway de tipo de aforo</div></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 1000 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="1000" height="240" fill="transparent"/>
+      <defs><marker id="bad" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8B949E"/></marker></defs>
+
+      <!-- START -->
+      <circle cx="35" cy="80" r="16" fill="#21262D" stroke="#3FB950" stroke-width="2.5"/>
+      <circle cx="35" cy="80" r="10" fill="none" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="35" y="106" text-anchor="middle" font-size="9" fill="#3FB950">ARRIBO</text>
+
+      <!-- Task 1: Daniel notifica agente -->
+      <rect x="62" y="62" width="110" height="36" rx="5" fill="#1C2B47" stroke="#F85149" stroke-width="1.5"/>
+      <text x="117" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Daniel notifica</text>
+      <text x="117" y="91" text-anchor="middle" font-size="9" fill="#8B949E">agente + docs</text>
+      <line x1="51" y1="80" x2="62" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Task 2: Agente elabora DTA -->
+      <rect x="188" y="62" width="110" height="36" rx="5" fill="#1C2B47" stroke="#A371F7" stroke-width="1.5"/>
+      <text x="243" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Agente elabora</text>
+      <text x="243" y="91" text-anchor="middle" font-size="9" fill="#8B949E">DTA en MUISCA</text>
+      <line x1="172" y1="80" x2="188" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Gateway: Tipo aforo -->
+      <polygon points="320,80 348,55 376,80 348,105" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="348" y="78" text-anchor="middle" font-size="9" fill="#E8B84B">¿Tipo</text>
+      <text x="348" y="90" text-anchor="middle" font-size="9" fill="#E8B84B">aforo?</text>
+      <line x1="298" y1="80" x2="320" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Verde path (top) -->
+      <line x1="348" y1="55" x2="348" y2="20" stroke="#3FB950" stroke-width="1.5"/>
+      <line x1="348" y1="20" x2="590" y2="20" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="468" y="15" text-anchor="middle" font-size="9" fill="#3FB950">Verde — Levante automático</text>
+      <line x1="590" y1="20" x2="590" y2="60" stroke="#3FB950" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Amarillo path (middle right) -->
+      <rect x="390" y="62" width="110" height="36" rx="5" fill="#1C2B47" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="445" y="79" text-anchor="middle" font-size="10" fill="#E8B84B">Docs físicos</text>
+      <text x="445" y="91" text-anchor="middle" font-size="9" fill="#8B949E">a la DIAN</text>
+      <line x1="376" y1="75" x2="390" y2="75" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#bad)"/>
+      <text x="383" y="69" font-size="8" fill="#E8B84B">Amar.</text>
+      <line x1="500" y1="80" x2="585" y2="80" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Rojo path (bottom) -->
+      <rect x="390" y="130" width="110" height="36" rx="5" fill="#1C2B47" stroke="#F85149" stroke-width="1.5"/>
+      <text x="445" y="147" text-anchor="middle" font-size="10" fill="#F85149">Aforo físico</text>
+      <text x="445" y="159" text-anchor="middle" font-size="9" fill="#8B949E">en puerto</text>
+      <line x1="348" y1="105" x2="348" y2="148" stroke="#F85149" stroke-width="1.5"/>
+      <line x1="348" y1="148" x2="390" y2="148" stroke="#F85149" stroke-width="1.5" marker-end="url(#bad)"/>
+      <text x="368" y="142" font-size="8" fill="#F85149">Rojo</text>
+      <line x1="500" y1="148" x2="570" y2="148" stroke="#F85149" stroke-width="1.5"/>
+      <line x1="570" y1="148" x2="570" y2="98" stroke="#F85149" stroke-width="1.5"/>
+      <line x1="570" y1="98" x2="585" y2="90" stroke="#F85149" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Join + Pago tributos -->
+      <rect x="585" y="62" width="110" height="36" rx="5" fill="#1C2B47" stroke="#A371F7" stroke-width="1.5"/>
+      <text x="640" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Pago tributos</text>
+      <text x="640" y="91" text-anchor="middle" font-size="9" fill="#8B949E">arancel + IVA</text>
+
+      <!-- Levante -->
+      <rect x="712" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="762" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Levante</text>
+      <text x="762" y="91" text-anchor="middle" font-size="9" fill="#8B949E">DIAN autoriza</text>
+      <line x1="695" y1="80" x2="712" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- Entrega -->
+      <rect x="828" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="878" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Entrega en</text>
+      <text x="878" y="91" text-anchor="middle" font-size="9" fill="#8B949E">bodega cliente</text>
+      <line x1="812" y1="80" x2="828" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bad)"/>
+
+      <!-- END -->
+      <circle cx="960" cy="80" r="16" fill="#21262D" stroke="#3FB950" stroke-width="2.5"/>
+      <circle cx="960" cy="80" r="10" fill="#3FB950"/>
+      <line x1="928" y1="80" x2="944" y2="80" stroke="#3FB950" stroke-width="1.5" marker-end="url(#bad)"/>
+      <text x="960" y="106" text-anchor="middle" font-size="9" fill="#3FB950">→ FACT.</text>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S5 — SWIMLANES -->
+<div class="sec" id="s5">
+  <div class="sec-header"><div class="sec-num">05</div><div class="sec-title-wrap"><h2>Diagrama Swimlanes</h2><div class="sec-sub">4 actores — EASY · Agente Aduanero · DIAN · Cliente</div></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 960 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="960" height="300" fill="transparent"/>
+      <defs><marker id="swad" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8B949E"/></marker></defs>
+      <!-- Lane headers -->
+      <rect x="0" y="0" width="80" height="300" fill="#0D1117"/>
+      <line x1="80" y1="0" x2="80" y2="300" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 1: EASY / Daniel -->
+      <rect x="0" y="0" width="80" height="75" fill="rgba(248,81,73,0.05)"/>
+      <text transform="rotate(-90,40,37.5)" x="40" y="37.5" text-anchor="middle" font-size="10" font-weight="700" fill="#F85149" dominant-baseline="middle">EASY</text>
+      <line x1="0" y1="75" x2="960" y2="75" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 2: Agente -->
+      <rect x="0" y="75" width="80" height="75" fill="rgba(163,113,247,0.05)"/>
+      <text transform="rotate(-90,40,112.5)" x="40" y="112.5" text-anchor="middle" font-size="10" font-weight="700" fill="#A371F7" dominant-baseline="middle">AGENTE</text>
+      <line x1="0" y1="150" x2="960" y2="150" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 3: DIAN -->
+      <rect x="0" y="150" width="80" height="75" fill="rgba(232,184,75,0.05)"/>
+      <text transform="rotate(-90,40,187.5)" x="40" y="187.5" text-anchor="middle" font-size="10" font-weight="700" fill="#E8B84B" dominant-baseline="middle">DIAN</text>
+      <line x1="0" y1="225" x2="960" y2="225" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 4: Cliente -->
+      <rect x="0" y="225" width="80" height="75" fill="rgba(27,181,212,0.05)"/>
+      <text transform="rotate(-90,40,262.5)" x="40" y="262.5" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4" dominant-baseline="middle">CLIENTE</text>
+
+      <!-- EASY tasks -->
+      <rect x="90" y="12" width="120" height="28" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="150" y="30" text-anchor="middle" font-size="10" fill="#E6EDF3">Notifica arribo + docs</text>
+      <rect x="730" y="12" width="120" height="28" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="790" y="30" text-anchor="middle" font-size="10" fill="#E6EDF3">Cierra op. Airtable</text>
+
+      <!-- Agente tasks -->
+      <rect x="230" y="87" width="120" height="28" rx="4" fill="#21262D" stroke="#A371F7" stroke-width="1.5"/>
+      <text x="290" y="105" text-anchor="middle" font-size="10" fill="#E6EDF3">Clasifica + elabora DTA</text>
+      <rect x="380" y="87" width="100" height="28" rx="4" fill="#21262D" stroke="#A371F7" stroke-width="1"/>
+      <text x="430" y="105" text-anchor="middle" font-size="10" fill="#E6EDF3">Paga tributos</text>
+      <rect x="510" y="87" width="110" height="28" rx="4" fill="#21262D" stroke="#A371F7" stroke-width="1"/>
+      <text x="565" y="105" text-anchor="middle" font-size="10" fill="#E6EDF3">Retira carga puerto</text>
+      <line x1="350" y1="101" x2="380" y2="101" stroke="#A371F7" stroke-width="1.5" marker-end="url(#swad)"/>
+      <line x1="480" y1="101" x2="510" y2="101" stroke="#A371F7" stroke-width="1.5" marker-end="url(#swad)"/>
+      <!-- EASY → Agente (arriba) -->
+      <line x1="210" y1="26" x2="290" y2="26" stroke="#F85149" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="290" y1="26" x2="290" y2="87" stroke="#F85149" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#swad)"/>
+
+      <!-- DIAN tasks -->
+      <rect x="380" y="163" width="110" height="28" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="435" y="181" text-anchor="middle" font-size="10" fill="#E8B84B">Aforo + aprobación</text>
+      <rect x="520" y="163" width="100" height="28" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="570" y="181" text-anchor="middle" font-size="10" fill="#E8B84B">Emite levante</text>
+      <line x1="480" y1="177" x2="520" y2="177" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#swad)"/>
+      <!-- Agente → DIAN -->
+      <line x1="290" y1="115" x2="290" y2="163" stroke="#A371F7" stroke-width="1.5" marker-end="url(#swad)"/>
+      <text x="297" y="143" font-size="8" fill="#A371F7">presenta DTA</text>
+      <!-- DIAN levante → Agente -->
+      <line x1="570" y1="163" x2="565" y2="115" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#swad)"/>
+      <text x="590" y="140" font-size="8" fill="#E8B84B">autoriza retiro</text>
+
+      <!-- Cliente task -->
+      <rect x="630" y="237" width="110" height="28" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="685" y="255" text-anchor="middle" font-size="10" fill="#1BB5D4">Recibe carga + firma</text>
+      <!-- Agente entrega → Cliente -->
+      <line x1="615" y1="108" x2="685" y2="108" stroke="#A371F7" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="685" y1="108" x2="685" y2="237" stroke="#A371F7" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#swad)"/>
+      <!-- Cliente confirma → EASY -->
+      <line x1="685" y1="237" x2="790" y2="237" stroke="#1BB5D4" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="790" y1="237" x2="790" y2="40" stroke="#1BB5D4" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#swad)"/>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S6 — TIPOS DE AFORO -->
+<div class="sec" id="s6">
+  <div class="sec-header"><div class="sec-num">06</div><div class="sec-title-wrap"><h2>Tipos de Aforo DIAN</h2><div class="sec-sub">Los tres canales posibles y su impacto operacional</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>Canal</th><th>Nombre formal</th><th>Descripción</th><th>Tiempo adicional</th><th>Cómo ocurre</th><th>Impacto para EASY</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><span class="badge badge-green">VERDE</span></td>
+        <td>Levante Automático</td>
+        <td>El sistema de la DIAN acepta la DTA electrónicamente sin revisión adicional. La carga queda libre de inmediato.</td>
+        <td><strong>0 días</strong></td>
+        <td>Perfil de riesgo bajo del importador, mercancía común, documentación completa y sin inconsistencias</td>
+        <td>Ideal. La carga llega a la bodega del cliente en el menor tiempo posible.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-yellow">AMARILLO</span></td>
+        <td>Aforo Documental</td>
+        <td>La DIAN requiere los documentos físicos del embarque para verificar que la DTA es correcta.</td>
+        <td><strong>1–2 días hábiles</strong></td>
+        <td>Inconsistencias documentales menores, primeras importaciones del cliente, mercancías con controles especiales</td>
+        <td>Retraso moderado. Daniel comunica al cliente y el agente entrega los documentos a la DIAN.</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">ROJO</span></td>
+        <td>Aforo Físico</td>
+        <td>La DIAN inspecciona físicamente la carga en el puerto o en una bodega de la DIAN. Puede implicar apertura de contenedores.</td>
+        <td><strong>2–5 días hábiles</strong></td>
+        <td>Perfil de riesgo alto, mercancía sensible (electrónicos, textiles, químicos), inconsistencia entre peso declarado y real</td>
+        <td>Retraso significativo. Puede generar costos de almacenamiento portuario. Daniel gestiona con el agente y comunica al cliente.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="card" style="margin-top:16px;border-color:var(--yellow)">
+    <div class="card-title" style="color:var(--yellow)">Nota importante sobre el aforo</div>
+    <p>EASY Revolution no puede controlar ni predecir qué canal asigna la DIAN. El agente aduanero puede optimizar la probabilidad de aforo verde a través de la calidad documental y el historial limpio del importador, pero la decisión final es de la DIAN. Por esto, toda cotización a clientes debe incluir un margen de tiempo que contemple posibles aforos amarillos o rojos.</p>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S7 — DOCUMENTOS ADUANEROS -->
+<div class="sec" id="s7">
+  <div class="sec-header"><div class="sec-num">07</div><div class="sec-title-wrap"><h2>Documentos Aduaneros</h2><div class="sec-sub">El paquete documental completo que gestiona este departamento</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>Documento</th><th>Emitido por</th><th>Cuándo</th><th>Función aduanera</th><th>Obligatorio</th></tr></thead>
+    <tbody>
+      <tr><td><strong>BL (Bill of Lading) o AWB</strong></td><td>Naviera / aerolínea</td><td>Post-embarque en origen</td><td>Título de transporte. La DIAN lo usa para verificar el carrier, el origen, y el destinatario de la carga.</td><td><span class="badge badge-red">Sí</span></td></tr>
+      <tr><td><strong>Factura Comercial</strong></td><td>Exportador en el país de origen</td><td>Pre-embarque</td><td>Define el valor en aduana — base para calcular el arancel e IVA. La DIAN puede revisar si el valor es subvalorado.</td><td><span class="badge badge-red">Sí</span></td></tr>
+      <tr><td><strong>Packing List</strong></td><td>Exportador en el país de origen</td><td>Pre-embarque</td><td>Detalla el contenido físico de la carga: ítems, cantidad, peso, dimensiones. La DIAN lo compara con la carga física en aforos rojos.</td><td><span class="badge badge-red">Sí</span></td></tr>
+      <tr><td><strong>Certificado de Origen</strong></td><td>Cámara de Comercio del país de origen</td><td>Pre-embarque (si aplica)</td><td>Certifica dónde fue fabricada la mercancía. Puede aplicar preferencias arancelarias bajo TLCs (ej. TLC Colombia-USA).</td><td><span class="badge badge-yellow">Según TLC</span></td></tr>
+      <tr><td><strong>Declaración de Importación (DTA)</strong></td><td>Agente aduanero</td><td>Post-arribo, ante la DIAN</td><td>El documento central del proceso aduanero. Consolida toda la información del embarque para la DIAN.</td><td><span class="badge badge-red">Sí</span></td></tr>
+      <tr><td><strong>Liquidación de tributos</strong></td><td>DIAN / MUISCA</td><td>Post-aprobación DTA</td><td>Detalla los valores a pagar: arancel + IVA sobre el valor CIF de la mercancía.</td><td><span class="badge badge-red">Sí</span></td></tr>
+      <tr><td><strong>Comprobante de pago tributos</strong></td><td>Banco autorizado</td><td>Post-liquidación</td><td>Prueba de que los tributos aduaneros fueron pagados. La DIAN no libera la carga sin esto.</td><td><span class="badge badge-red">Sí</span></td></tr>
+      <tr><td><strong>Autorización de levante</strong></td><td>DIAN (MUISCA)</td><td>Post-pago de tributos</td><td>Documento que autoriza al transportista a retirar la carga del recinto portuario.</td><td><span class="badge badge-red">Sí</span></td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- S8 — MARCO REGULATORIO DIAN -->
+<div class="sec" id="s8">
+  <div class="sec-header"><div class="sec-num">08</div><div class="sec-title-wrap"><h2>Marco Regulatorio DIAN</h2><div class="sec-sub">Bases legales del proceso de importación en Colombia</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Normativa aplicable</div>
+      <table class="tbl"><tbody>
+        <tr><td><strong>Decreto 1165 de 2019</strong></td><td>Régimen aduanero colombiano. Define todos los procedimientos de importación, exportación y tránsito.</td></tr>
+        <tr><td><strong>Resolución DIAN 046 de 2019</strong></td><td>Procedimientos de presentación y aceptación de declaraciones de importación ante la DIAN.</td></tr>
+        <tr><td><strong>Arancel de Aduanas</strong></td><td>Tabla oficial de partidas arancelarias y tarifas de arancel por tipo de mercancía. Se actualiza periódicamente.</td></tr>
+        <tr><td><strong>TLCs vigentes</strong></td><td>Acuerdos de Libre Comercio (USA, UE, CAN, etc.) que reducen o eliminan aranceles si la mercancía califica con Certificado de Origen.</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-title">El valor en aduana — base del cálculo tributario</div>
+      <p><strong>Valor CIF:</strong> La DIAN calcula los tributos sobre el valor CIF (Cost + Insurance + Freight) de la mercancía — es decir, el precio de la mercancía más el costo del seguro y el flete internacional.</p>
+      <p><strong>Arancel:</strong> Porcentaje variable según la partida arancelaria de la mercancía. Puede ser 0% (bienes de capital), 5%, 10%, 15%, o más para bienes protegidos.</p>
+      <p><strong>IVA a la importación:</strong> 19% sobre (valor CIF + arancel). Este IVA lo paga el importador (cliente de EASY) y es recuperable como IVA descontable en su declaración de renta si es responsable del impuesto.</p>
+      <p><strong>Ejemplo:</strong> Mercancía con valor CIF USD 10,000 (≈ COP 42,000,000). Arancel 5% = COP 2,100,000. IVA 19% sobre COP 44,100,000 = COP 8,379,000. Total tributos ≈ COP 10,479,000.</p>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S9 — FICHA TÉCNICA -->
+<div class="sec" id="s9">
+  <div class="sec-header"><div class="sec-num">09</div><div class="sec-title-wrap"><h2>Ficha Técnica del Proceso</h2><div class="sec-sub">Sin escenarios Make · Proceso 100% gestionado por el agente aduanero externo y supervisado por Daniel</div></div></div>
+  <div class="ficha" style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <div style="background:linear-gradient(135deg,#1A0F2E,#0D1117);padding:20px;border-bottom:1px solid var(--border)">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">Proceso Aduanero de Importación — Colombia</div>
+      <div style="font-size:12px;color:var(--accent);font-family:monospace;margin-top:4px">Sin escenario Make · Regulado por DIAN · 100% manual · Agente externo como ejecutor</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span class="badge badge-orange">100% MANUAL</span>
+        <span class="badge badge-purple">REGULADO DIAN</span>
+        <span class="badge badge-yellow">DISEÑADO</span>
+      </div>
+    </div>
+    <div style="padding:20px">
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Propósito</div><div>Garantizar el cumplimiento legal de toda importación para que la DIAN autorice el levante de la carga.</div></div>
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Ejecutor principal</div><div>Agente aduanero externo (tercero contratado por el importador o por EASY). EASY actúa como coordinador y supervisor.</div></div>
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Herramientas</div><div>MUISCA (sistema tributario DIAN) · Gmail · WhatsApp · Teléfono</div></div>
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Tiempo Daniel/op.</div><div>~30-90 min de coordinación. Mayor en aforos amarillos o rojos.</div></div>
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Inputs</div><div>BL/AWB + factura comercial + packing list + confirmación de arribo al puerto</div></div>
+      <div style="display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;font-size:13px"><div style="color:var(--muted);font-weight:600">Estado de madurez</div><div><span class="badge badge-orange">DISEÑADO (manual)</span> — El proceso opera correctamente pero sin ninguna integración digital con EASY OS.</div></div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S10-S18 -->
+<div class="sec" id="s10">
+  <div class="sec-header"><div class="sec-num">10</div><div class="sec-title-wrap"><h2>Arquitectura Técnica</h2><div class="sec-sub">Sistemas involucrados · Flujo de información aduanera</div></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="900" height="180" fill="transparent"/>
+      <defs><marker id="arc10" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8B949E"/></marker></defs>
+      <!-- Daniel / EASY -->
+      <rect x="20" y="65" width="130" height="50" rx="6" fill="#21262D" stroke="#F85149" stroke-width="2"/>
+      <text x="85" y="87" text-anchor="middle" font-size="12" font-weight="700" fill="#F85149">Daniel CEO</text>
+      <text x="85" y="102" text-anchor="middle" font-size="9" fill="#8B949E">Coordinador + Gmail</text>
+      <!-- Daniel → Agente -->
+      <line x1="150" y1="90" x2="220" y2="90" stroke="#F85149" stroke-width="1.5" marker-end="url(#arc10)"/>
+      <text x="185" y="84" text-anchor="middle" font-size="8" fill="#F85149">docs + briefing</text>
+      <!-- Agente aduanero -->
+      <rect x="220" y="65" width="130" height="50" rx="6" fill="#21262D" stroke="#A371F7" stroke-width="2"/>
+      <text x="285" y="87" text-anchor="middle" font-size="12" font-weight="700" fill="#A371F7">Agente Aduanero</text>
+      <text x="285" y="102" text-anchor="middle" font-size="9" fill="#8B949E">MUISCA + banco</text>
+      <!-- Agente → DIAN -->
+      <line x1="350" y1="90" x2="430" y2="90" stroke="#A371F7" stroke-width="1.5" marker-end="url(#arc10)"/>
+      <text x="390" y="84" text-anchor="middle" font-size="8" fill="#A371F7">DTA electrónica</text>
+      <!-- DIAN -->
+      <rect x="430" y="65" width="130" height="50" rx="6" fill="#21262D" stroke="#E8B84B" stroke-width="2"/>
+      <text x="495" y="87" text-anchor="middle" font-size="12" font-weight="700" fill="#E8B84B">DIAN / MUISCA</text>
+      <text x="495" y="102" text-anchor="middle" font-size="9" fill="#8B949E">Sistema tributario colombiano</text>
+      <!-- DIAN → Agente (levante) -->
+      <line x1="495" y1="115" x2="495" y2="145" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="495" y1="145" x2="285" y2="145" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="285" y1="145" x2="285" y2="115" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#arc10)"/>
+      <text x="390" y="140" text-anchor="middle" font-size="8" fill="#E8B84B">autorización de levante</text>
+      <!-- Airtable -->
+      <rect x="620" y="65" width="130" height="50" rx="6" fill="rgba(63,185,80,0.07)" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="685" y="87" text-anchor="middle" font-size="12" font-weight="700" fill="#3FB950">Airtable</text>
+      <text x="685" y="102" text-anchor="middle" font-size="9" fill="#8B949E">Estado QT → "Entregado"</text>
+      <!-- Daniel → Airtable -->
+      <line x1="150" y1="80" x2="620" y2="82" stroke="#F85149" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arc10)"/>
+      <text x="385" y="68" text-anchor="middle" font-size="8" fill="#F85149">actualiza estado al cierre</text>
+      <!-- Facturación -->
+      <rect x="770" y="65" width="110" height="50" rx="6" fill="#21262D" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="825" y="87" text-anchor="middle" font-size="12" font-weight="700" fill="#1BB5D4">Facturación</text>
+      <text x="825" y="102" text-anchor="middle" font-size="9" fill="#8B949E">recibe trigger</text>
+      <line x1="750" y1="90" x2="770" y2="90" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arc10)"/>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s11">
+  <div class="sec-header"><div class="sec-num">11</div><div class="sec-title-wrap"><h2>Secuencia Temporal</h2><div class="sec-sub">Línea de tiempo del proceso aduanero post-arribo</div></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 960 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="960" height="110" fill="transparent"/>
+      <line x1="30" y1="55" x2="930" y2="55" stroke="#21262D" stroke-width="2"/>
+      <circle cx="70" cy="55" r="8" fill="#E8B84B"/>
+      <text x="70" y="35" text-anchor="middle" font-size="9" fill="#E8B84B">Día 0</text>
+      <text x="70" y="22" text-anchor="middle" font-size="8" fill="#8B949E">Arribo +</text>
+      <text x="70" y="12" text-anchor="middle" font-size="8" fill="#8B949E">Daniel notifica</text>
+      <circle cx="230" cy="55" r="8" fill="#A371F7"/>
+      <text x="230" y="78" text-anchor="middle" font-size="9" fill="#A371F7">Día 0–1</text>
+      <text x="230" y="91" text-anchor="middle" font-size="8" fill="#8B949E">Agente elabora</text>
+      <text x="230" y="101" text-anchor="middle" font-size="8" fill="#8B949E">y presenta DTA</text>
+      <circle cx="430" cy="55" r="8" fill="#E8B84B"/>
+      <text x="430" y="35" text-anchor="middle" font-size="9" fill="#E8B84B">Día 1–2</text>
+      <text x="430" y="22" text-anchor="middle" font-size="8" fill="#8B949E">DIAN asigna</text>
+      <text x="430" y="12" text-anchor="middle" font-size="8" fill="#8B949E">aforo: V/A/R</text>
+      <circle cx="620" cy="55" r="8" fill="#A371F7"/>
+      <text x="620" y="78" text-anchor="middle" font-size="9" fill="#A371F7">Día 1–6</text>
+      <text x="620" y="91" text-anchor="middle" font-size="8" fill="#8B949E">Aforo resuelto</text>
+      <text x="620" y="101" text-anchor="middle" font-size="8" fill="#8B949E">+ tributos pagados</text>
+      <circle cx="800" cy="55" r="8" fill="#3FB950"/>
+      <text x="800" y="35" text-anchor="middle" font-size="9" fill="#3FB950">Día 2–7</text>
+      <text x="800" y="22" text-anchor="middle" font-size="8" fill="#8B949E">Levante + retiro</text>
+      <text x="800" y="12" text-anchor="middle" font-size="8" fill="#8B949E">+ entrega cliente</text>
+      <circle cx="920" cy="55" r="8" fill="#1BB5D4"/>
+      <text x="920" y="78" text-anchor="middle" font-size="9" fill="#1BB5D4">D+1 max</text>
+      <text x="920" y="91" text-anchor="middle" font-size="8" fill="#8B949E">Cierre Airtable</text>
+      <line x1="78" y1="55" x2="222" y2="55" stroke="#A371F7" stroke-width="1.5"/>
+      <line x1="238" y1="55" x2="422" y2="55" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="438" y1="55" x2="612" y2="55" stroke="#A371F7" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <line x1="628" y1="55" x2="792" y2="55" stroke="#3FB950" stroke-width="1.5"/>
+      <line x1="808" y1="55" x2="912" y2="55" stroke="#1BB5D4" stroke-width="1.5"/>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s12">
+  <div class="sec-header"><div class="sec-num">12</div><div class="sec-title-wrap"><h2>Flujo de Datos</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Dato</th><th>Nace en</th><th>Lo genera</th><th>Se almacena en</th><th>Lo consume</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Número de DTA</strong></td><td>MUISCA (DIAN)</td><td>Sistema DIAN al recibir la declaración</td><td>NO VERIFICADO — posiblemente email + Airtable</td><td>Seguimiento del proceso aduanero</td></tr>
+      <tr><td><strong>Canal de aforo asignado</strong></td><td>DIAN automático</td><td>Algoritmo de perfiles de riesgo DIAN</td><td>Agente aduanero (Daniel lo recibe por notificación del agente)</td><td>Daniel para comunicar al cliente si hay demora</td></tr>
+      <tr><td><strong>Liquidación de tributos</strong></td><td>DIAN / MUISCA</td><td>Sistema DIAN post-aforo</td><td>Agente aduanero + banco</td><td>Cliente (quien paga los tributos)</td></tr>
+      <tr><td><strong>Autorización de levante</strong></td><td>DIAN</td><td>Sistema DIAN post-pago</td><td>Agente aduanero</td><td>Puerto / transportista para liberar la carga</td></tr>
+      <tr><td><strong>Fecha_Entrega_Real</strong></td><td>Confirmación del cliente</td><td>Daniel la registra en Airtable</td><td>QT en Airtable</td><td>Trigger para Facturación</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s13">
+  <div class="sec-header"><div class="sec-num">13</div><div class="sec-title-wrap"><h2>Intervención Humana</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Actividad Daniel</th><th>Tiempo</th><th>Frecuencia</th><th>¿Automatizable?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Notificar al agente aduanero y enviar documentos</strong></td><td>15 min</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — Make puede detectar el arribo en Airtable y generar el draft de notificación al agente automáticamente</td></tr>
+      <tr><td><strong>Hacer seguimiento del estado de la DTA</strong></td><td>10-20 min/día durante proceso</td><td>Diario durante proceso aduanero</td><td><span style="color:var(--yellow)">Parcial</span> — El agente debería hacer push de actualizaciones. Un formulario web o Typeform podría recibir las actualizaciones del agente en Airtable.</td></tr>
+      <tr><td><strong>Comunicar incidencias al cliente</strong></td><td>15 min</td><td>Cuando hay aforo A o R</td><td><span style="color:var(--green)">Sí</span> — Si Daniel actualiza el canal en Airtable, Make genera draft de comunicación al cliente</td></tr>
+      <tr><td><strong>Coordinar el retiro de la carga</strong></td><td>20 min</td><td>Por operación</td><td><span style="color:var(--red)">No</span> — Requiere coordinación logística y juicio situacional</td></tr>
+      <tr><td><strong>Cerrar la operación en Airtable</strong></td><td>5 min</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — Si el cliente responde por email, Make puede detectar la confirmación y actualizar el estado</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s14">
+  <div class="sec-header"><div class="sec-num">14</div><div class="sec-title-wrap"><h2>Reglas de Negocio</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Regla</th><th>Tipo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>El paquete documental debe estar completo ANTES del arribo</strong></td><td><span class="badge badge-red">HARD LIMIT</span></td><td>BL, factura comercial y packing list deben estar en poder del agente aduanero antes de que la carga llegue al puerto. Tener documentación incompleta al arribo puede resultar en aforo rojo automático y costos de almacenamiento.</td></tr>
+      <tr><td><strong>Los tributos los paga el importador (cliente), no EASY</strong></td><td><span class="badge badge-yellow">REGLA NEGOCIO</span></td><td>EASY Revolution coordina el proceso aduanero pero no anticipa los tributos aduaneros (arancel + IVA). Estos son a cargo del importador. Esto debe quedar claro en la propuesta comercial para evitar sorpresas.</td></tr>
+      <tr><td><strong>Nunca comprometerse con una fecha de entrega sin buffer aduanero</strong></td><td><span class="badge badge-yellow">REGLA NEGOCIO</span></td><td>Toda fecha de entrega al cliente debe incluir un mínimo de 3-5 días hábiles de buffer para el proceso aduanero sobre el ETA del barco.</td></tr>
+      <tr><td><strong>Todo incidente aduanero se comunica al cliente proactivamente</strong></td><td><span class="badge badge-yellow">REGLA NEGOCIO</span></td><td>Si la DIAN asigna aforo rojo o hay un problema documental, Daniel comunica al cliente antes de que el cliente pregunte. La transparencia ante imprevistos construye confianza.</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s15">
+  <div class="sec-header"><div class="sec-num">15</div><div class="sec-title-wrap"><h2>Riesgos y Fallbacks</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Riesgo</th><th>Prob.</th><th>Impacto</th><th>Fallback</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Aforo físico (canal rojo DIAN)</strong></td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-red">Alto</span></td><td>Daniel comunica al cliente la demora y el costo de almacenamiento adicional. El agente coordina con la DIAN la inspección física lo antes posible.</td></tr>
+      <tr><td><strong>Documentación incompleta o inconsistente</strong></td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-red">Alto</span></td><td>El agente gestiona la corrección con el exportador o la naviera. Si el BL tiene errores, puede requerir enmienda formal — proceso que toma 3-7 días adicionales.</td></tr>
+      <tr><td><strong>Subvaloración detectada por la DIAN</strong></td><td><span class="badge badge-green">Baja</span></td><td><span class="badge badge-red">Muy alto</span></td><td>Si la DIAN detecta que el valor en la factura comercial no corresponde con el valor real de la mercancía, puede imponer sanción y retener la carga. Requiere intervención legal.</td></tr>
+      <tr><td><strong>El agente aduanero comete un error en la DTA</strong></td><td><span class="badge badge-yellow">Baja</span></td><td><span class="badge badge-yellow">Medio</span></td><td>La DTA se corrige (si aún no fue presentada) o se tramita una corrección ante la DIAN (si ya fue presentada). Tiempo adicional: 1-3 días.</td></tr>
+      <tr><td><strong>El agente aduanero no responde a tiempo</strong></td><td><span class="badge badge-green">Baja</span></td><td><span class="badge badge-yellow">Medio</span></td><td>EASY no tiene un agente aduanero de respaldo documentado. Este es un riesgo operacional latente.</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s16">
+  <div class="sec-header"><div class="sec-num">16</div><div class="sec-title-wrap"><h2>Dependencias</h2></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">Necesita de departamentos anteriores</div>
+      <table class="tbl"><tbody>
+        <tr><td><strong>Operaciones</strong></td><td>Confirmación de arribo de la carga al puerto de destino. BL/AWB del proveedor. Sin esto, no hay proceso aduanero.</td></tr>
+        <tr><td><strong>Proveedores</strong></td><td>Número de booking para identificar la carga en el sistema de la naviera/aerolínea.</td></tr>
+        <tr><td><strong>Comercial</strong></td><td>Datos del importador (NIT, RUT, dirección) para la DTA. Estos deben estar correctos en Airtable desde el inicio.</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--yellow)">Provee a departamentos siguientes</div>
+      <table class="tbl"><tbody>
+        <tr><td><strong>Facturación</strong></td><td>Estado "Entregado" en Airtable + Fecha_Entrega_Real. Sin estos, la factura no se puede emitir.</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s17">
+  <div class="sec-header"><div class="sec-num">17</div><div class="sec-title-wrap"><h2>Mejoras Posibles</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Mejora</th><th>Prioridad</th><th>Impacto</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Notificación automática al agente cuando arriba el barco</strong></td><td><span class="badge badge-red">ALTA</span></td><td>Alto</td><td>Cuando Airtable registra el arribo, Make genera automáticamente el email al agente con todos los datos del embarque adjuntos. Daniel solo confirma el envío. Mismo patrón ADR-004.</td></tr>
+      <tr><td><strong>Repositorio documental centralizado en Airtable</strong></td><td><span class="badge badge-red">ALTA</span></td><td>Alto</td><td>Definir un campo de adjuntos en la QT de Airtable donde se suben y almacenan todos los documentos del embarque (BL, factura comercial, packing list, levante). Hoy no existe.</td></tr>
+      <tr><td><strong>Formulario del agente → actualización directa en Airtable</strong></td><td><span class="badge badge-yellow">MEDIA</span></td><td>Medio</td><td>Un formulario simple (Typeform o Airtable Form) que el agente aduanero diligencia para reportar el estado de la DTA, el tipo de aforo, y la fecha de levante. Elimina la necesidad de que Daniel haga seguimiento activo.</td></tr>
+      <tr><td><strong>Notificación al cliente en cada hito aduanero</strong></td><td><span class="badge badge-yellow">MEDIA</span></td><td>Medio</td><td>Make detecta cambios en el estado aduanero de la QT y genera drafts de actualización al cliente en cada hito (DTA presentada, aforo asignado, levante obtenido). El cliente recibe información sin que Daniel deba redactar cada email.</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s18">
+  <div class="sec-header"><div class="sec-num">18</div><div class="sec-title-wrap"><h2>Opinión Arquitectónica</h2></div></div>
+  <div class="card" style="border-color:var(--accent)">
+    <div class="card-title" style="color:var(--accent)">El proceso más regulado — y el menos integrado con EASY OS</div>
+    <p>El proceso aduanero es el único departamento de EASY Revolution donde el ejecutor principal no es Daniel ni un sistema automatizado — es un agente aduanero externo que opera en sistemas del gobierno colombiano (MUISCA/DIAN) completamente fuera del ecosistema de EASY OS. Esta realidad es estructural e irremediable: la automatización aduanera tiene un techo bajo porque los sistemas de la DIAN son cerrados.</p>
+    <p>Sin embargo, la oportunidad no está en automatizar el proceso aduanero en sí — está en automatizar la <em>coordinación</em> alrededor de ese proceso. Notificar al agente, hacer seguimiento, comunicar al cliente, registrar el cierre — todo eso hoy corre manualmente por Daniel y es perfectamente automatizable con el stack existente de EASY OS.</p>
+  </div>
+  <div class="card" style="border-color:var(--teal);margin-top:12px">
+    <div class="card-title" style="color:var(--teal)">Recomendaciones del CTO</div>
+    <p><strong>Prioridad 1:</strong> Repositorio documental en Airtable. Es la base de todo lo demás. Sin los documentos centralizados, es imposible automatizar la notificación al agente ni garantizar que el proceso sea auditable.</p>
+    <p><strong>Prioridad 2:</strong> Automatizar la notificación de arribo al agente aduanero. Quick win con alto impacto — implementable en pocas horas siguiendo el patrón ADR-004 ya establecido.</p>
+    <p><strong>Consideración estratégica:</strong> A medida que el volumen de importaciones crezca, EASY debe considerar trabajar con un único agente aduanero con SLA documentados y, eventualmente, con un portal de actualización de estado que alimente directamente Airtable. Hoy la comunicación es por WhatsApp — eso no escala.</p>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<footer style="text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)">
+  <div style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:8px">SESIÓN 5 — Departamento de Aduanas</div>
+  <div>EASY OS · EASY Revolution · easy-logistics.co · Julio 2026 · 18 secciones</div>
+  <div style="display:flex;justify-content:center;gap:40px;margin-top:16px">
+    <div><div style="font-size:20px;font-weight:700;color:var(--red)">0</div><div style="font-size:10px;color:var(--muted)">Escenarios Make</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--accent)">4</div><div style="font-size:10px;color:var(--muted)">Actores externos</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--yellow)">3</div><div style="font-size:10px;color:var(--muted)">Canales de aforo DIAN</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--green)">4</div><div style="font-size:10px;color:var(--muted)">Mejoras priorizadas</div></div>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>

@@ -1,0 +1,14 @@
+﻿Consecutivo,Estado cobro,Factura venta,Carpeta Drive,Notas,QT,Cliente,OP_ETAPAS,CXP,Estado_Aduanas,Docs_Notificado,Fecha_ETD,Fecha_ETA,Naviera_Aerolinea,BL_AWB,Alerta_Enviada,Tracking_URL,Tipo_Carga,Declaracion_Importacion,Fecha_Aforo,Documentos_Completos,Etapa_Actual,Cliente_Email_Notif,Ultima_Notificacion,Porcentaje_Avance
+DHA-OP-00001,SIN FACTURAR,,,Operación generada automáticamente desde QT-00005 GANADA. Impresoras 3D industriales Shenzhen-Bogotá. FCL 20'. Incoterm FOB. Requiere aduana destino y transporte terrestre Buenaventura-Bogotá.,DHA-QT-00005,,,,EN TRÁMITE,,2026-07-05,2026-08-05,Pacific Carriers S.A.,PCOL2026001234,,,FCL 20,,,,,,,0
+DHA-OP-00002,SIN FACTURAR,,,,,,,,Documentos pendientes,,2026-07-15,2026-08-20,MSC,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00003,SIN FACTURAR,,,,,,,,Documentos pendientes,,2026-07-17,2026-08-25,Maersk,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00004,SIN FACTURAR,,,,,,,,Documentos pendientes,,2026-07-18,2026-07-22,Copa Airlines Cargo,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00005,SIN FACTURAR,,,,,,,,Documentos pendientes,2026-06-25 04:12,2026-07-20,2026-08-28,CMA CGM,,,,,,,checked,COORDINACIÓN,,,30
+DHA-OP-00006,SIN FACTURAR,,,,,,,,Documentos pendientes,,2026-07-21,2026-08-05,MSC,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00007,SIN FACTURAR,,,,,,,,Documentos pendientes,,2026-07-22,2026-08-29,Maersk,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00008,SIN FACTURAR,,,,,,,,Documentos pendientes,,2026-07-24,2026-09-05,MSC,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00009,SIN FACTURAR,,,,DHA-QT-00008,,,,Documentos pendientes,,2026-07-25,2026-07-30,Lufthansa Cargo,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00010,SIN FACTURAR,,,,DHA-QT-00009,,,,Documentos pendientes,,2026-07-28,2026-09-03,CMA CGM,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-00011,SIN FACTURAR,,,,DHA-QT-00010,,,,Documentos pendientes,,2026-07-30,2026-09-05,MSC,,,,,,,,COORDINACIÓN,,,30
+TEST-OP-00001,,,,,TEST-QT-00001,,,,,,2026-07-22,2026-06-22,TEST_CARRIER,,,,,,,,COORDINACIÓN,,,30
+DHA-OP-25001,,,,,DHA-QT-25001,,DHA-OP-25001-E1,,,,,,,,,,,,,,COORDINACIÓN,,,30

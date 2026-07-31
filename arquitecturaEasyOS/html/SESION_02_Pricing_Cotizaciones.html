@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SESIÓN 2 — Departamento de Pricing y Cotizaciones · EASY OS</title>
+<style>
+:root {
+  --navy:#1C2B47;
+  --teal:#1BB5D4;
+  --gold:#E8B84B;
+  --bg:#0D1117;
+  --surface:#161B22;
+  --border:#21262D;
+  --muted:#8B949E;
+  --green:#3FB950;
+  --red:#F85149;
+  --yellow:#E8B84B;
+  --purple:#A371F7;
+  --orange:#DB6D28;
+  --text:#E6EDF3;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;font-size:14px}
+.hero{background:linear-gradient(135deg,#0D1117 0%,#1C2B47 50%,#0D1117 100%);padding:60px 40px;border-bottom:1px solid var(--border);text-align:center}
+.hero-session{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--teal);text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-size:36px;font-weight:800;color:var(--text);margin-bottom:8px}
+.hero-sub{font-size:16px;color:var(--muted);margin-bottom:24px}
+.hero-desc{font-size:14px;color:var(--muted);max-width:700px;margin:0 auto 28px}
+.hero-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+.meta-item{display:flex;flex-direction:column;align-items:center}
+.meta-val{font-size:20px;font-weight:700;color:var(--teal)}
+.meta-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100;display:flex;gap:0;overflow-x:auto}
+.nav a{display:block;padding:12px 16px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.nav a:hover{color:var(--teal);border-bottom-color:var(--teal)}
+main{max-width:1200px;margin:0 auto;padding:40px}
+.sec{margin-bottom:0;padding:40px 0}
+.sec-div{border-top:1px solid var(--border);margin:0}
+.sec-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+.sec-num{font-size:48px;font-weight:800;color:var(--border);line-height:1;min-width:60px}
+.sec-title-wrap h2{font-size:26px;font-weight:700;color:var(--text)}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:var(--navy);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,0.02)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px}
+.kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.kpi-num{font-size:28px;font-weight:800;color:var(--teal)}
+.kpi-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.dw{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.badge-green{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+.badge-yellow{background:rgba(232,184,75,.15);color:var(--yellow);border:1px solid rgba(232,184,75,.3)}
+.badge-red{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+.badge-blue{background:rgba(27,181,212,.15);color:var(--teal);border:1px solid rgba(27,181,212,.3)}
+.ficha{background:var(--surface);border:1px solid var(--border);border-radius:10px;margin-bottom:24px;overflow:hidden}
+.ficha-header{background:linear-gradient(135deg,#1C2B47,#0D1117);padding:20px;border-bottom:1px solid var(--border)}
+.ficha-title{font-size:18px;font-weight:700;color:var(--text)}
+.ficha-id{font-size:12px;color:var(--teal);font-family:monospace;margin-top:4px}
+.ficha-body{padding:20px}
+.ficha-row{display:grid;grid-template-columns:160px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ficha-row:last-child{border-bottom:none}
+.ficha-key{color:var(--muted);font-weight:600}
+.ficha-val{color:var(--text)}
+.ficha-val code{background:#21262D;padding:1px 6px;border-radius:3px;font-size:11px;color:var(--teal);font-family:monospace}
+p{margin-bottom:10px;font-size:13px;color:var(--text)}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-session">EASY OS · Documentación Técnica · Sesión 2 de 7</div>
+  <h1 class="hero-title">Departamento de Pricing y Cotizaciones</h1>
+  <p class="hero-sub">Desde la solicitud de cotización hasta la propuesta enviada al cliente</p>
+  <p class="hero-desc">Este documento describe el flujo completo del departamento de Pricing de EASY Revolution — cómo una solicitud de cotización (RFQ) llega al sistema, cómo Claude la procesa, cómo el Pricing Agent calcula el valor, y cómo la cotización llega al cliente. Es la fase del negocio donde la captura de interés se convierte en una propuesta económica concreta.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-val">2</div><div class="meta-lbl">Escenarios Make</div></div>
+    <div class="meta-item"><div class="meta-val">1</div><div class="meta-lbl">Certificado</div></div>
+    <div class="meta-item"><div class="meta-val">24/7</div><div class="meta-lbl">Módulo 1 activo</div></div>
+    <div class="meta-item"><div class="meta-val">&lt;10 min</div><div class="meta-lbl">RFQ→Draft CEO</div></div>
+    <div class="meta-item"><div class="meta-val">100%</div><div class="meta-lbl">QTs generadas auto</div></div>
+    <div class="meta-item"><div class="meta-val">ADR-004</div><div class="meta-lbl">Solo drafts, nunca envío</div></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#s1">1. Objetivo</a>
+  <a href="#s2">2. KPIs y SLA</a>
+  <a href="#s3">3. Proceso</a>
+  <a href="#s4">4. BPMN</a>
+  <a href="#s5">5. Swimlanes</a>
+  <a href="#s6">6. Estructura Tarifaria</a>
+  <a href="#s7">7. TRM y Margen</a>
+  <a href="#s8">8. Arquitectura 2 Ítems</a>
+  <a href="#s9">9. Fichas Técnicas</a>
+  <a href="#s10">10. Arquitectura Técnica</a>
+  <a href="#s11">11. Secuencia Temporal</a>
+  <a href="#s12">12. Flujo de Datos</a>
+  <a href="#s13">13. Intervención Humana</a>
+  <a href="#s14">14. Reglas de Negocio</a>
+  <a href="#s15">15. Riesgos y Fallbacks</a>
+  <a href="#s16">16. Dependencias</a>
+  <a href="#s17">17. Mejoras Posibles</a>
+  <a href="#s18">18. Opinión Arquitectónica</a>
+</nav>
+
+<main>
+
+<!-- SECCIÓN 1 -->
+<div class="sec" id="s1">
+  <div class="sec-header">
+    <div class="sec-num">01</div>
+    <div class="sec-title-wrap">
+      <h2>Objetivo del Departamento</h2>
+      <div class="sec-sub">Para qué existe · Qué problema resuelve · Qué entrega</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Propósito</div>
+      <p>El Departamento de Pricing y Cotizaciones tiene un único propósito: <strong>convertir solicitudes de cotización (RFQs) en propuestas económicas precisas y enviárselas al cliente</strong> lo más rápido posible, con el menor error posible, y con el margen correcto para que la operación sea rentable.</p>
+      <p>Es el departamento que traduce la intención de compra del cliente en un número concreto. Sin este departamento, el negocio no puede generar ingresos.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Problema que resuelve</div>
+      <p>Antes de EASY OS, cada cotización requería que Daniel realizara manualmente cinco pasos que consumían entre 30 y 90 minutos por RFQ: leer y extraer datos del email del cliente, consultar la TRM del día, consultar tarifas de proveedores, calcular el margen, y redactar y enviar la respuesta. Con un volumen creciente de solicitudes, este proceso era insostenible para un solo operador. EASY OS reduce ese tiempo a menos de 10 minutos — con mayor precisión y sin posibilidad de error de cálculo.</p>
+    </div>
+  </div>
+  <div class="kpi-grid" style="margin-top:16px">
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--green)">INICIO</div><div class="kpi-label">Email RFQ llega a Gmail</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--teal)">QT</div><div class="kpi-label">Airtable registra la solicitud</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--yellow)">PRECIO</div><div class="kpi-label">Pricing Agent calcula</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--red)">FIN</div><div class="kpi-label">Draft listo para CEO</div></div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 2 -->
+<div class="sec" id="s2">
+  <div class="sec-header">
+    <div class="sec-num">02</div>
+    <div class="sec-title-wrap">
+      <h2>KPIs y SLA</h2>
+      <div class="sec-sub">Indicadores clave · Niveles de servicio · Umbrales de alerta</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <table class="tbl">
+      <thead><tr><th>KPI</th><th>Objetivo</th><th>Alerta</th><th>Medición</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tiempo RFQ → QT creada</strong></td><td>&lt; 2 min</td><td>&gt; 5 min</td><td>Timestamp email vs. creación Airtable</td></tr>
+        <tr><td><strong>Tiempo QT → Cotización calculada</strong></td><td>&lt; 5 min</td><td>&gt; 15 min</td><td>Trigger vs. campo Precio_Final_COP</td></tr>
+        <tr><td><strong>Tiempo total RFQ → Draft CEO</strong></td><td>&lt; 10 min</td><td>&gt; 30 min</td><td>Email recibido vs. borrador Gmail</td></tr>
+        <tr><td><strong>% QTs con datos completos</strong></td><td>&gt; 90%</td><td>&lt; 75%</td><td>Campos requeridos sin null en Airtable</td></tr>
+        <tr><td><strong>% cotizaciones con TRM correcta</strong></td><td>100%</td><td>&lt; 100%</td><td>Validación vs. TRM banco</td></tr>
+        <tr><td><strong>% cotizaciones enviadas al cliente</strong></td><td>&gt; 95%</td><td>&lt; 80%</td><td>QTs en estado "Cotizado" vs. QTs recibidas</td></tr>
+      </tbody>
+    </table>
+    <div>
+      <div class="card">
+        <div class="card-title">SLA Comprometidos</div>
+        <p><strong>Disponibilidad Módulo 1:</strong> 24 horas / 7 días. No hay horario de corte. El sistema captura RFQs en cualquier momento.</p>
+        <p><strong>Respuesta al cliente:</strong> Cotización disponible para revisión del CEO en &lt; 10 min post-RFQ. Envío al cliente en &lt; 2 horas (incluyendo revisión humana).</p>
+        <p><strong>Datos mínimos para cotizar:</strong> Origen, destino, tipo de carga, peso o volumen estimado. Sin estos 4 datos, la QT se crea pero el pricing no puede calcularse automáticamente.</p>
+        <p><strong>TRM:</strong> Se usa la TRM del día de la solicitud. Si la API falla, se usa la TRM del día anterior como fallback documentado.</p>
+        <p><strong>Vigencia cotización:</strong> NO VERIFICADO — política no documentada en el sistema actual.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 3 -->
+<div class="sec" id="s3">
+  <div class="sec-header">
+    <div class="sec-num">03</div>
+    <div class="sec-title-wrap">
+      <h2>Proceso Principal de Cotización</h2>
+      <div class="sec-sub">12 pasos desde el RFQ hasta la cotización enviada al cliente</div>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Paso</th><th>Responsable</th><th>Herramienta</th><th>Input</th><th>Output</th><th>Tiempo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>01</strong></td><td>Cliente envía RFQ por email</td><td>Cliente</td><td>Gmail</td><td>—</td><td>Email en dhasasdrive@gmail.com</td><td>—</td></tr>
+      <tr><td><strong>02</strong></td><td>Módulo 1 detecta el email</td><td>Make 5373407</td><td>Make + Gmail OAuth</td><td>Email entrante con palabras clave de RFQ</td><td>Inicio del escenario</td><td>&lt; 1 min</td></tr>
+      <tr><td><strong>03</strong></td><td>Claude extrae datos del embarque</td><td>Claude API</td><td>Claude API via Make</td><td>Texto completo del email</td><td>JSON: origen, destino, tipo_carga, peso, volumen, mercancía, incoterm, fecha requerida</td><td>&lt; 30 seg</td></tr>
+      <tr><td><strong>04</strong></td><td>Make crea registro QT en Airtable</td><td>Make 5373407</td><td>Make + Airtable API</td><td>JSON extraído por Claude</td><td>Registro QT con ID único, estado "Nuevo"</td><td>&lt; 10 seg</td></tr>
+      <tr><td><strong>05</strong></td><td>Airtable trigger activa Pricing Agent</td><td>Make 5438649</td><td>Make webhook</td><td>QT recién creada</td><td>Inicio del escenario Pricing Agent</td><td>Inmediato</td></tr>
+      <tr><td><strong>06</strong></td><td>Pricing Agent consulta TRM del día</td><td>Make 5438649</td><td>Make + API Banco República</td><td>Fecha de hoy</td><td>TRM COP/USD vigente</td><td>&lt; 5 seg</td></tr>
+      <tr><td><strong>07</strong></td><td>Pricing Agent consulta tarifas en Airtable</td><td>Make 5438649</td><td>Make + Airtable</td><td>Tipo de carga, ruta, proveedor asignado</td><td>Tarifa base del proveedor en USD</td><td>&lt; 5 seg</td></tr>
+      <tr><td><strong>08</strong></td><td>Claude calcula precio final con margen EASY</td><td>Claude API</td><td>Claude API via Make</td><td>Tarifa proveedor USD + TRM + margen configurado</td><td>Precio_CGEN (margen EASY en COP) + Precio_IPT (proveedor en COP) + Precio_Total_COP</td><td>&lt; 30 seg</td></tr>
+      <tr><td><strong>09</strong></td><td>Make actualiza QT en Airtable con precios</td><td>Make 5438649</td><td>Make + Airtable API</td><td>Precios calculados</td><td>Campos Precio_Final_COP, Precio_CGEN, Precio_IPT, TRM_Usada actualizados. Estado: "Cotizado"</td><td>&lt; 10 seg</td></tr>
+      <tr><td><strong>10</strong></td><td>Claude genera email de cotización</td><td>Claude API</td><td>Claude API via Make</td><td>QT completa + precio final + datos del cliente</td><td>Email profesional con detalles del embarque, precio total, desglose, condiciones</td><td>&lt; 30 seg</td></tr>
+      <tr><td><strong>11</strong></td><td>Make crea Draft en Gmail (ADR-004)</td><td>Make 5438649</td><td>Make + Gmail createADraft</td><td>Email generado por Claude</td><td>Borrador en Gmail listo para revisión, destinatario pre-cargado</td><td>&lt; 10 seg</td></tr>
+      <tr><td><strong>12</strong></td><td>CEO revisa, ajusta si necesario, y envía</td><td>Daniel CEO</td><td>Gmail</td><td>Borrador generado por sistema</td><td>Email enviado al cliente con cotización oficial</td><td>Variable (2-120 min)</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 4 — BPMN -->
+<div class="sec" id="s4">
+  <div class="sec-header">
+    <div class="sec-num">04</div>
+    <div class="sec-title-wrap">
+      <h2>Diagrama BPMN</h2>
+      <div class="sec-sub">Business Process Model and Notation · Flujo completo de cotización</div>
+    </div>
+  </div>
+  <div class="dw">
+    <svg viewBox="0 0 1000 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="1000" height="260" fill="transparent"/>
+      <!-- Start -->
+      <circle cx="40" cy="130" r="18" fill="#21262D" stroke="#3FB950" stroke-width="2.5"/>
+      <circle cx="40" cy="130" r="12" fill="none" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="40" y="162" text-anchor="middle" font-size="9" fill="#3FB950">START</text>
+
+      <!-- Tarea 1: Email llega -->
+      <rect x="75" y="110" width="100" height="40" rx="6" fill="#1C2B47" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="125" y="128" text-anchor="middle" font-size="10" fill="#E6EDF3">Email RFQ</text>
+      <text x="125" y="141" text-anchor="middle" font-size="9" fill="#8B949E">llega a Gmail</text>
+      <line x1="58" y1="130" x2="75" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+
+      <!-- Gateway: ¿Es RFQ? -->
+      <polygon points="220,130 245,110 270,130 245,150" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="245" y="128" text-anchor="middle" font-size="9" fill="#E8B84B">¿RFQ</text>
+      <text x="245" y="140" text-anchor="middle" font-size="9" fill="#E8B84B">válido?</text>
+      <line x1="175" y1="130" x2="220" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+      <!-- No path -->
+      <line x1="245" y1="150" x2="245" y2="215" stroke="#F85149" stroke-width="1.5" stroke-dasharray="4,3"/>
+      <rect x="195" y="215" width="100" height="30" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="245" y="233" text-anchor="middle" font-size="9" fill="#F85149">Ignorar / clasificar</text>
+      <text x="255" y="149" font-size="8" fill="#F85149">No</text>
+
+      <!-- Tarea 2: Claude extrae -->
+      <rect x="295" y="110" width="110" height="40" rx="6" fill="#1C2B47" stroke="#A371F7" stroke-width="1.5"/>
+      <text x="350" y="128" text-anchor="middle" font-size="10" fill="#E6EDF3">Claude extrae</text>
+      <text x="350" y="141" text-anchor="middle" font-size="9" fill="#8B949E">datos embarque</text>
+      <line x1="270" y1="130" x2="295" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+      <text x="282" y="124" font-size="8" fill="#3FB950">Sí</text>
+
+      <!-- Tarea 3: Crea QT -->
+      <rect x="430" y="110" width="100" height="40" rx="6" fill="#1C2B47" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="480" y="128" text-anchor="middle" font-size="10" fill="#E6EDF3">Crea QT</text>
+      <text x="480" y="141" text-anchor="middle" font-size="9" fill="#8B949E">en Airtable</text>
+      <line x1="405" y1="130" x2="430" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+
+      <!-- Tarea 4: Pricing Agent -->
+      <rect x="553" y="110" width="110" height="40" rx="6" fill="#1C2B47" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="608" y="125" text-anchor="middle" font-size="10" fill="#E6EDF3">Pricing Agent</text>
+      <text x="608" y="138" text-anchor="middle" font-size="9" fill="#8B949E">TRM + tarifa</text>
+      <text x="608" y="149" text-anchor="middle" font-size="9" fill="#8B949E">+ margen EASY</text>
+      <line x1="530" y1="130" x2="553" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+
+      <!-- Tarea 5: Claude genera email -->
+      <rect x="686" y="110" width="110" height="40" rx="6" fill="#1C2B47" stroke="#A371F7" stroke-width="1.5"/>
+      <text x="741" y="128" text-anchor="middle" font-size="10" fill="#E6EDF3">Claude genera</text>
+      <text x="741" y="141" text-anchor="middle" font-size="9" fill="#8B949E">email cotización</text>
+      <line x1="663" y1="130" x2="686" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+
+      <!-- Tarea 6: createADraft -->
+      <rect x="820" y="110" width="100" height="40" rx="6" fill="#1C2B47" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="870" y="128" text-anchor="middle" font-size="10" fill="#E6EDF3">createADraft</text>
+      <text x="870" y="141" text-anchor="middle" font-size="9" fill="#8B949E">Gmail (ADR-004)</text>
+      <line x1="796" y1="130" x2="820" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+
+      <!-- End (intermediate) — awaiting human -->
+      <circle cx="955" cy="130" r="18" fill="#21262D" stroke="#E8B84B" stroke-width="2.5"/>
+      <text x="955" y="134" text-anchor="middle" font-size="16" fill="#E8B84B">⏸</text>
+      <text x="955" y="162" text-anchor="middle" font-size="9" fill="#E8B84B">CEO revisa</text>
+      <line x1="920" y1="130" x2="937" y2="130" stroke="#8B949E" stroke-width="1.5" marker-end="url(#a)"/>
+
+      <!-- Labels -->
+      <text x="40" y="190" text-anchor="middle" font-size="9" fill="#8B949E">Módulo 1</text>
+      <text x="40" y="200" text-anchor="middle" font-size="9" fill="#8B949E">(5373407)</text>
+      <text x="608" y="195" text-anchor="middle" font-size="9" fill="#8B949E">Pricing Agent</text>
+      <text x="608" y="205" text-anchor="middle" font-size="9" fill="#8B949E">(5438649)</text>
+
+      <defs>
+        <marker id="a" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 5 — SWIMLANES -->
+<div class="sec" id="s5">
+  <div class="sec-header">
+    <div class="sec-num">05</div>
+    <div class="sec-title-wrap">
+      <h2>Diagrama Swimlanes</h2>
+      <div class="sec-sub">Quién hace qué · Responsabilidades por actor</div>
+    </div>
+  </div>
+  <div class="dw">
+    <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="1000" height="320" fill="transparent"/>
+
+      <!-- Lane headers -->
+      <rect x="0" y="0" width="100" height="320" fill="#0D1117"/>
+      <line x1="100" y1="0" x2="100" y2="320" stroke="#21262D" stroke-width="1"/>
+
+      <!-- Lane 1: Cliente -->
+      <rect x="0" y="0" width="100" height="64" fill="rgba(27,181,212,0.05)" rx="0"/>
+      <text transform="rotate(-90,50,32)" x="50" y="32" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4" dominant-baseline="middle">CLIENTE</text>
+      <line x1="0" y1="64" x2="1000" y2="64" stroke="#21262D" stroke-width="1"/>
+
+      <!-- Lane 2: Módulo 1 / Make -->
+      <rect x="0" y="64" width="100" height="64" fill="rgba(232,184,75,0.05)"/>
+      <text transform="rotate(-90,50,96)" x="50" y="96" text-anchor="middle" font-size="10" font-weight="700" fill="#E8B84B" dominant-baseline="middle">MÓD. 1</text>
+      <line x1="0" y1="128" x2="1000" y2="128" stroke="#21262D" stroke-width="1"/>
+
+      <!-- Lane 3: Claude API -->
+      <rect x="0" y="128" width="100" height="64" fill="rgba(163,113,247,0.05)"/>
+      <text transform="rotate(-90,50,160)" x="50" y="160" text-anchor="middle" font-size="10" font-weight="700" fill="#A371F7" dominant-baseline="middle">CLAUDE API</text>
+      <line x1="0" y1="192" x2="1000" y2="192" stroke="#21262D" stroke-width="1"/>
+
+      <!-- Lane 4: Pricing Agent -->
+      <rect x="0" y="192" width="100" height="64" fill="rgba(63,185,80,0.05)"/>
+      <text transform="rotate(-90,50,224)" x="50" y="224" text-anchor="middle" font-size="10" font-weight="700" fill="#3FB950" dominant-baseline="middle">PRICING</text>
+      <line x1="0" y1="256" x2="1000" y2="256" stroke="#21262D" stroke-width="1"/>
+
+      <!-- Lane 5: CEO Daniel -->
+      <rect x="0" y="256" width="100" height="64" fill="rgba(248,81,73,0.05)"/>
+      <text transform="rotate(-90,50,288)" x="50" y="288" text-anchor="middle" font-size="10" font-weight="700" fill="#F85149" dominant-baseline="middle">CEO</text>
+
+      <!-- Tasks in each lane -->
+      <!-- Cliente: envía email -->
+      <rect x="120" y="18" width="120" height="28" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="180" y="32" text-anchor="middle" font-size="10" fill="#E6EDF3">Envía email RFQ</text>
+      <line x1="180" y1="46" x2="180" y2="64" stroke="#1BB5D4" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a2)"/>
+
+      <!-- Módulo 1: detecta + trigger -->
+      <rect x="120" y="76" width="120" height="28" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1"/>
+      <text x="180" y="90" text-anchor="middle" font-size="10" fill="#E6EDF3">Detecta RFQ</text>
+      <line x1="240" y1="90" x2="270" y2="90" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#a2)"/>
+      <!-- Módulo 1 → Claude -->
+      <line x1="180" y1="104" x2="180" y2="128" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Claude: extrae datos -->
+      <rect x="280" y="140" width="130" height="28" rx="4" fill="#21262D" stroke="#A371F7" stroke-width="1"/>
+      <text x="345" y="154" text-anchor="middle" font-size="10" fill="#E6EDF3">Extrae datos embarque</text>
+      <line x1="180" y1="154" x2="280" y2="154" stroke="#A371F7" stroke-width="1.5" marker-end="url(#a2)"/>
+      <!-- Claude → Módulo 1 (JSON back) -->
+      <line x1="410" y1="154" x2="460" y2="154" stroke="#A371F7" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#a2)"/>
+
+      <!-- Módulo 1: Crea QT -->
+      <rect x="460" y="76" width="120" height="28" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1"/>
+      <text x="520" y="90" text-anchor="middle" font-size="10" fill="#E6EDF3">Crea QT Airtable</text>
+      <!-- → Pricing -->
+      <line x1="520" y1="104" x2="520" y2="192" stroke="#3FB950" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Pricing: consulta TRM + tarifas -->
+      <rect x="460" y="204" width="130" height="28" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1"/>
+      <text x="525" y="218" text-anchor="middle" font-size="10" fill="#E6EDF3">TRM + Tarifas + Margen</text>
+      <!-- Pricing → Claude para calcular -->
+      <line x1="590" y1="218" x2="660" y2="154" stroke="#3FB950" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Claude: calcula precio -->
+      <rect x="660" y="140" width="120" height="28" rx="4" fill="#21262D" stroke="#A371F7" stroke-width="1"/>
+      <text x="720" y="154" text-anchor="middle" font-size="10" fill="#E6EDF3">Calcula CGEN + IPT</text>
+      <!-- → Pricing actualiza QT -->
+      <line x1="720" y1="168" x2="720" y2="204" stroke="#A371F7" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- Pricing: actualiza QT + genera email draft -->
+      <rect x="660" y="204" width="120" height="28" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1"/>
+      <text x="720" y="218" text-anchor="middle" font-size="10" fill="#E6EDF3">Actualiza QT + Draft</text>
+      <!-- → CEO -->
+      <line x1="720" y1="232" x2="720" y2="256" stroke="#3FB950" stroke-width="1.5" marker-end="url(#a2)"/>
+
+      <!-- CEO: revisa y envía -->
+      <rect x="660" y="268" width="130" height="28" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="725" y="282" text-anchor="middle" font-size="10" fill="#E6EDF3">Revisa draft → Envía</text>
+      <!-- CEO → Cliente -->
+      <line x1="725" y1="268" x2="725" y2="32" stroke="#F85149" stroke-width="1.5" stroke-dasharray="3,2"/>
+      <line x1="725" y1="32" x2="830" y2="32" stroke="#F85149" stroke-width="1.5" marker-end="url(#a2)"/>
+      <rect x="830" y="18" width="130" height="28" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="895" y="32" text-anchor="middle" font-size="10" fill="#1BB5D4">Recibe cotización ✓</text>
+
+      <defs>
+        <marker id="a2" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 6 — ESTRUCTURA TARIFARIA -->
+<div class="sec" id="s6">
+  <div class="sec-header">
+    <div class="sec-num">06</div>
+    <div class="sec-title-wrap">
+      <h2>Estructura Tarifaria</h2>
+      <div class="sec-sub">Cómo se compone el precio de una cotización · Variables de entrada · Tipos de carga</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="card-title">Componentes del precio</div>
+        <table class="tbl">
+          <thead><tr><th>Componente</th><th>Descripción</th><th>Moneda</th><th>IVA</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Tarifa proveedor base</strong></td><td>Precio del servicio logístico cobrado por la naviera/aerolínea/transitario</td><td>USD</td><td>0%</td></tr>
+            <tr><td><strong>Margen EASY (CGEN)</strong></td><td>Utilidad de EASY Revolution sobre el servicio. Porcentaje configurado por ruta/tipo de carga</td><td>COP</td><td>19%</td></tr>
+            <tr><td><strong>IPT (pass-through)</strong></td><td>Costo del proveedor convertido a COP que EASY cobra y transfiere al proveedor</td><td>COP</td><td>0%</td></tr>
+            <tr><td><strong>TRM del día</strong></td><td>Factor de conversión USD→COP. Se consulta al Banco de la República de Colombia</td><td>COP/USD</td><td>N/A</td></tr>
+            <tr><td><strong>Precio Final COP</strong></td><td>CGEN (con IVA) + IPT (sin IVA). Es el valor que el cliente ve en la cotización</td><td>COP</td><td>Mixto</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">Fórmula de pricing</div>
+        <div style="background:#0D1117;padding:16px;border-radius:6px;font-family:monospace;font-size:13px;color:#3FB950">
+          Tarifa_IPT_COP = Tarifa_USD × TRM_día<br/>
+          Margen_CGEN_COP = Tarifa_IPT_COP × %_margen_EASY<br/>
+          IVA_CGEN = Margen_CGEN_COP × 0.19<br/>
+          <br/>
+          <span style="color:#E8B84B">Precio_Final_COP = Tarifa_IPT_COP + Margen_CGEN_COP + IVA_CGEN</span><br/>
+          <br/>
+          <span style="color:#8B949E">// Factura emite 2 ítems:</span><br/>
+          <span style="color:#A371F7">Ítem 1: CGEN — Margen_CGEN_COP (base) + IVA 19%</span><br/>
+          <span style="color:#1BB5D4">Ítem 2: IPT — Tarifa_IPT_COP, IVA 0%</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <div class="card-title">Tipos de carga y modalidades</div>
+        <table class="tbl">
+          <thead><tr><th>Tipo</th><th>Modalidad</th><th>Unidad de medida</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Marítima FCL</strong></td><td>Full Container Load — contenedor completo</td><td>Por contenedor (20', 40', 40' HC)</td></tr>
+            <tr><td><strong>Marítima LCL</strong></td><td>Less than Container Load — carga consolidada</td><td>Por CBM (metro cúbico) o ton</td></tr>
+            <tr><td><strong>Aérea</strong></td><td>Carga aérea general o urgente</td><td>Por kg real o kg volumétrico (el mayor)</td></tr>
+            <tr><td><strong>Terrestre</strong></td><td>Transporte nacional (NO VERIFICADO si aplica)</td><td>Por camión o carga suelta</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card" style="margin-top:12px">
+        <div class="card-title">Variables de entrada que afectan el precio</div>
+        <table class="tbl">
+          <thead><tr><th>Variable</th><th>Fuente</th><th>Impacto</th></tr></thead>
+          <tbody>
+            <tr><td>Origen (puerto/ciudad)</td><td>RFQ del cliente → Claude extrae</td><td>Define ruta y tarifa base</td></tr>
+            <tr><td>Destino</td><td>RFQ del cliente → Claude extrae</td><td>Define ruta y tarifa base</td></tr>
+            <tr><td>Tipo de carga</td><td>RFQ del cliente → Claude clasifica</td><td>Define modalidad y tarifa</td></tr>
+            <tr><td>Peso / Volumen</td><td>RFQ del cliente → Claude extrae</td><td>Determina unidades a cobrar</td></tr>
+            <tr><td>TRM del día</td><td>API Banco República</td><td>Conversión USD→COP</td></tr>
+            <tr><td>% Margen EASY</td><td>Tabla de configuración Airtable</td><td>Determina CGEN</td></tr>
+            <tr><td>Tarifa proveedor</td><td>Tabla de tarifas Airtable</td><td>Determina IPT</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 7 — TRM Y MARGEN -->
+<div class="sec" id="s7">
+  <div class="sec-header">
+    <div class="sec-num">07</div>
+    <div class="sec-title-wrap">
+      <h2>TRM y Margen EASY</h2>
+      <div class="sec-sub">Cómo se obtiene la TRM · Cómo se configura el margen · Casos especiales</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">TRM — Tasa Representativa del Mercado</div>
+      <p>La TRM es publicada diariamente por el Banco de la República de Colombia. EASY OS la consulta automáticamente en cada cotización via una llamada HTTP en el Pricing Agent (5438649).</p>
+      <table class="tbl" style="margin-top:12px">
+        <thead><tr><th>Escenario</th><th>Comportamiento</th></tr></thead>
+        <tbody>
+          <tr><td>API disponible</td><td>Se usa la TRM del día de la solicitud</td></tr>
+          <tr><td>API no disponible</td><td>Fallback: TRM del día anterior</td></tr>
+          <tr><td>TRM no encontrada</td><td>El escenario pausa y notifica al CEO</td></tr>
+          <tr><td>Solicitud en fin de semana</td><td>Se usa la TRM del último día hábil</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">La TRM usada queda registrada en el campo TRM_Usada de la QT en Airtable para trazabilidad y auditoría.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Margen EASY — Configuración</div>
+      <p>El margen de EASY Revolution sobre cada cotización está configurado en una tabla de Airtable (NO VERIFICADO — nombre exacto del campo/tabla). El margen puede variar por ruta, tipo de carga, o cliente.</p>
+      <table class="tbl" style="margin-top:12px">
+        <thead><tr><th>Variable</th><th>Descripción</th></tr></thead>
+        <tbody>
+          <tr><td>% Margen base</td><td>Porcentaje sobre el costo del proveedor (NO VERIFICADO — valor exacto)</td></tr>
+          <tr><td>Margen mínimo</td><td>NO VERIFICADO — si existe un piso de margen por operación</td></tr>
+          <tr><td>Margen por cliente</td><td>NO VERIFICADO — si hay diferenciación por tipo de cliente</td></tr>
+          <tr><td>Margen por ruta</td><td>NO VERIFICADO — si rutas premium tienen margen diferente</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top:12px;color:var(--muted);font-size:12px">El margen configurado en Airtable es el único parámetro que Daniel puede cambiar para ajustar la rentabilidad sin modificar el código del escenario.</p>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 8 — ARQUITECTURA DOS ÍTEMS -->
+<div class="sec" id="s8">
+  <div class="sec-header">
+    <div class="sec-num">08</div>
+    <div class="sec-title-wrap">
+      <h2>Arquitectura de Dos Ítems de Facturación</h2>
+      <div class="sec-sub">CGENMARITIMO + IPT · Por qué existe esta estructura · Requerimiento regulatorio colombiano</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">¿Por qué dos ítems?</div>
+    <p>En Colombia, un broker de carga que actúa como intermediario no puede simplemente cobrarle al cliente el precio total del servicio logístico como si fuera su propio ingreso. La DIAN exige que la factura refleje con exactitud la naturaleza económica de la operación: (1) el <strong>margen real</strong> de la empresa intermediaria (que sí es ingreso gravado con IVA), y (2) los <strong>costos recuperados del proveedor</strong> (que son un pass-through sin IVA propio). Mezclarlos en un solo ítem causaría un error tributario — se pagaría IVA sobre costos de proveedor que no son ingresos de EASY.</p>
+  </div>
+  <div class="grid-2" style="margin-top:16px">
+    <div class="card" style="border-color:var(--teal)">
+      <div class="card-title" style="color:var(--teal)">Ítem 1 — CGENMARITIMO (Margen EASY)</div>
+      <table class="tbl">
+        <tbody>
+          <tr><td>Código Siigo</td><td><strong>3034</strong></td></tr>
+          <tr><td>Descripción</td><td>Servicio de intermediación logística de EASY Revolution</td></tr>
+          <tr><td>Valor</td><td>Margen de EASY sobre el costo del proveedor</td></tr>
+          <tr><td>IVA</td><td><strong>19%</strong></td></tr>
+          <tr><td>¿Es ingreso de EASY?</td><td>SÍ — es la ganancia real de la empresa</td></tr>
+          <tr><td>Naturaleza contable</td><td>Ingreso operacional gravado</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="border-color:var(--purple)">
+      <div class="card-title" style="color:var(--purple)">Ítem 2 — IPT (Pass-Through Proveedor)</div>
+      <table class="tbl">
+        <tbody>
+          <tr><td>Código Siigo</td><td><strong>30360</strong></td></tr>
+          <tr><td>Descripción</td><td>Costo del servicio de transporte del proveedor logístico</td></tr>
+          <tr><td>Valor</td><td>Costo del proveedor convertido a COP (Tarifa_USD × TRM)</td></tr>
+          <tr><td>IVA</td><td><strong>0%</strong></td></tr>
+          <tr><td>¿Es ingreso de EASY?</td><td>NO — EASY lo cobra y lo transfiere al proveedor</td></tr>
+          <tr><td>Naturaleza contable</td><td>Ingreso por cuenta de tercero (recuperación de costo)</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <div class="card-title">Ejemplo numérico</div>
+    <div style="background:#0D1117;padding:16px;border-radius:6px;font-family:monospace;font-size:13px">
+      <div style="color:#8B949E">// Cotización marítima FCL · TRM: $4,200 COP/USD · Tarifa proveedor: $1,500 USD · Margen EASY: 15%</div>
+      <br/>
+      <div style="color:#E6EDF3">Tarifa_IPT_COP = $1,500 × $4,200 = <strong style="color:#A371F7">$6,300,000 COP</strong></div>
+      <div style="color:#E6EDF3">Margen_CGEN_base = $6,300,000 × 15% = <strong style="color:#1BB5D4">$945,000 COP</strong></div>
+      <div style="color:#E6EDF3">IVA_CGEN = $945,000 × 19% = <strong style="color:#1BB5D4">$179,550 COP</strong></div>
+      <br/>
+      <div style="color:#8B949E">// La factura emite:</div>
+      <div style="color:#1BB5D4">Ítem 1 (CGENMARITIMO): $945,000 + IVA $179,550 = <strong>$1,124,550 COP</strong></div>
+      <div style="color:#A371F7">Ítem 2 (IPT): $6,300,000 + IVA $0 = <strong>$6,300,000 COP</strong></div>
+      <br/>
+      <div style="color:#E8B84B">TOTAL FACTURA: <strong>$7,424,550 COP</strong></div>
+      <div style="color:#3FB950">MARGEN REAL EASY: <strong>$945,000 COP</strong> (antes de IVA)</div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 9 — FICHAS TÉCNICAS -->
+<div class="sec" id="s9">
+  <div class="sec-header">
+    <div class="sec-num">09</div>
+    <div class="sec-title-wrap">
+      <h2>Fichas Técnicas de Escenarios</h2>
+      <div class="sec-sub">Módulo 1 (5373407) · Pricing Agent (5438649) · Configuración, triggers, lógica, fallbacks</div>
+    </div>
+  </div>
+
+  <!-- FICHA 1: MÓDULO 1 -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">Módulo 1 — Captura de RFQ y Creación de QT</div>
+      <div class="ficha-id">Make Scenario ID: 5373407 · Equipo: 2430126 · Org: 8015476</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span class="badge badge-green">CERTIFICADO</span>
+        <span class="badge badge-blue">ACTIVO 24/7</span>
+        <span class="badge badge-green">PRODUCCIÓN</span>
+      </div>
+    </div>
+    <div class="ficha-body">
+      <div class="ficha-row"><div class="ficha-key">Propósito</div><div class="ficha-val">Capturar solicitudes de cotización (RFQs) que llegan por email a Gmail, extraer los datos del embarque con Claude, y crear automáticamente un registro QT en Airtable.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Trigger</div><div class="ficha-val">Email nuevo en Gmail (dhasasdrive@gmail.com) que contenga palabras clave de solicitud de cotización. El escenario corre en modo <code>instant</code> (webhook de Gmail).</div></div>
+      <div class="ficha-row"><div class="ficha-key">Flujo Make</div><div class="ficha-val">Gmail Watch → Filtro palabras clave → Claude API (extracción) → Airtable Create Record (tabla QTs) → Notificación CEO</div></div>
+      <div class="ficha-row"><div class="ficha-key">Claude Prompt</div><div class="ficha-val">Extrae del email: nombre del cliente, empresa, email de respuesta, origen, destino, tipo de carga (FCL/LCL/aéreo), peso en KG, volumen en CBM, descripción de mercancía, incoterm, fecha requerida de embarque. Devuelve JSON estructurado. Si algún campo no está disponible en el email, devuelve null.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Campos creados en QT</div><div class="ficha-val">Cliente, Empresa, Email_Cliente, Origen, Destino, Tipo_Carga, Peso_KG, Volumen_CBM, Mercancia, Incoterm, Fecha_Embarque, Estado (= "Nuevo"), Fecha_QT (= hoy), ID_Email_Origen</div></div>
+      <div class="ficha-row"><div class="ficha-key">Tabla Airtable</div><div class="ficha-val">QTs (tabla principal de cotizaciones). Base: <code>appGvhQHWWQRXgmSo</code></div></div>
+      <div class="ficha-row"><div class="ficha-key">Conexión Gmail</div><div class="ficha-val">OAuth ID: <code>9371760</code> · Expira: 2026-08-24 · Cuenta: dhasasdrive@gmail.com</div></div>
+      <div class="ficha-row"><div class="ficha-key">Datos incompletos</div><div class="ficha-val">Si el email tiene información insuficiente para cotizar (sin origen o destino), el sistema crea la QT de todas formas con los campos disponibles, y cambia el estado a "Datos Incompletos" para revisión del CEO.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Fallback</div><div class="ficha-val">Si Claude API falla: el escenario registra el error en Make, envía notificación al CEO con el email original, y no crea la QT. El CEO debe crear la QT manualmente.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Frecuencia</div><div class="ficha-val">Trigger instantáneo. Corre cada vez que llega un email nuevo. Sin programación de hora.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Próximo escenario</div><div class="ficha-val">La creación de la QT en Airtable dispara automáticamente el Pricing Agent (5438649) via webhook de Airtable.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Estado de madurez</div><div class="ficha-val"><span class="badge badge-green">CERTIFICADO</span> — Activo en producción, procesando RFQs reales, generando QTs correctamente. Impacto económico demostrado.</div></div>
+    </div>
+  </div>
+
+  <!-- FICHA 2: PRICING AGENT -->
+  <div class="ficha">
+    <div class="ficha-header">
+      <div class="ficha-title">Pricing Agent — Cálculo de Cotización y Generación de Draft</div>
+      <div class="ficha-id">Make Scenario ID: 5438649 · Equipo: 2430126 · Org: 8015476</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span class="badge badge-yellow">VALIDADO</span>
+        <span class="badge badge-blue">ACTIVO</span>
+        <span class="badge" style="background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)">BUG 7 PENDIENTE (Make UI)</span>
+      </div>
+    </div>
+    <div class="ficha-body">
+      <div class="ficha-row"><div class="ficha-key">Propósito</div><div class="ficha-val">Recibir una QT recién creada en Airtable, consultar la TRM del día, buscar tarifas del proveedor, calcular el precio final con margen EASY (CGEN) y pass-through (IPT), actualizar la QT, generar el email de cotización al cliente, y crear el borrador en Gmail para revisión del CEO.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Trigger</div><div class="ficha-val">Webhook de Airtable cuando se crea una QT nueva con estado "Nuevo". El escenario corre en modo <code>instant</code>.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Flujo Make</div><div class="ficha-val">Airtable Webhook → HTTP GET TRM API → Airtable Search (tarifas por ruta) → Claude API (cálculo de precios) → Airtable Update (precios en QT) → Claude API (generación email) → Gmail createADraft</div></div>
+      <div class="ficha-row"><div class="ficha-key">Claude Prompt #1 (pricing)</div><div class="ficha-val">Calcula el precio de la cotización para los siguientes datos de embarque: [datos QT]. Tarifa del proveedor: [USD]. TRM del día: [COP/USD]. Porcentaje de margen EASY: [%]. Devuelve JSON con: precio_cgen_base (COP), precio_iva_cgen (COP), precio_ipt (COP), precio_total_cop (COP), trm_usada, justificación_pricing.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Claude Prompt #2 (email)</div><div class="ficha-val">Redacta un email profesional de cotización en español para enviar al cliente [nombre]. Incluye: saludo, resumen del servicio cotizado, precio total en COP, desglose de condiciones, validez de la cotización, datos de contacto de EASY Revolution. Tono: profesional, directo, cordial. Sin lenguaje de ventas agresivo.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Campos actualizados en QT</div><div class="ficha-val">Precio_CGEN_base, Precio_IVA_CGEN, Precio_IPT, Precio_Final_COP, TRM_Usada, Estado (→ "Cotizado"), Fecha_Cotizacion, Proveedor_Asignado</div></div>
+      <div class="ficha-row"><div class="ficha-key">ADR-004 (HARD LIMIT)</div><div class="ficha-val">El escenario NUNCA envía el email directamente (<code>sendAnEmail</code> está prohibido). Siempre usa <code>createADraft</code>. El CEO es el único que puede enviar emails a clientes.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Bug 7 (pendiente)</div><div class="ficha-val">El escenario 5438649 tiene 3 módulos <code>http:ActionSendData v3</code> que deben ser corregidos desde la Make UI por el CEO. Hasta su corrección, algunos módulos HTTP pueden comportarse de forma inesperada. No afecta el flujo principal si se corrige a tiempo.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Fallback TRM</div><div class="ficha-val">Si la API del Banco República no responde: usa TRM del día anterior almacenada en Airtable. Si tampoco existe: pausa el escenario y notifica al CEO para ingresar TRM manualmente.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Fallback tarifa</div><div class="ficha-val">Si no existe tarifa para la ruta/proveedor en Airtable: la QT queda en estado "Sin Tarifa" y se notifica al CEO para asignar manualmente.</div></div>
+      <div class="ficha-row"><div class="ficha-key">Estado de madurez</div><div class="ficha-val"><span class="badge badge-yellow">VALIDADO</span> — Funciona correctamente en pruebas. Pendiente de primer ciclo de cotización real con cliente activo para certificación completa.</div></div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 10 — ARQUITECTURA TÉCNICA -->
+<div class="sec" id="s10">
+  <div class="sec-header">
+    <div class="sec-num">10</div>
+    <div class="sec-title-wrap">
+      <h2>Arquitectura Técnica</h2>
+      <div class="sec-sub">Integración de sistemas · APIs · Conexiones · Flujo técnico</div>
+    </div>
+  </div>
+  <div class="dw">
+    <svg viewBox="0 0 900 300" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="900" height="300" fill="transparent"/>
+
+      <!-- Gmail box -->
+      <rect x="10" y="120" width="120" height="60" rx="6" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="70" y="144" text-anchor="middle" font-size="11" font-weight="700" fill="#E8B84B">Gmail</text>
+      <text x="70" y="158" text-anchor="middle" font-size="9" fill="#8B949E">dhasasdrive@</text>
+      <text x="70" y="170" text-anchor="middle" font-size="9" fill="#8B949E">OAuth 9371760</text>
+
+      <!-- Arrow Gmail → Make -->
+      <line x1="130" y1="150" x2="195" y2="150" stroke="#E8B84B" stroke-width="2" marker-end="url(#ta)"/>
+      <text x="162" y="144" font-size="9" fill="#8B949E">Watch Emails</text>
+
+      <!-- Make box (central) -->
+      <rect x="195" y="50" width="160" height="200" rx="6" fill="rgba(232,184,75,0.05)" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="275" y="80" text-anchor="middle" font-size="12" font-weight="700" fill="#E8B84B">MAKE.COM</text>
+
+      <!-- Módulo 1 inside Make -->
+      <rect x="210" y="95" width="130" height="40" rx="4" fill="#1C2B47" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="275" y="112" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4">Módulo 1</text>
+      <text x="275" y="126" text-anchor="middle" font-size="9" fill="#8B949E">5373407</text>
+
+      <!-- Pricing Agent inside Make -->
+      <rect x="210" y="165" width="130" height="40" rx="4" fill="#1C2B47" stroke="#3FB950" stroke-width="1"/>
+      <text x="275" y="182" text-anchor="middle" font-size="10" font-weight="700" fill="#3FB950">Pricing Agent</text>
+      <text x="275" y="196" text-anchor="middle" font-size="9" fill="#8B949E">5438649</text>
+
+      <!-- Internal arrow Módulo1 → Pricing -->
+      <line x1="275" y1="135" x2="275" y2="165" stroke="#3FB950" stroke-width="1.5" stroke-dasharray="3,2" marker-end="url(#ta)"/>
+      <text x="285" y="153" font-size="8" fill="#3FB950">trigger QT</text>
+
+      <!-- Claude API -->
+      <rect x="410" y="60" width="140" height="60" rx="6" fill="#21262D" stroke="#A371F7" stroke-width="1.5"/>
+      <text x="480" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#A371F7">Claude API</text>
+      <text x="480" y="98" text-anchor="middle" font-size="9" fill="#8B949E">Anthropic · api.anthropic.com</text>
+      <text x="480" y="111" text-anchor="middle" font-size="9" fill="#8B949E">claude-sonnet / claude-haiku</text>
+
+      <!-- Make ↔ Claude -->
+      <line x1="355" y1="115" x2="410" y2="90" stroke="#A371F7" stroke-width="1.5" marker-end="url(#ta)"/>
+      <line x1="410" y1="100" x2="355" y2="120" stroke="#A371F7" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#ta)"/>
+
+      <!-- Make ↔ Claude (Pricing) -->
+      <line x1="355" y1="180" x2="410" y2="100" stroke="#3FB950" stroke-width="1.5" marker-end="url(#ta)"/>
+
+      <!-- Airtable -->
+      <rect x="410" y="160" width="140" height="80" rx="6" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="480" y="188" text-anchor="middle" font-size="11" font-weight="700" fill="#3FB950">Airtable</text>
+      <text x="480" y="203" text-anchor="middle" font-size="9" fill="#8B949E">Base appGvhQH...</text>
+      <text x="480" y="217" text-anchor="middle" font-size="9" fill="#8B949E">Tabla QTs · Tabla Tarifas</text>
+      <text x="480" y="231" text-anchor="middle" font-size="9" fill="#8B949E">Tabla Clientes · 13 tablas</text>
+
+      <!-- Make ↔ Airtable -->
+      <line x1="355" y1="185" x2="410" y2="195" stroke="#3FB950" stroke-width="1.5" marker-end="url(#ta)"/>
+      <line x1="410" y1="205" x2="355" y2="195" stroke="#3FB950" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#ta)"/>
+
+      <!-- Banco República API -->
+      <rect x="590" y="150" width="140" height="45" rx="6" fill="#21262D" stroke="#8B949E" stroke-width="1"/>
+      <text x="660" y="170" text-anchor="middle" font-size="10" font-weight="700" fill="#8B949E">Banco República API</text>
+      <text x="660" y="185" text-anchor="middle" font-size="9" fill="#8B949E">TRM COP/USD diaria</text>
+      <line x1="550" y1="190" x2="590" y2="173" stroke="#8B949E" stroke-width="1.5" marker-end="url(#ta)"/>
+      <line x1="590" y1="180" x2="550" y2="195" stroke="#8B949E" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#ta)"/>
+
+      <!-- Gmail (output - Draft) -->
+      <rect x="590" y="60" width="140" height="60" rx="6" fill="#21262D" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="660" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#1BB5D4">Gmail</text>
+      <text x="660" y="98" text-anchor="middle" font-size="9" fill="#8B949E">createADraft ← ADR-004</text>
+      <text x="660" y="111" text-anchor="middle" font-size="9" fill="#8B949E">Solo borradores</text>
+      <line x1="355" y1="170" x2="590" y2="90" stroke="#1BB5D4" stroke-width="1.5" marker-end="url(#ta)"/>
+
+      <!-- CEO Daniel -->
+      <rect x="760" y="60" width="120" height="60" rx="6" fill="#21262D" stroke="#F85149" stroke-width="2"/>
+      <text x="820" y="84" text-anchor="middle" font-size="11" font-weight="700" fill="#F85149">CEO Daniel</text>
+      <text x="820" y="100" text-anchor="middle" font-size="9" fill="#8B949E">Revisa y envía</text>
+      <text x="820" y="112" text-anchor="middle" font-size="9" fill="#8B949E">el borrador</text>
+      <line x1="730" y1="90" x2="760" y2="90" stroke="#F85149" stroke-width="1.5" marker-end="url(#ta)"/>
+
+      <defs>
+        <marker id="ta" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto">
+          <polygon points="0 0, 7 2.5, 0 5" fill="#8B949E"/>
+        </marker>
+      </defs>
+    </svg>
+  </div>
+
+  <table class="tbl" style="margin-top:16px">
+    <thead><tr><th>Conexión</th><th>Protocolo</th><th>Auth</th><th>Dirección</th><th>ADR aplicable</th></tr></thead>
+    <tbody>
+      <tr><td>Make ↔ Gmail (lectura)</td><td>OAuth 2.0 IMAP/API</td><td>Conexión ID 9371760</td><td>Gmail → Make (watch)</td><td>—</td></tr>
+      <tr><td>Make ↔ Claude API</td><td>HTTPS REST</td><td>API Key Anthropic (Make env)</td><td>Make → Claude (request/response)</td><td>—</td></tr>
+      <tr><td>Make ↔ Airtable</td><td>HTTPS REST API</td><td>API Token Airtable (Make env)</td><td>Bidireccional (read/write)</td><td>ADR-001</td></tr>
+      <tr><td>Make ↔ Banco República</td><td>HTTPS GET</td><td>Pública (sin auth)</td><td>Make → API (solo lectura TRM)</td><td>—</td></tr>
+      <tr><td>Make ↔ Gmail (draft)</td><td>OAuth 2.0 Gmail API</td><td>Conexión ID 9371760</td><td>Make → Gmail (createADraft)</td><td>ADR-004</td></tr>
+      <tr><td>CEO → Gmail (envío)</td><td>Gmail UI</td><td>Google Account Daniel</td><td>Daniel → Cliente (envío manual)</td><td>ADR-004</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 11 — SECUENCIA TEMPORAL -->
+<div class="sec" id="s11">
+  <div class="sec-header">
+    <div class="sec-num">11</div>
+    <div class="sec-title-wrap">
+      <h2>Secuencia Temporal</h2>
+      <div class="sec-sub">Línea de tiempo precisa desde el email RFQ hasta el cliente recibe respuesta</div>
+    </div>
+  </div>
+  <div class="dw">
+    <svg viewBox="0 0 960 120" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="960" height="120" fill="transparent"/>
+      <!-- Timeline line -->
+      <line x1="40" y1="60" x2="920" y2="60" stroke="#21262D" stroke-width="2"/>
+      <!-- T=0 -->
+      <circle cx="80" cy="60" r="8" fill="#1BB5D4"/>
+      <text x="80" y="85" text-anchor="middle" font-size="9" fill="#1BB5D4">T=0</text>
+      <text x="80" y="98" text-anchor="middle" font-size="8" fill="#8B949E">Email RFQ</text>
+      <text x="80" y="108" text-anchor="middle" font-size="8" fill="#8B949E">llega</text>
+      <!-- T+30s -->
+      <circle cx="200" cy="60" r="8" fill="#E8B84B"/>
+      <text x="200" y="40" text-anchor="middle" font-size="9" fill="#E8B84B">T+30s</text>
+      <text x="200" y="28" text-anchor="middle" font-size="8" fill="#8B949E">Módulo 1</text>
+      <text x="200" y="18" text-anchor="middle" font-size="8" fill="#8B949E">detecta</text>
+      <!-- T+60s -->
+      <circle cx="340" cy="60" r="8" fill="#A371F7"/>
+      <text x="340" y="85" text-anchor="middle" font-size="9" fill="#A371F7">T+1 min</text>
+      <text x="340" y="98" text-anchor="middle" font-size="8" fill="#8B949E">Claude extrae</text>
+      <text x="340" y="108" text-anchor="middle" font-size="8" fill="#8B949E">datos embarque</text>
+      <!-- T+90s -->
+      <circle cx="460" cy="60" r="8" fill="#3FB950"/>
+      <text x="460" y="40" text-anchor="middle" font-size="9" fill="#3FB950">T+1.5 min</text>
+      <text x="460" y="28" text-anchor="middle" font-size="8" fill="#8B949E">QT creada</text>
+      <text x="460" y="18" text-anchor="middle" font-size="8" fill="#8B949E">en Airtable</text>
+      <!-- T+3 min -->
+      <circle cx="600" cy="60" r="8" fill="#E8B84B"/>
+      <text x="600" y="85" text-anchor="middle" font-size="9" fill="#E8B84B">T+3 min</text>
+      <text x="600" y="98" text-anchor="middle" font-size="8" fill="#8B949E">Pricing Agent</text>
+      <text x="600" y="108" text-anchor="middle" font-size="8" fill="#8B949E">calcula precio</text>
+      <!-- T+5 min -->
+      <circle cx="740" cy="60" r="8" fill="#A371F7"/>
+      <text x="740" y="40" text-anchor="middle" font-size="9" fill="#A371F7">T+5 min</text>
+      <text x="740" y="28" text-anchor="middle" font-size="8" fill="#8B949E">Draft en Gmail</text>
+      <text x="740" y="18" text-anchor="middle" font-size="8" fill="#8B949E">listo para CEO</text>
+      <!-- T+2h -->
+      <circle cx="880" cy="60" r="8" fill="#F85149"/>
+      <text x="880" y="85" text-anchor="middle" font-size="9" fill="#F85149">T+2h (objetivo)</text>
+      <text x="880" y="98" text-anchor="middle" font-size="8" fill="#8B949E">CEO envía</text>
+      <text x="880" y="108" text-anchor="middle" font-size="8" fill="#8B949E">al cliente</text>
+      <!-- Arrows between -->
+      <line x1="88" y1="60" x2="192" y2="60" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="208" y1="60" x2="332" y2="60" stroke="#A371F7" stroke-width="1.5"/>
+      <line x1="348" y1="60" x2="452" y2="60" stroke="#3FB950" stroke-width="1.5"/>
+      <line x1="468" y1="60" x2="592" y2="60" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="608" y1="60" x2="732" y2="60" stroke="#A371F7" stroke-width="1.5"/>
+      <line x1="748" y1="60" x2="872" y2="60" stroke="#F85149" stroke-width="1.5" stroke-dasharray="5,3"/>
+      <text x="810" y="52" text-anchor="middle" font-size="8" fill="#F85149">revisión humana</text>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 12 — FLUJO DE DATOS -->
+<div class="sec" id="s12">
+  <div class="sec-header">
+    <div class="sec-num">12</div>
+    <div class="sec-title-wrap">
+      <h2>Flujo de Datos</h2>
+      <div class="sec-sub">Qué dato nace dónde, se transforma en qué, y termina dónde</div>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Dato</th><th>Nace en</th><th>Lo extrae</th><th>Se almacena en</th><th>Lo consume</th><th>Termina en</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Email RFQ original</strong></td><td>Bandeja Gmail</td><td>Make Watch</td><td>Gmail (inmutable)</td><td>Claude API (análisis)</td><td>Referenciado en campo ID_Email_Origen de QT</td></tr>
+      <tr><td><strong>Datos del embarque (JSON)</strong></td><td>Claude API extrae del email</td><td>Claude API</td><td>QT en Airtable (campos individuales)</td><td>Pricing Agent 5438649</td><td>Cotización enviada al cliente</td></tr>
+      <tr><td><strong>TRM del día</strong></td><td>Banco República API</td><td>Make HTTP GET</td><td>Campo TRM_Usada en QT Airtable</td><td>Claude API (cálculo precio)</td><td>Auditoría y trazabilidad de la cotización</td></tr>
+      <tr><td><strong>Tarifa del proveedor (USD)</strong></td><td>Tabla de Tarifas Airtable</td><td>Make Airtable Search</td><td>YA está en Airtable</td><td>Claude API (cálculo precio)</td><td>Campo Precio_IPT en QT</td></tr>
+      <tr><td><strong>Precio_CGEN (margen EASY)</strong></td><td>Claude API calcula</td><td>Claude API</td><td>Campo Precio_CGEN en QT Airtable</td><td>Generación email · Futura factura</td><td>Ítem CGENMARITIMO en Siigo</td></tr>
+      <tr><td><strong>Precio_IPT (proveedor COP)</strong></td><td>Claude API calcula</td><td>Claude API</td><td>Campo Precio_IPT en QT Airtable</td><td>Generación email · Futura factura</td><td>Ítem IPT en Siigo</td></tr>
+      <tr><td><strong>Precio_Final_COP</strong></td><td>Claude API suma</td><td>Claude API</td><td>Campo Precio_Final_COP en QT Airtable</td><td>Email de cotización al cliente</td><td>Referencia en factura Siigo</td></tr>
+      <tr><td><strong>Email de cotización redactado</strong></td><td>Claude API genera</td><td>Claude API</td><td>Draft en Gmail</td><td>CEO Daniel (revisión)</td><td>Email enviado al cliente</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 13 — INTERVENCIÓN HUMANA -->
+<div class="sec" id="s13">
+  <div class="sec-header">
+    <div class="sec-num">13</div>
+    <div class="sec-title-wrap">
+      <h2>Intervención Humana</h2>
+      <div class="sec-sub">Qué hace Daniel · Por qué lo hace él · Cuánto tiempo toma · ¿Podría automatizarse?</div>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Actividad</th><th>Responsable</th><th>Motivo de la intervención humana</th><th>Frecuencia</th><th>Tiempo estimado</th><th>¿Automatizable?</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Revisar y enviar la cotización</strong></td>
+        <td>Daniel CEO</td>
+        <td>ADR-004: EASY OS nunca envía emails directamente al cliente. Toda comunicación comercial requiere aprobación del CEO.</td>
+        <td>Por cada QT cotizada (1-5 por día)</td>
+        <td>5-15 min por cotización</td>
+        <td><span style="color:var(--yellow)">Parcialmente</span> — Con suficiente confianza en el sistema, el CEO podría delegar cotizaciones menores de cierto valor. Requiere track record validado.</td>
+      </tr>
+      <tr>
+        <td><strong>Completar datos faltantes de la QT</strong></td>
+        <td>Daniel CEO</td>
+        <td>Cuando el cliente no proveyó suficiente información en su email para cotizar. El sistema crea la QT pero no puede calcular el precio.</td>
+        <td>Variable (estimado 20-30% de QTs)</td>
+        <td>5-10 min por QT</td>
+        <td><span style="color:var(--green)">Sí</span> — Claude podría generar automáticamente un email al cliente pidiendo los datos faltantes (sin enviarlo directamente, via draft).</td>
+      </tr>
+      <tr>
+        <td><strong>Asignar proveedor cuando no está en Airtable</strong></td>
+        <td>Daniel CEO</td>
+        <td>Si no existe tarifa para la ruta en la tabla de tarifas, el sistema no puede cotizar. Requiere que Daniel consulte manualmente al proveedor.</td>
+        <td>Baja (rutas nuevas o proveedores nuevos)</td>
+        <td>15-60 min</td>
+        <td><span style="color:var(--red)">No</span> — Requiere negociación directa con el proveedor. No automatizable.</td>
+      </tr>
+      <tr>
+        <td><strong>Ajustar el precio de la cotización</strong></td>
+        <td>Daniel CEO</td>
+        <td>Daniel puede considerar factores que el sistema no conoce: relación con el cliente, descuentos comerciales, contexto del mercado.</td>
+        <td>Variable (estimado 15-25% de cotizaciones)</td>
+        <td>5 min</td>
+        <td><span style="color:var(--red)">No</span> — Decisión comercial estratégica que requiere criterio humano.</td>
+      </tr>
+      <tr>
+        <td><strong>Monitorear el estado del Módulo 1</strong></td>
+        <td>Daniel CEO</td>
+        <td>Verificar periódicamente que el escenario esté activo y sin errores en Make.</td>
+        <td>Diaria (2-5 min)</td>
+        <td>2-5 min</td>
+        <td><span style="color:var(--green)">Sí</span> — Sales Manager podría incluir un check del estado de Make en su briefing diario.</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="kpi-grid" style="margin-top:16px">
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--red)">~30 min</div><div class="kpi-label">Tiempo CEO/día en Pricing (estimado)</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--green)">2/5</div><div class="kpi-label">Actividades potencialmente automatizables</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--yellow)">3/5</div><div class="kpi-label">Actividades que permanecen humanas</div></div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 14 — REGLAS DE NEGOCIO -->
+<div class="sec" id="s14">
+  <div class="sec-header">
+    <div class="sec-num">14</div>
+    <div class="sec-title-wrap">
+      <h2>Reglas de Negocio</h2>
+      <div class="sec-sub">Reglas hard-coded vs. configurables · Lógica de decisión · Restricciones</div>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Regla</th><th>Tipo</th><th>Descripción</th><th>Dónde está codificada</th><th>¿Configurable?</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>ADR-004: Solo drafts, nunca envío directo</strong></td>
+        <td><span class="badge badge-red">HARD LIMIT</span></td>
+        <td>Claude nunca ejecuta sendAnEmail(). Solo createADraft(). El CEO es el único que envía comunicaciones al cliente.</td>
+        <td>Make scenario 5438649 · Prompt de Claude</td>
+        <td>No — es una decisión arquitectónica permanente</td>
+      </tr>
+      <tr>
+        <td><strong>TRM = día actual (con fallback)</strong></td>
+        <td><span class="badge badge-yellow">REGLA DE NEGOCIO</span></td>
+        <td>La TRM usada es siempre la del día de la solicitud. Si no está disponible, se usa la del día anterior. Nunca se cotiza sin TRM.</td>
+        <td>Lógica del Pricing Agent 5438649</td>
+        <td>Sí — el fallback podría modificarse</td>
+      </tr>
+      <tr>
+        <td><strong>Arquitectura dos ítems (CGEN + IPT)</strong></td>
+        <td><span class="badge badge-red">HARD LIMIT</span></td>
+        <td>Toda factura debe tener exactamente dos ítems: CGEN (margen con IVA 19%) + IPT (proveedor sin IVA). Sin excepción.</td>
+        <td>Blueprint de facturación · Siigo configuración</td>
+        <td>No — requerimiento legal colombiano</td>
+      </tr>
+      <tr>
+        <td><strong>QT creada aunque falten datos</strong></td>
+        <td><span class="badge badge-blue">REGLA DE SISTEMA</span></td>
+        <td>Si el email tiene información insuficiente, el Módulo 1 crea la QT de todas formas con los datos disponibles y la marca como "Datos Incompletos". No rechaza la solicitud.</td>
+        <td>Módulo 1 (5373407)</td>
+        <td>Sí — podría configurarse un umbral mínimo de datos</td>
+      </tr>
+      <tr>
+        <td><strong>Porcentaje de margen desde Airtable</strong></td>
+        <td><span class="badge badge-yellow">CONFIG. TÉCNICA</span></td>
+        <td>El % de margen de EASY no está en el código del escenario de Make. Se lee desde una tabla de configuración en Airtable. Daniel puede cambiarlo sin tocar el escenario.</td>
+        <td>Tabla de configuración Airtable</td>
+        <td>Sí — configurable por Daniel en Airtable</td>
+      </tr>
+      <tr>
+        <td><strong>Idioma del email de cotización: español</strong></td>
+        <td><span class="badge badge-yellow">REGLA DE NEGOCIO</span></td>
+        <td>Claude siempre genera el email de cotización en español. El mercado objetivo de EASY es Colombia.</td>
+        <td>Prompt de Claude en Pricing Agent</td>
+        <td>Sí — el prompt podría adaptarse para clientes internacionales</td>
+      </tr>
+      <tr>
+        <td><strong>Validez de la cotización</strong></td>
+        <td><span class="badge badge-red">NO IMPLEMENTADO</span></td>
+        <td>El sistema actualmente no incluye fecha de vencimiento de la cotización en el email. NO VERIFICADO si existe esta política.</td>
+        <td>Pendiente definir e implementar</td>
+        <td>Sí — requiere decisión de negocio de Daniel</td>
+      </tr>
+      <tr>
+        <td><strong>Descuentos comerciales</strong></td>
+        <td><span class="badge badge-red">NO IMPLEMENTADO</span></td>
+        <td>El sistema no tiene lógica de descuentos por volumen, cliente frecuente, o negociación especial. Los descuentos los aplica Daniel manualmente al revisar el draft.</td>
+        <td>No existe — manual</td>
+        <td>Sí — requiere definición de política de descuentos</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 15 — RIESGOS Y FALLBACKS -->
+<div class="sec" id="s15">
+  <div class="sec-header">
+    <div class="sec-num">15</div>
+    <div class="sec-title-wrap">
+      <h2>Riesgos y Fallbacks</h2>
+      <div class="sec-sub">Qué puede fallar · Impacto · Plan de contingencia</div>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Riesgo</th><th>Probabilidad</th><th>Impacto</th><th>Fallback actual</th><th>Riesgo residual</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Módulo 1 cae (Make inactivo)</strong></td>
+        <td><span class="badge badge-yellow">Baja</span></td>
+        <td><span class="badge badge-red">Crítico</span></td>
+        <td>Make tiene reintentos automáticos. Daniel puede activar el escenario manualmente. RFQs que llegan mientras Make está caído NO se procesan retroactivamente — deben revisarse manualmente.</td>
+        <td>Pérdida de RFQs si Make está caído más de lo que Daniel tarda en notar</td>
+      </tr>
+      <tr>
+        <td><strong>Claude API no disponible</strong></td>
+        <td><span class="badge badge-yellow">Baja</span></td>
+        <td><span class="badge badge-red">Alto</span></td>
+        <td>El escenario falla en el módulo de Claude, registra el error en Make, y notifica al CEO. Daniel debe procesar el RFQ manualmente.</td>
+        <td>Delay en cotizaciones durante la indisponibilidad</td>
+      </tr>
+      <tr>
+        <td><strong>API TRM no disponible</strong></td>
+        <td><span class="badge badge-yellow">Baja</span></td>
+        <td><span class="badge badge-yellow">Medio</span></td>
+        <td>Fallback: usar TRM del día anterior almacenada en Airtable. Si tampoco existe: pausar y notificar al CEO para ingresar TRM manualmente.</td>
+        <td>Cotización con TRM levemente desactualizada (máximo 1 día)</td>
+      </tr>
+      <tr>
+        <td><strong>OAuth Gmail expira (2026-08-24)</strong></td>
+        <td><span class="badge badge-red">Programado</span></td>
+        <td><span class="badge badge-red">Crítico</span></td>
+        <td>Ninguno automático. Daniel debe renovar la conexión OAuth en Make antes de la fecha de expiración.</td>
+        <td>Si no se renueva a tiempo: Módulo 1 cae completamente. Sin captura de RFQs.</td>
+      </tr>
+      <tr>
+        <td><strong>Claude extrae datos incorrectos del email</strong></td>
+        <td><span class="badge badge-yellow">Media</span></td>
+        <td><span class="badge badge-yellow">Medio</span></td>
+        <td>La QT se crea con los datos extraídos. Daniel revisa la QT y el draft antes de enviar — puede corregir en ese punto.</td>
+        <td>Cotización incorrecta enviada si Daniel no revisa. Mitigado por ADR-004.</td>
+      </tr>
+      <tr>
+        <td><strong>Bug 7 — módulos HTTP v3 en Pricing Agent</strong></td>
+        <td><span class="badge badge-red">Confirmado</span></td>
+        <td><span class="badge badge-yellow">Medio</span></td>
+        <td>El escenario funciona con comportamiento inesperado en algunos módulos HTTP. Solución: Daniel debe corregir desde Make UI (tarea T-002 pendiente).</td>
+        <td>Posibles errores intermitentes en el Pricing Agent hasta que se corrija Bug 7</td>
+      </tr>
+      <tr>
+        <td><strong>No existe tarifa para la ruta solicitada</strong></td>
+        <td><span class="badge badge-yellow">Media</span></td>
+        <td><span class="badge badge-yellow">Medio</span></td>
+        <td>QT queda en estado "Sin Tarifa". Daniel recibe notificación y debe obtener tarifa del proveedor manualmente antes de cotizar.</td>
+        <td>Delay en la cotización (tiempo de consulta al proveedor)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 16 — DEPENDENCIAS -->
+<div class="sec" id="s16">
+  <div class="sec-header">
+    <div class="sec-num">16</div>
+    <div class="sec-title-wrap">
+      <h2>Dependencias</h2>
+      <div class="sec-sub">Qué sistemas requiere este departamento · Qué lo puede bloquear</div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">Dependencias críticas (bloquean la operación)</div>
+      <table class="tbl">
+        <tbody>
+          <tr><td><strong>Make.com</strong></td><td>Orquesta todo el flujo. Sin Make, no hay automatización.</td></tr>
+          <tr><td><strong>Gmail OAuth</strong></td><td>Sin esta conexión, el Módulo 1 no puede leer los emails de RFQ. Expira 2026-08-24.</td></tr>
+          <tr><td><strong>Claude API</strong></td><td>Sin Claude, no hay extracción de datos ni cálculo de precios.</td></tr>
+          <tr><td><strong>Airtable</strong></td><td>Base de datos de QTs y tarifas. Sin Airtable, no se puede crear ni consultar nada.</td></tr>
+          <tr><td><strong>Tabla de Tarifas en Airtable</strong></td><td>Si la tabla está vacía o no tiene la ruta, el Pricing Agent no puede calcular.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--yellow)">Dependencias del departamento SIGUIENTE (Proveedores)</div>
+      <table class="tbl">
+        <tbody>
+          <tr><td><strong>Proveedor disponible</strong></td><td>El Pricing Agent necesita que exista un proveedor asignado para la ruta en Airtable.</td></tr>
+          <tr><td><strong>Tarifa del proveedor vigente</strong></td><td>Las tarifas de navieras cambian periódicamente. Si están desactualizadas, la cotización será incorrecta.</td></tr>
+          <tr><td><strong>Confirmación del proveedor</strong></td><td>Una vez enviada la cotización, el CEO debe confirmar disponibilidad con el proveedor antes de comprometerse con el cliente.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 17 — MEJORAS POSIBLES -->
+<div class="sec" id="s17">
+  <div class="sec-header">
+    <div class="sec-num">17</div>
+    <div class="sec-title-wrap">
+      <h2>Mejoras Posibles</h2>
+      <div class="sec-sub">Oportunidades de optimización · Orden de prioridad · Impacto estimado</div>
+    </div>
+  </div>
+  <table class="tbl">
+    <thead><tr><th>Mejora</th><th>Prioridad</th><th>Esfuerzo</th><th>Impacto</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><strong>Corregir Bug 7 en Pricing Agent</strong></td>
+        <td><span class="badge badge-red">URGENTE</span></td>
+        <td>Bajo (Make UI)</td>
+        <td>Alto — estabiliza el Pricing Agent</td>
+        <td>Daniel corrige los 3 módulos HTTP v3 en Make UI (escenario 5438649). Tarea T-002 pendiente.</td>
+      </tr>
+      <tr>
+        <td><strong>Renovar OAuth Gmail antes de 2026-08-24</strong></td>
+        <td><span class="badge badge-red">URGENTE</span></td>
+        <td>Bajo (Make settings)</td>
+        <td>Crítico — evita caída del Módulo 1</td>
+        <td>Renovar la conexión OAuth en Make (ID 9371760) antes de la expiración para no perder la captura de RFQs.</td>
+      </tr>
+      <tr>
+        <td><strong>Draft automático pidiendo datos faltantes al cliente</strong></td>
+        <td><span class="badge badge-yellow">MEDIA</span></td>
+        <td>Medio</td>
+        <td>Medio — reduce trabajo manual de CEO</td>
+        <td>Cuando la QT queda en "Datos Incompletos", Claude genera automáticamente un draft preguntándole al cliente los datos faltantes. Daniel solo revisa y envía.</td>
+      </tr>
+      <tr>
+        <td><strong>Tarifas de navieras en tiempo real (API)</strong></td>
+        <td><span class="badge badge-green">BAJA</span></td>
+        <td>Alto</td>
+        <td>Alto a largo plazo</td>
+        <td>Integrar APIs de Maersk, MSC u otras navieras para obtener tarifas en tiempo real en vez de la tabla manual de Airtable. Elimina el riesgo de tarifas desactualizadas.</td>
+      </tr>
+      <tr>
+        <td><strong>Política de vigencia de cotización</strong></td>
+        <td><span class="badge badge-yellow">MEDIA</span></td>
+        <td>Bajo</td>
+        <td>Medio — reduce disputas comerciales</td>
+        <td>Definir cuántos días es válida la cotización y hacer que Claude la incluya en el email. Ej: "Esta cotización tiene validez de 5 días hábiles sujeta a disponibilidad del proveedor."</td>
+      </tr>
+      <tr>
+        <td><strong>Multicanal: WhatsApp y formulario web</strong></td>
+        <td><span class="badge badge-green">BAJA</span></td>
+        <td>Alto</td>
+        <td>Alto — más clientes pueden cotizar</td>
+        <td>Extender la captura de RFQs a WhatsApp Business API y a un formulario web. El mismo flujo de extracción y creación de QT aplica; solo cambia el canal de entrada.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- SECCIÓN 18 — OPINIÓN ARQUITECTÓNICA -->
+<div class="sec" id="s18">
+  <div class="sec-header">
+    <div class="sec-num">18</div>
+    <div class="sec-title-wrap">
+      <h2>Opinión Arquitectónica</h2>
+      <div class="sec-sub">Evaluación del diseño actual · Fortalezas · Deuda técnica · Recomendaciones del CTO</div>
+    </div>
+  </div>
+
+  <div class="card" style="border-color:var(--green)">
+    <div class="card-title" style="color:var(--green)">Fortalezas del diseño actual</div>
+    <p><strong>El Módulo 1 es el mejor activo del sistema.</strong> Su arquitectura es simple, robusta, y está correctamente certificada. Trigger basado en Gmail webhooks, extracción con Claude, escritura en Airtable — tres pasos, cada uno sin estado, fáciles de depurar y monitorear. Este patrón debería ser el modelo para todos los agentes del sistema.</p>
+    <p><strong>La separación de responsabilidades entre los dos escenarios es correcta.</strong> Módulo 1 captura y crea. Pricing Agent calcula y cotiza. Esta separación permite que cada escenario falle de forma independiente sin bloquear el otro.</p>
+    <p><strong>ADR-004 es una decisión arquitectónica excelente.</strong> Mantener al CEO en el loop para toda comunicación externa elimina el riesgo de errores irreversibles en la relación comercial.</p>
+  </div>
+
+  <div class="card" style="border-color:var(--yellow);margin-top:12px">
+    <div class="card-title" style="color:var(--yellow)">Deuda técnica y preocupaciones</div>
+    <p><strong>Bug 7 en el Pricing Agent es un riesgo operativo activo.</strong> Tener módulos HTTP v3 no resueltos en el escenario más crítico del ciclo comercial después del Módulo 1 es inaceptable para la fase de operacionalización. Esta es la deuda técnica de mayor prioridad.</p>
+    <p><strong>La tabla de tarifas manual es un cuello de botella.</strong> Cada vez que una tarifa cambia o llega una solicitud de una ruta nueva, Daniel tiene que actualizar Airtable manualmente. A medida que el volumen de cotizaciones crezca, este proceso no escala.</p>
+    <p><strong>La expiración del OAuth Gmail es un riesgo de fecha fija.</strong> El 24 de agosto de 2026 el Módulo 1 cae si no se renueva. No existe ningún sistema de alerta anticipada. Este es un punto de fallo único que podría hacer caer la captura de RFQs en un momento crítico.</p>
+    <p><strong>No hay validación de calidad en el output de Claude.</strong> Si Claude extrae datos incorrectos del email (confundiendo origen con destino, por ejemplo), el sistema crea una QT incorrecta sin ningún mecanismo de detección automática. La única salvaguarda es la revisión humana de Daniel sobre el draft.</p>
+  </div>
+
+  <div class="card" style="border-color:var(--teal);margin-top:12px">
+    <div class="card-title" style="color:var(--teal)">Recomendaciones del CTO</div>
+    <p><strong>Prioridad 1 (esta semana):</strong> Corregir Bug 7 en Make UI (T-002) y verificar la fecha de expiración del OAuth Gmail para programar su renovación. Son dos acciones que Daniel puede hacer en menos de 30 minutos y que eliminan los dos riesgos técnicos más urgentes.</p>
+    <p><strong>Prioridad 2 (próximas dos semanas):</strong> Procesar la primera cotización real completa de extremo a extremo con el sistema — desde que el cliente envía el RFQ hasta que Daniel envía la cotización y el cliente responde. Este ciclo completo es lo que lleva el Pricing Agent de VALIDADO a CERTIFICADO.</p>
+    <p><strong>Prioridad 3 (próximo mes):</strong> Implementar el draft automático para datos faltantes. Es la mejora con el mejor ratio esfuerzo/impacto después de la certificación del Pricing Agent — reduce el trabajo manual del CEO en el 20-30% de QTs que llegan incompletas.</p>
+    <p><strong>Decisión de negocio pendiente:</strong> Daniel debe definir la política de vigencia de cotizaciones y los criterios de descuento por volumen. Sin estas definiciones, el sistema no puede automatizar las cotizaciones de clientes frecuentes.</p>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- FOOTER -->
+<footer style="text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)">
+  <div style="font-size:18px;font-weight:700;color:var(--teal);margin-bottom:8px">SESIÓN 2 — Departamento de Pricing y Cotizaciones</div>
+  <div style="margin-bottom:4px">EASY OS · EASY Revolution · easy-logistics.co</div>
+  <div style="margin-bottom:4px">18 secciones · Julio 2026 · Documentación Técnica Consulting Grade</div>
+  <div style="display:flex;justify-content:center;gap:40px;margin-top:16px">
+    <div><div style="font-size:20px;font-weight:700;color:var(--teal)">2</div><div style="font-size:10px;color:var(--muted)">Escenarios Make</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--green)">1</div><div style="font-size:10px;color:var(--muted)">Certificado</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--yellow)">1</div><div style="font-size:10px;color:var(--muted)">Validado</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--red)">1</div><div style="font-size:10px;color:var(--muted)">Bug Pendiente</div></div>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>

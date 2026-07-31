@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>SESIÓN 6 — Departamento de Facturación · EASY OS</title>
+<style>
+:root{--navy:#1C2B47;--teal:#1BB5D4;--bg:#0D1117;--surface:#161B22;--border:#21262D;--muted:#8B949E;--green:#3FB950;--red:#F85149;--yellow:#E8B84B;--purple:#A371F7;--orange:#DB6D28;--text:#E6EDF3;--accent:#3FB950}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;line-height:1.6;font-size:14px}
+.hero{background:linear-gradient(135deg,#0D1117 0%,#0B1F0B 50%,#0D1117 100%);padding:60px 40px;border-bottom:1px solid var(--border);text-align:center}
+.hero-session{font-size:11px;font-weight:700;letter-spacing:3px;color:var(--accent);text-transform:uppercase;margin-bottom:12px}
+.hero-title{font-size:36px;font-weight:800;color:var(--text);margin-bottom:8px}
+.hero-sub{font-size:16px;color:var(--muted);margin-bottom:24px}
+.hero-desc{font-size:14px;color:var(--muted);max-width:700px;margin:0 auto 28px}
+.hero-meta{display:flex;justify-content:center;gap:30px;flex-wrap:wrap}
+.meta-item{display:flex;flex-direction:column;align-items:center}
+.meta-val{font-size:20px;font-weight:700;color:var(--accent)}
+.meta-lbl{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:0 40px;position:sticky;top:0;z-index:100;display:flex;overflow-x:auto}
+.nav a{display:block;padding:12px 16px;font-size:12px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;border-bottom:2px solid transparent;transition:all .2s}
+.nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+main{max-width:1200px;margin:0 auto;padding:40px}
+.sec{padding:40px 0}
+.sec-div{border-top:1px solid var(--border)}
+.sec-header{display:flex;align-items:flex-start;gap:20px;margin-bottom:28px}
+.sec-num{font-size:48px;font-weight:800;color:var(--border);line-height:1;min-width:60px}
+.sec-title-wrap h2{font-size:26px;font-weight:700;color:var(--text)}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:4px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:20px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:var(--navy);color:var(--muted);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:10px 12px;text-align:left;border-bottom:2px solid var(--border)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--border);font-size:13px;vertical-align:top}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,0.02)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:20px}
+.kpi-box{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;text-align:center}
+.kpi-num{font-size:28px;font-weight:800;color:var(--accent)}
+.kpi-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.dw{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:16px}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.badge-green{background:rgba(63,185,80,.15);color:var(--green);border:1px solid rgba(63,185,80,.3)}
+.badge-yellow{background:rgba(232,184,75,.15);color:var(--yellow);border:1px solid rgba(232,184,75,.3)}
+.badge-red{background:rgba(248,81,73,.15);color:var(--red);border:1px solid rgba(248,81,73,.3)}
+.badge-blue{background:rgba(27,181,212,.15);color:var(--teal);border:1px solid rgba(27,181,212,.3)}
+.badge-purple{background:rgba(163,113,247,.15);color:var(--purple);border:1px solid rgba(163,113,247,.3)}
+.badge-orange{background:rgba(219,109,40,.15);color:var(--orange);border:1px solid rgba(219,109,40,.3)}
+p{margin-bottom:10px;font-size:13px;color:var(--text)}
+.highlight-box{background:rgba(63,185,80,0.05);border:1px solid rgba(63,185,80,0.3);border-radius:8px;padding:20px;margin-bottom:16px}
+.num-example{background:var(--navy);border:1px solid var(--border);border-radius:8px;padding:20px;font-family:monospace}
+.num-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px}
+.num-row:last-child{border-bottom:none;font-weight:700;color:var(--accent);font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-session">EASY OS · Documentación Técnica · Sesión 6 de 7</div>
+  <h1 class="hero-title">Departamento de Facturación</h1>
+  <p class="hero-sub">Facturación electrónica DIAN via Siigo · Arquitectura de dos ítems · API local</p>
+  <p class="hero-desc">Este documento describe cómo EASY Revolution genera facturas electrónicas válidas ante la DIAN para cobrar sus servicios de transporte internacional. La arquitectura de facturación tiene una complejidad técnica inusual: factura dos ítems con regímenes de IVA distintos, usa Siigo exclusivamente via API local en el Mac de Daniel, y cada factura debe ser validada en tiempo real por la DIAN antes de ser enviada al cliente.</p>
+  <div class="hero-meta">
+    <div class="meta-item"><div class="meta-val">Siigo</div><div class="meta-lbl">ERP de facturación (API local)</div></div>
+    <div class="meta-item"><div class="meta-val">2 ítems</div><div class="meta-lbl">Por factura (CGEN + IPT)</div></div>
+    <div class="meta-item"><div class="meta-val">DIAN</div><div class="meta-lbl">Validación en tiempo real</div></div>
+    <div class="meta-item"><div class="meta-val">~Parcial</div><div class="meta-lbl">Automatización actual</div></div>
+    <div class="meta-item"><div class="meta-val">&lt; 24h</div><div class="meta-lbl">SLA desde cierre de operación</div></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <a href="#s1">1. Objetivo</a><a href="#s2">2. KPIs y SLA</a><a href="#s3">3. Proceso</a>
+  <a href="#s4">4. BPMN</a><a href="#s5">5. Swimlanes</a><a href="#s6">6. Arquitectura 2 ítems</a>
+  <a href="#s7">7. Siigo API local</a><a href="#s8">8. Flujo DIAN</a>
+  <a href="#s9">9. Ficha Técnica</a><a href="#s10">10. Arquitectura Técnica</a>
+  <a href="#s11">11. Secuencia Temporal</a><a href="#s12">12. Flujo de Datos</a>
+  <a href="#s13">13. Intervención Humana</a><a href="#s14">14. Reglas de Negocio (ADRs)</a>
+  <a href="#s15">15. Riesgos y Fallbacks</a><a href="#s16">16. Dependencias</a>
+  <a href="#s17">17. Mejoras Posibles</a><a href="#s18">18. Opinión Arquitectónica</a>
+</nav>
+
+<main>
+
+<!-- S1 -->
+<div class="sec" id="s1">
+  <div class="sec-header"><div class="sec-num">01</div><div class="sec-title-wrap"><h2>Objetivo del Departamento</h2><div class="sec-sub">Para qué existe · Qué produce · Por qué es técnicamente complejo</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Propósito</div>
+      <p>El Departamento de Facturación tiene como propósito <strong>emitir una factura de venta electrónica válida ante la DIAN por cada servicio de transporte internacional prestado por EASY Revolution</strong>, una vez confirmada la entrega de la carga al cliente.</p>
+      <p>Sin factura electrónica DIAN-validada, EASY no puede cobrar legalmente su servicio en Colombia. La facturación cierra el ciclo operativo (Comercial → Pricing → Proveedores → Operaciones → Aduanas → <strong>Facturación</strong>) y abre el ciclo de cobranza.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Por qué es técnicamente complejo</div>
+      <p><strong>1. Dos ítems con IVA distinto:</strong> Cada factura tiene exactamente dos líneas — el margen de EASY (CGEN, gravado al 19% de IVA) y el pass-through al proveedor (IPT, con IVA 0% por ser servicio de transporte internacional).</p>
+      <p><strong>2. Siigo API local únicamente:</strong> La API de Siigo opera desde el Mac de Daniel. No está disponible en Railway (el servidor donde corren los escenarios de Make). Esto significa que la generación automática de facturas desde Make no es directamente posible.</p>
+      <p><strong>3. Validación DIAN en tiempo real:</strong> Siigo envía cada factura a la DIAN electrónicamente. La DIAN valida y retorna un CUFE (Código Único de Factura Electrónica). Sin CUFE, la factura no tiene validez legal.</p>
+    </div>
+  </div>
+  <div class="kpi-grid" style="margin-top:16px">
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--yellow)">TRIGGER</div><div class="kpi-label">QT estado "Entregado" en Airtable</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--accent)">Siigo</div><div class="kpi-label">ERP de facturación electrónica</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--teal)">DIAN</div><div class="kpi-label">Validación y CUFE</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--accent)">FV</div><div class="kpi-label">Factura de Venta numerada</div></div>
+    <div class="kpi-box"><div class="kpi-num" style="color:var(--purple)">Cobranza</div><div class="kpi-label">Factura enviada al cliente</div></div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S2 -->
+<div class="sec" id="s2">
+  <div class="sec-header"><div class="sec-num">02</div><div class="sec-title-wrap"><h2>KPIs y SLA</h2></div></div>
+  <div class="grid-2">
+    <table class="tbl">
+      <thead><tr><th>KPI</th><th>Objetivo</th><th>Alerta</th><th>Qué mide</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Tiempo cierre op. → factura emitida</strong></td><td>&lt; 24h hábiles</td><td>&gt; 48h</td><td>Velocidad de facturación post-entrega</td></tr>
+        <tr><td><strong>% facturas emitidas sin errores</strong></td><td>&gt; 99%</td><td>&lt; 95%</td><td>Calidad del proceso — errores requieren anulación y re-emisión (costoso)</td></tr>
+        <tr><td><strong>% facturas validadas por la DIAN (CUFE)</strong></td><td>100%</td><td>&lt; 100%</td><td>Cumplimiento legal — toda factura emitida debe tener CUFE</td></tr>
+        <tr><td><strong>Tiempo DIAN → CUFE retornado</strong></td><td>&lt; 5 min</td><td>&gt; 15 min / falla</td><td>Disponibilidad del servicio de validación DIAN</td></tr>
+      </tbody>
+    </table>
+    <div class="card">
+      <div class="card-title">El costo de un error en facturación</div>
+      <p>Una factura electrónica emitida con error no se puede simplemente "editar" en Colombia. El proceso correcto es:</p>
+      <p>1. Emitir una <strong>nota crédito</strong> que anula la factura original — también requiere validación DIAN.</p>
+      <p>2. Emitir una nueva factura corregida — también requiere validación DIAN.</p>
+      <p>Cada ciclo de anulación + re-emisión toma tiempo, consume el número de factura original, y puede generar confusión contable en el cliente. Por esto la precisión en la preparación de la factura es crítica.</p>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S3 -->
+<div class="sec" id="s3">
+  <div class="sec-header"><div class="sec-num">03</div><div class="sec-title-wrap"><h2>Proceso de Facturación</h2><div class="sec-sub">Desde el trigger de entrega hasta el CUFE y el envío al cliente</div></div></div>
+  <table class="tbl">
+    <thead><tr><th>#</th><th>Paso</th><th>Responsable</th><th>Herramienta</th><th>Input</th><th>Output</th><th>Tiempo</th></tr></thead>
+    <tbody>
+      <tr><td><strong>01</strong></td><td>QT pasa a estado "Entregado" en Airtable con Fecha_Entrega_Real registrada</td><td>Daniel CEO</td><td>Airtable</td><td>Confirmación de entrega del cliente</td><td>Trigger para iniciar facturación</td><td>Post-entrega, &lt; 24h</td></tr>
+      <tr><td><strong>02</strong></td><td>Daniel consulta la QT en Airtable para reunir los datos de la factura</td><td>Daniel CEO</td><td>Airtable</td><td>QT en estado "Entregado"</td><td>Datos: cliente, NIT, tarifa IPT, margen CGEN, TRM utilizado</td><td>5 min</td></tr>
+      <tr><td><strong>03</strong></td><td>Daniel abre Siigo en su Mac y crea una nueva Factura de Venta</td><td>Daniel CEO</td><td>Siigo (interfaz web o app Mac, API local)</td><td>Datos de la QT</td><td>Borrador de FV en Siigo</td><td>5-10 min</td></tr>
+      <tr><td><strong>04</strong></td><td>Daniel ingresa ítem 1: IPT — Intermediación en el Transporte</td><td>Daniel CEO</td><td>Siigo</td><td>Valor IPT = Tarifa_USD × TRM (COP)</td><td>Ítem 1 en la FV. Código: 30360. IVA: 0%</td><td>3 min</td></tr>
+      <tr><td><strong>05</strong></td><td>Daniel ingresa ítem 2: CGEN — Comisión de gestión (margen EASY)</td><td>Daniel CEO</td><td>Siigo</td><td>Valor CGEN = IPT × %_margen</td><td>Ítem 2 en la FV. Código: 3034. IVA: 19%</td><td>3 min</td></tr>
+      <tr><td><strong>06</strong></td><td>Daniel verifica los totales: IPT + CGEN + IVA_CGEN = Total factura</td><td>Daniel CEO</td><td>Siigo</td><td>Borrador de FV</td><td>Confirmación de que los valores son correctos</td><td>2 min</td></tr>
+      <tr><td><strong>07</strong></td><td>Daniel envía la FV a validación de la DIAN desde Siigo</td><td>Siigo (automático)</td><td>Siigo API → DIAN</td><td>FV en borrador</td><td>FV enviada a la DIAN electrónicamente</td><td>&lt; 1 min (proceso automático)</td></tr>
+      <tr><td><strong>08</strong></td><td>DIAN valida la FV y retorna CUFE</td><td>DIAN (automático)</td><td>Sistema DIAN → Siigo</td><td>FV electrónica</td><td>CUFE (Código Único de Factura Electrónica). FV tiene validez legal.</td><td>Segundos a 5 min</td></tr>
+      <tr><td><strong>09</strong></td><td>Siigo genera el PDF de la factura electrónica con el CUFE incluido</td><td>Siigo (automático)</td><td>Siigo</td><td>FV validada con CUFE</td><td>PDF de factura electrónica lista para enviar al cliente</td><td>Automático</td></tr>
+      <tr><td><strong>10</strong></td><td>Daniel envía la factura al cliente por Gmail como borrador ADR-004</td><td>Daniel CEO</td><td>Gmail (draft → Daniel envía)</td><td>PDF de FV + datos del cliente</td><td>Factura en poder del cliente. Estado QT → "Facturado"</td><td>5 min</td></tr>
+      <tr><td><strong>11</strong></td><td>Daniel registra en Airtable que la factura fue emitida</td><td>Daniel CEO</td><td>Airtable</td><td>Número de FV + fecha</td><td>Campo Num_Factura y Fecha_Factura actualizados. QT → "Facturado"</td><td>3 min</td></tr>
+      <tr><td><strong>12</strong></td><td>Factura disponible para gestión de cobranza</td><td>Sistema</td><td>Airtable</td><td>Estado "Facturado"</td><td>Trigger para Departamento de Cobranza y Reportes</td><td>Automático</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<!-- S4 — BPMN -->
+<div class="sec" id="s4">
+  <div class="sec-header"><div class="sec-num">04</div><div class="sec-title-wrap"><h2>Diagrama BPMN</h2><div class="sec-sub">Flujo de facturación con validación DIAN</div></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 1000 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="1000" height="160" fill="transparent"/>
+      <defs><marker id="bfv" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8B949E"/></marker></defs>
+      <!-- START -->
+      <circle cx="35" cy="80" r="16" fill="#21262D" stroke="#E8B84B" stroke-width="2.5"/>
+      <circle cx="35" cy="80" r="10" fill="none" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="35" y="106" text-anchor="middle" font-size="9" fill="#E8B84B">ENTREGADO</text>
+      <!-- Task: Consulta datos QT -->
+      <rect x="62" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#F85149" stroke-width="1.5"/>
+      <text x="112" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Consulta datos</text>
+      <text x="112" y="91" text-anchor="middle" font-size="9" fill="#8B949E">QT Airtable</text>
+      <line x1="51" y1="80" x2="62" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <!-- Task: Crea FV en Siigo -->
+      <rect x="178" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="228" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Crea FV Siigo</text>
+      <text x="228" y="91" text-anchor="middle" font-size="9" fill="#8B949E">IPT + CGEN</text>
+      <line x1="162" y1="80" x2="178" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <!-- Task: Envía a DIAN -->
+      <rect x="294" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="344" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Siigo → DIAN</text>
+      <text x="344" y="91" text-anchor="middle" font-size="9" fill="#8B949E">validación</text>
+      <line x1="278" y1="80" x2="294" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <!-- Gateway: DIAN ok? -->
+      <polygon points="415,80 440,58 465,80 440,102" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="440" y="76" text-anchor="middle" font-size="9" fill="#E8B84B">¿DIAN</text>
+      <text x="440" y="88" text-anchor="middle" font-size="9" fill="#E8B84B">ok?</text>
+      <line x1="394" y1="80" x2="415" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <!-- No: reintento -->
+      <line x1="440" y1="102" x2="440" y2="140" stroke="#F85149" stroke-width="1" stroke-dasharray="4,2"/>
+      <rect x="370" y="137" width="140" height="20" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="440" y="150" text-anchor="middle" font-size="9" fill="#F85149">Revisar error → reintentar</text>
+      <line x1="370" y1="147" x2="344" y2="147" stroke="#F85149" stroke-width="1" stroke-dasharray="3,2"/>
+      <line x1="344" y1="147" x2="344" y2="98" stroke="#F85149" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#bfv)"/>
+      <text x="452" y="125" font-size="8" fill="#F85149">No</text>
+      <!-- Sí: CUFE retornado -->
+      <rect x="480" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="530" y="79" text-anchor="middle" font-size="10" fill="#3FB950">CUFE retornado</text>
+      <text x="530" y="91" text-anchor="middle" font-size="9" fill="#8B949E">FV válida legalmente</text>
+      <line x1="465" y1="80" x2="480" y2="80" stroke="#3FB950" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <text x="472" y="74" font-size="8" fill="#3FB950">Sí</text>
+      <!-- Task: Enviar al cliente -->
+      <rect x="596" y="62" width="100" height="36" rx="5" fill="#1C2B47" stroke="#F85149" stroke-width="1.5"/>
+      <text x="646" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">Gmail draft</text>
+      <text x="646" y="91" text-anchor="middle" font-size="9" fill="#8B949E">→ Daniel envía</text>
+      <line x1="580" y1="80" x2="596" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <!-- Task: Actualizar Airtable -->
+      <rect x="712" y="62" width="110" height="36" rx="5" fill="#1C2B47" stroke="#F85149" stroke-width="1.5"/>
+      <text x="767" y="79" text-anchor="middle" font-size="10" fill="#E6EDF3">QT → "Facturado"</text>
+      <text x="767" y="91" text-anchor="middle" font-size="9" fill="#8B949E">Airtable actualizado</text>
+      <line x1="696" y1="80" x2="712" y2="80" stroke="#8B949E" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <!-- END -->
+      <circle cx="955" cy="80" r="16" fill="#21262D" stroke="#3FB950" stroke-width="2.5"/>
+      <circle cx="955" cy="80" r="10" fill="#3FB950"/>
+      <line x1="822" y1="80" x2="939" y2="80" stroke="#3FB950" stroke-width="1.5" marker-end="url(#bfv)"/>
+      <text x="955" y="106" text-anchor="middle" font-size="9" fill="#3FB950">→ COBRAR</text>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S5 — SWIMLANES -->
+<div class="sec" id="s5">
+  <div class="sec-header"><div class="sec-num">05</div><div class="sec-title-wrap"><h2>Diagrama Swimlanes</h2><div class="sec-sub">4 actores — Daniel · Siigo · DIAN · Cliente</div></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 960 260" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="960" height="260" fill="transparent"/>
+      <defs><marker id="swfv" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8B949E"/></marker></defs>
+      <rect x="0" y="0" width="80" height="260" fill="#0D1117"/>
+      <line x1="80" y1="0" x2="80" y2="260" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 1: Daniel -->
+      <rect x="0" y="0" width="80" height="65" fill="rgba(248,81,73,0.05)"/>
+      <text transform="rotate(-90,40,32.5)" x="40" y="32.5" text-anchor="middle" font-size="10" font-weight="700" fill="#F85149" dominant-baseline="middle">DANIEL</text>
+      <line x1="0" y1="65" x2="960" y2="65" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 2: Siigo -->
+      <rect x="0" y="65" width="80" height="65" fill="rgba(63,185,80,0.05)"/>
+      <text transform="rotate(-90,40,97.5)" x="40" y="97.5" text-anchor="middle" font-size="10" font-weight="700" fill="#3FB950" dominant-baseline="middle">SIIGO</text>
+      <line x1="0" y1="130" x2="960" y2="130" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 3: DIAN -->
+      <rect x="0" y="130" width="80" height="65" fill="rgba(232,184,75,0.05)"/>
+      <text transform="rotate(-90,40,162.5)" x="40" y="162.5" text-anchor="middle" font-size="10" font-weight="700" fill="#E8B84B" dominant-baseline="middle">DIAN</text>
+      <line x1="0" y1="195" x2="960" y2="195" stroke="#21262D" stroke-width="1"/>
+      <!-- Lane 4: Cliente -->
+      <rect x="0" y="195" width="80" height="65" fill="rgba(27,181,212,0.05)"/>
+      <text transform="rotate(-90,40,227.5)" x="40" y="227.5" text-anchor="middle" font-size="10" font-weight="700" fill="#1BB5D4" dominant-baseline="middle">CLIENTE</text>
+
+      <!-- Daniel tasks -->
+      <rect x="90" y="12" width="140" height="28" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="160" y="30" text-anchor="middle" font-size="10" fill="#E6EDF3">Prepara FV: IPT + CGEN</text>
+      <rect x="690" y="12" width="130" height="28" rx="4" fill="#21262D" stroke="#F85149" stroke-width="1"/>
+      <text x="755" y="30" text-anchor="middle" font-size="10" fill="#E6EDF3">Envía email + actualiza Airtable</text>
+      <line x1="230" y1="26" x2="300" y2="82" stroke="#F85149" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#swfv)"/>
+
+      <!-- Siigo tasks -->
+      <rect x="290" y="77" width="120" height="28" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="350" y="95" text-anchor="middle" font-size="10" fill="#3FB950">Crea FV en Siigo</text>
+      <rect x="440" y="77" width="120" height="28" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="500" y="95" text-anchor="middle" font-size="10" fill="#3FB950">Envía a DIAN</text>
+      <rect x="590" y="77" width="120" height="28" rx="4" fill="#21262D" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="650" y="95" text-anchor="middle" font-size="10" fill="#3FB950">Genera PDF + CUFE</text>
+      <line x1="410" y1="91" x2="440" y2="91" stroke="#3FB950" stroke-width="1.5" marker-end="url(#swfv)"/>
+      <line x1="560" y1="91" x2="590" y2="91" stroke="#3FB950" stroke-width="1.5" marker-end="url(#swfv)"/>
+
+      <!-- DIAN tasks -->
+      <rect x="480" y="142" width="120" height="28" rx="4" fill="#21262D" stroke="#E8B84B" stroke-width="1.5"/>
+      <text x="540" y="160" text-anchor="middle" font-size="10" fill="#E8B84B">Valida → retorna CUFE</text>
+      <!-- Siigo → DIAN -->
+      <line x1="500" y1="105" x2="540" y2="142" stroke="#3FB950" stroke-width="1.5" marker-end="url(#swfv)"/>
+      <text x="512" y="128" font-size="8" fill="#3FB950">FV electrónica</text>
+      <!-- DIAN → Siigo (CUFE) -->
+      <line x1="540" y1="170" x2="620" y2="105" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#swfv)"/>
+      <text x="595" y="145" font-size="8" fill="#E8B84B">CUFE</text>
+
+      <!-- Siigo → Daniel (PDF listo) -->
+      <line x1="650" y1="77" x2="700" y2="40" stroke="#3FB950" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#swfv)"/>
+      <text x="680" y="58" font-size="8" fill="#3FB950">PDF listo</text>
+
+      <!-- Cliente task -->
+      <rect x="690" y="207" width="120" height="28" rx="4" fill="#21262D" stroke="#1BB5D4" stroke-width="1"/>
+      <text x="750" y="225" text-anchor="middle" font-size="10" fill="#1BB5D4">Recibe factura PDF</text>
+      <!-- Daniel → Cliente -->
+      <line x1="755" y1="40" x2="755" y2="207" stroke="#1BB5D4" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#swfv)"/>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S6 — ARQUITECTURA 2 ÍTEMS -->
+<div class="sec" id="s6">
+  <div class="sec-header"><div class="sec-num">06</div><div class="sec-title-wrap"><h2>Arquitectura de Dos Ítems</h2><div class="sec-sub">La decisión de diseño más importante de la facturación · Por qué dos ítems · Cómo se calculan</div></div></div>
+  <div class="highlight-box">
+    <div style="font-size:15px;font-weight:700;color:var(--accent);margin-bottom:12px">Principio fundamental</div>
+    <p>EASY Revolution actúa como <strong>broker de transporte</strong>, no como transportista. Esto significa que la factura refleja dos componentes económicamente distintos: (1) lo que cobra EASY por su servicio de intermediación, y (2) lo que EASY le paga al proveedor como pass-through. Mezclar ambos en un solo ítem crea problemas contables, fiscales y de transparencia. Por esto, la arquitectura tiene exactamente dos ítems con tratamientos de IVA opuestos.</p>
+  </div>
+  <div class="grid-3" style="margin-top:16px">
+    <div class="card" style="border-color:var(--yellow)">
+      <div class="card-title" style="color:var(--yellow)">Ítem 1 — IPT</div>
+      <p><strong>Nombre completo:</strong> Intermediación en el Pago del Transporte Internacional</p>
+      <p><strong>Código Siigo:</strong> 30360</p>
+      <p><strong>IVA:</strong> 0% — El transporte internacional está exento de IVA en Colombia (Art. 481 ET)</p>
+      <p><strong>Valor:</strong> Tarifa del proveedor en COP = Tarifa_USD × TRM del día</p>
+      <p><strong>Naturaleza:</strong> Pass-through. EASY lo recauda del cliente y se lo paga al proveedor. El margen de EASY sobre este ítem es cero.</p>
+    </div>
+    <div class="card" style="border-color:var(--accent)">
+      <div class="card-title" style="color:var(--accent)">Ítem 2 — CGEN</div>
+      <p><strong>Nombre completo:</strong> Comisión de Gestión EASY Revolution</p>
+      <p><strong>Código Siigo:</strong> 3034</p>
+      <p><strong>IVA:</strong> 19% — Los servicios de intermediación y gestión sí causan IVA en Colombia</p>
+      <p><strong>Valor base:</strong> IPT × %_margen (porcentaje acordado con el cliente)</p>
+      <p><strong>Naturaleza:</strong> El ingreso real de EASY Revolution. Es lo que EASY se queda después de pagarle al proveedor.</p>
+    </div>
+    <div class="card" style="border-color:var(--teal)">
+      <div class="card-title" style="color:var(--teal)">Total Factura</div>
+      <div class="num-example">
+        <div class="num-row"><span style="color:var(--muted)">Tarifa USD (ejemplo)</span><span>$1,500 USD</span></div>
+        <div class="num-row"><span style="color:var(--muted)">TRM aplicado</span><span>$4,200 COP/USD</span></div>
+        <div class="num-row"><span style="color:var(--yellow)">IPT (ítem 1, IVA 0%)</span><span>$6,300,000</span></div>
+        <div class="num-row"><span style="color:var(--muted)">% margen EASY</span><span>15%</span></div>
+        <div class="num-row"><span style="color:var(--accent)">CGEN (ítem 2, base)</span><span>$945,000</span></div>
+        <div class="num-row"><span style="color:var(--accent)">IVA 19% sobre CGEN</span><span>$179,550</span></div>
+        <div class="num-row"><span>TOTAL FACTURA</span><span style="color:var(--accent)">$7,424,550</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S7 — SIIGO API LOCAL -->
+<div class="sec" id="s7">
+  <div class="sec-header"><div class="sec-num">07</div><div class="sec-title-wrap"><h2>Siigo y la Restricción de API Local</h2><div class="sec-sub">La arquitectura técnica más importante de este departamento · Por qué Siigo no está en Railway</div></div></div>
+  <div class="grid-2">
+    <div class="card" style="border-color:var(--red)">
+      <div class="card-title" style="color:var(--red)">La restricción: Siigo API solo desde Mac local</div>
+      <p>La API de Siigo que usa EASY Revolution requiere autenticación que se gestiona localmente en el Mac de Daniel. El token de acceso y las credenciales están almacenados en el entorno local del Mac, no en las variables de entorno de Railway (el servidor cloud donde corren los escenarios de Make).</p>
+      <p>Esto significa que los escenarios de Make <strong>no pueden llamar la API de Siigo directamente</strong> para crear o emitir facturas de forma autónoma. Cualquier automatización de facturación debe pasar por el Mac de Daniel.</p>
+      <p>Esta restricción es estructural — no es un bug ni una limitación temporal. Es una decisión de seguridad que impide que credenciales financieras estén en un servidor externo.</p>
+    </div>
+    <div class="card" style="border-color:var(--yellow)">
+      <div class="card-title" style="color:var(--yellow)">Implicaciones de diseño</div>
+      <p><strong>Flujos que SÍ son posibles:</strong> Crear scripts en el Mac de Daniel que corran automáticamente y llamen la API de Siigo cuando Airtable cambia el estado de una QT a "Entregado". Esto requiere que el Mac esté encendido y conectado.</p>
+      <p><strong>Flujos que NO son posibles:</strong> Que un escenario de Make en Railway llame la API de Siigo directamente. Que la factura se genere automáticamente mientras el Mac de Daniel está apagado o sin conexión.</p>
+      <p><strong>Workaround actual:</strong> Daniel crea las facturas manualmente en Siigo. La automatización está limitada a la preparación de los datos (Make puede formatear todos los valores necesarios y presentárselos a Daniel) pero la ejecución en Siigo es manual.</p>
+    </div>
+  </div>
+  <div class="card" style="margin-top:12px;border-color:var(--accent)">
+    <div class="card-title">Camino técnico para automatización futura</div>
+    <p>La alternativa técnica más viable es usar un <strong>script local en el Mac de Daniel</strong> (Python o Node.js) que corra como un watcher: escucha cambios en Airtable via webhook, detecta QTs que cambian a "Entregado", llama la API de Siigo con los datos correctos, y crea la factura automáticamente. El Mac debe estar encendido durante el horario laboral (que normalmente lo está). Las credenciales de Siigo nunca salen del Mac. Esta es la arquitectura objetivo para la automatización de facturación.</p>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S8 — FLUJO DIAN -->
+<div class="sec" id="s8">
+  <div class="sec-header"><div class="sec-num">08</div><div class="sec-title-wrap"><h2>Flujo de Validación DIAN</h2><div class="sec-sub">Cómo funciona la factura electrónica en Colombia · Qué es el CUFE</div></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">Factura electrónica en Colombia — marco legal</div>
+      <p>Desde 2019, la DIAN exige que todas las facturas de venta de empresas colombianas sean electrónicas — generadas, transmitidas y validadas mediante el sistema habilitado de la DIAN (Decreto 358 de 2020).</p>
+      <p><strong>Operador tecnológico:</strong> Siigo actúa como operador tecnológico habilitado por la DIAN. Cuando Daniel emite una factura en Siigo, Siigo la transmite en tiempo real a la DIAN en el formato XML requerido (UBL 2.1).</p>
+      <p><strong>CUFE:</strong> Código Único de Factura Electrónica. Es el código que la DIAN retorna para confirmar que la factura fue recibida y validada. Sin CUFE, la factura no tiene validez legal y no puede usarse como soporte contable por el cliente.</p>
+      <p><strong>Tiempo de respuesta:</strong> Segundos en condiciones normales. Puede tardar hasta 15 minutos en periodos de alta carga de la plataforma DIAN.</p>
+    </div>
+    <div class="card">
+      <div class="card-title">Lo que contiene el PDF de la factura electrónica</div>
+      <table class="tbl"><tbody>
+        <tr><td>CUFE</td><td>Código de validación DIAN. Permite verificar la autenticidad de la factura en el portal de la DIAN.</td></tr>
+        <tr><td>Código QR</td><td>Enlace al portal de la DIAN para verificar la factura electrónicamente.</td></tr>
+        <tr><td>Datos del emisor</td><td>Razón social, NIT, régimen, dirección de EASY Revolution / DHA SAS</td></tr>
+        <tr><td>Datos del receptor</td><td>Razón social, NIT, dirección del cliente importador</td></tr>
+        <tr><td>Ítems detallados</td><td>IPT (código 30360, 0% IVA) + CGEN (código 3034, 19% IVA)</td></tr>
+        <tr><td>Totales</td><td>Subtotal + IVA + Total a pagar</td></tr>
+        <tr><td>Número de FV</td><td>Número consecutivo de la factura (ej. FV-1-XXX)</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S9 — FICHA TÉCNICA -->
+<div class="sec" id="s9">
+  <div class="sec-header"><div class="sec-num">09</div><div class="sec-title-wrap"><h2>Ficha Técnica del Proceso</h2></div></div>
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <div style="background:linear-gradient(135deg,#0B1F0B,#0D1117);padding:20px;border-bottom:1px solid var(--border)">
+      <div style="font-size:18px;font-weight:700;color:var(--text)">Facturación Electrónica EASY Revolution — Siigo + DIAN</div>
+      <div style="font-size:12px;color:var(--accent);font-family:monospace;margin-top:4px">Siigo API local · Dos ítems (CGEN+IPT) · Validación DIAN obligatoria</div>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <span class="badge badge-yellow">~PARCIAL MANUAL</span>
+        <span class="badge badge-green">IMPLEMENTADO</span>
+      </div>
+    </div>
+    <div style="padding:20px">
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Herramientas</div><div>Siigo (ERP / facturación electrónica) · Airtable (datos de la operación) · Gmail (envío al cliente) · DIAN / MUISCA (validación electrónica)</div></div>
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Restricción crítica</div><div>Siigo API solo disponible via Mac local de Daniel — no accesible desde Railway/Make de forma autónoma</div></div>
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Ítems por factura</div><div>Siempre exactamente 2: IPT (código 30360, IVA 0%) + CGEN (código 3034, IVA 19%)</div></div>
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--muted);font-weight:600">Tiempo Daniel/factura</div><div>~15-20 minutos en condiciones normales</div></div>
+      <div style="display:grid;grid-template-columns:180px 1fr;gap:8px;padding:8px 0;font-size:13px"><div style="color:var(--muted);font-weight:600">Estado de madurez</div><div><span class="badge badge-green">IMPLEMENTADO</span> — El proceso opera. La automatización completa requiere el script local Mac.</div></div>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<!-- S10 -->
+<div class="sec" id="s10">
+  <div class="sec-header"><div class="sec-num">10</div><div class="sec-title-wrap"><h2>Arquitectura Técnica</h2></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 900 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="900" height="180" fill="transparent"/>
+      <defs><marker id="arc10f" markerWidth="7" markerHeight="5" refX="7" refY="2.5" orient="auto"><polygon points="0 0,7 2.5,0 5" fill="#8B949E"/></marker></defs>
+      <!-- Airtable -->
+      <rect x="20" y="70" width="140" height="50" rx="6" fill="rgba(63,185,80,0.07)" stroke="#3FB950" stroke-width="1.5"/>
+      <text x="90" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#3FB950">Airtable</text>
+      <text x="90" y="108" text-anchor="middle" font-size="9" fill="#8B949E">QT "Entregado" + datos FV</text>
+      <!-- Daniel Mac -->
+      <rect x="200" y="60" width="140" height="70" rx="6" fill="#21262D" stroke="#F85149" stroke-width="2.5"/>
+      <text x="270" y="88" text-anchor="middle" font-size="12" font-weight="700" fill="#F85149">Mac de Daniel</text>
+      <text x="270" y="103" text-anchor="middle" font-size="9" fill="#8B949E">Siigo API local</text>
+      <text x="270" y="118" text-anchor="middle" font-size="9" fill="#yellow">Script o manual</text>
+      <line x1="160" y1="95" x2="200" y2="95" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arc10f)"/>
+      <text x="180" y="89" text-anchor="middle" font-size="8" fill="#3FB950">datos</text>
+      <!-- Siigo server -->
+      <rect x="380" y="70" width="140" height="50" rx="6" fill="rgba(63,185,80,0.07)" stroke="#3FB950" stroke-width="2"/>
+      <text x="450" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#3FB950">Siigo Cloud</text>
+      <text x="450" y="108" text-anchor="middle" font-size="9" fill="#8B949E">Procesamiento FV electrónica</text>
+      <line x1="340" y1="95" x2="380" y2="95" stroke="#F85149" stroke-width="1.5" marker-end="url(#arc10f)"/>
+      <text x="360" y="89" text-anchor="middle" font-size="8" fill="#F85149">API call</text>
+      <!-- DIAN -->
+      <rect x="560" y="70" width="140" height="50" rx="6" fill="rgba(232,184,75,0.07)" stroke="#E8B84B" stroke-width="2"/>
+      <text x="630" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#E8B84B">DIAN / MUISCA</text>
+      <text x="630" y="108" text-anchor="middle" font-size="9" fill="#8B949E">Validación + retorna CUFE</text>
+      <line x1="520" y1="95" x2="560" y2="95" stroke="#3FB950" stroke-width="1.5" marker-end="url(#arc10f)"/>
+      <text x="540" y="89" text-anchor="middle" font-size="8" fill="#3FB950">XML UBL</text>
+      <!-- DIAN → Siigo (CUFE) -->
+      <line x1="630" y1="120" x2="630" y2="145" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="630" y1="145" x2="450" y2="145" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="450" y1="145" x2="450" y2="120" stroke="#E8B84B" stroke-width="1.5" marker-end="url(#arc10f)"/>
+      <text x="540" y="140" text-anchor="middle" font-size="8" fill="#E8B84B">CUFE retornado</text>
+      <!-- Cliente (Gmail) -->
+      <rect x="750" y="70" width="130" height="50" rx="6" fill="#21262D" stroke="#1BB5D4" stroke-width="1.5"/>
+      <text x="815" y="93" text-anchor="middle" font-size="12" font-weight="700" fill="#1BB5D4">Cliente</text>
+      <text x="815" y="108" text-anchor="middle" font-size="9" fill="#8B949E">recibe PDF via Gmail</text>
+      <!-- Siigo PDF → Daniel → Cliente -->
+      <line x1="450" y1="70" x2="270" y2="60" stroke="#3FB950" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arc10f)"/>
+      <text x="360" y="55" text-anchor="middle" font-size="8" fill="#3FB950">PDF + CUFE</text>
+      <line x1="340" y1="78" x2="750" y2="90" stroke="#F85149" stroke-width="1" stroke-dasharray="3,2" marker-end="url(#arc10f)"/>
+      <text x="545" y="72" text-anchor="middle" font-size="8" fill="#F85149">Gmail draft → Daniel envía</text>
+    </svg>
+  </div>
+  <p style="color:var(--red);font-size:12px;margin-top:8px;font-weight:600">⚠ Restricción crítica: La línea entre Mac de Daniel y Siigo Cloud no puede ser reemplazada por Railway/Make. Solo el Mac local puede autenticarse contra la API de Siigo con las credenciales actuales.</p>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s11">
+  <div class="sec-header"><div class="sec-num">11</div><div class="sec-title-wrap"><h2>Secuencia Temporal</h2></div></div>
+  <div class="dw">
+    <svg viewBox="0 0 960 110" xmlns="http://www.w3.org/2000/svg" style="width:100%;font-family:-apple-system,sans-serif">
+      <rect width="960" height="110" fill="transparent"/>
+      <line x1="30" y1="55" x2="930" y2="55" stroke="#21262D" stroke-width="2"/>
+      <circle cx="80" cy="55" r="8" fill="#E8B84B"/>
+      <text x="80" y="35" text-anchor="middle" font-size="9" fill="#E8B84B">T=0</text>
+      <text x="80" y="22" text-anchor="middle" font-size="8" fill="#8B949E">QT → "Entregado"</text>
+      <circle cx="250" cy="55" r="8" fill="#F85149"/>
+      <text x="250" y="78" text-anchor="middle" font-size="9" fill="#F85149">T + &lt;30min</text>
+      <text x="250" y="91" text-anchor="middle" font-size="8" fill="#8B949E">Daniel prepara FV</text>
+      <text x="250" y="101" text-anchor="middle" font-size="8" fill="#8B949E">datos en Siigo</text>
+      <circle cx="470" cy="55" r="8" fill="#3FB950"/>
+      <text x="470" y="35" text-anchor="middle" font-size="9" fill="#3FB950">T + ~35min</text>
+      <text x="470" y="22" text-anchor="middle" font-size="8" fill="#8B949E">Siigo envía a DIAN</text>
+      <text x="470" y="12" text-anchor="middle" font-size="8" fill="#8B949E">FV electrónica</text>
+      <circle cx="640" cy="55" r="8" fill="#E8B84B"/>
+      <text x="640" y="78" text-anchor="middle" font-size="9" fill="#E8B84B">T + ~37min</text>
+      <text x="640" y="91" text-anchor="middle" font-size="8" fill="#8B949E">DIAN retorna CUFE</text>
+      <text x="640" y="101" text-anchor="middle" font-size="8" fill="#8B949E">FV válida legalmente</text>
+      <circle cx="830" cy="55" r="8" fill="#1BB5D4"/>
+      <text x="830" y="35" text-anchor="middle" font-size="9" fill="#1BB5D4">T + ~45min</text>
+      <text x="830" y="22" text-anchor="middle" font-size="8" fill="#8B949E">PDF enviado al cliente</text>
+      <text x="830" y="12" text-anchor="middle" font-size="8" fill="#8B949E">Airtable → "Facturado"</text>
+      <line x1="88" y1="55" x2="242" y2="55" stroke="#F85149" stroke-width="1.5"/>
+      <line x1="258" y1="55" x2="462" y2="55" stroke="#3FB950" stroke-width="1.5"/>
+      <line x1="478" y1="55" x2="632" y2="55" stroke="#E8B84B" stroke-width="1.5"/>
+      <line x1="648" y1="55" x2="822" y2="55" stroke="#1BB5D4" stroke-width="1.5"/>
+    </svg>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s12">
+  <div class="sec-header"><div class="sec-num">12</div><div class="sec-title-wrap"><h2>Flujo de Datos</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Dato</th><th>Origen</th><th>Lo genera</th><th>Se almacena en</th><th>Lo consume</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Tarifa_USD</strong></td><td>QT en Airtable (del Pricing Agent)</td><td>Daniel / Pricing Agent al cotizar</td><td>Campo Tarifa_USD en QT Airtable</td><td>Cálculo del valor IPT</td></tr>
+      <tr><td><strong>TRM del día</strong></td><td>API Banco de la República</td><td>Make (Pricing Agent) o Daniel</td><td>Campo TRM en QT Airtable</td><td>Conversión Tarifa_USD → COP para IPT</td></tr>
+      <tr><td><strong>Margen CGEN (%)</strong></td><td>Regla de negocio / cotización</td><td>Daniel al aprobar la cotización</td><td>Campo Margen_CGEN en QT Airtable</td><td>Cálculo del valor CGEN</td></tr>
+      <tr><td><strong>NIT del cliente</strong></td><td>Ficha del cliente en Airtable</td><td>Ingresado en el onboarding del cliente</td><td>Campo NIT en tabla Clientes Airtable</td><td>Factura en Siigo (receptor)</td></tr>
+      <tr><td><strong>Número de FV</strong></td><td>Siigo (consecutivo automático)</td><td>Siigo al crear la factura</td><td>Campo Num_Factura en QT Airtable (Daniel lo registra)</td><td>Cobranza · Referencia contable</td></tr>
+      <tr><td><strong>CUFE</strong></td><td>DIAN</td><td>Sistema DIAN post-validación</td><td>Siigo (dentro de la FV) · PDF de la factura</td><td>Verificación legal · Cliente · Contabilidad</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s13">
+  <div class="sec-header"><div class="sec-num">13</div><div class="sec-title-wrap"><h2>Intervención Humana</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Actividad</th><th>Tiempo</th><th>Frec.</th><th>¿Automatizable?</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Detectar QT en estado "Entregado"</strong></td><td>0 (Make puede detectarlo)</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — Make ya puede detectar cambios de estado en Airtable vía webhook</td></tr>
+      <tr><td><strong>Calcular IPT y CGEN con TRM actualizado</strong></td><td>5 min</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — Make puede calcular automáticamente y presentarle a Daniel los valores listos</td></tr>
+      <tr><td><strong>Ingresar datos en Siigo y emitir la FV</strong></td><td>10-15 min</td><td>Por operación</td><td><span style="color:var(--yellow)">Parcial</span> — Con script local Mac puede automatizarse completamente. Sin él, Daniel lo hace manualmente.</td></tr>
+      <tr><td><strong>Verificar CUFE retornado por la DIAN</strong></td><td>1 min</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — Siigo muestra el CUFE automáticamente. El script puede verificarlo programáticamente.</td></tr>
+      <tr><td><strong>Enviar PDF al cliente por Gmail</strong></td><td>5 min</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — Make puede generar el draft del email con el PDF adjunto (ADR-004). Daniel solo confirma el envío.</td></tr>
+      <tr><td><strong>Actualizar estado en Airtable</strong></td><td>3 min</td><td>Por operación</td><td><span style="color:var(--green)">Sí</span> — El script local puede actualizar Airtable via API automáticamente post-emisión</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s14">
+  <div class="sec-header"><div class="sec-num">14</div><div class="sec-title-wrap"><h2>Reglas de Negocio y ADRs</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Regla / ADR</th><th>Tipo</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Siempre dos ítems: IPT (IVA 0%) + CGEN (IVA 19%)</strong></td><td><span class="badge badge-red">HARD LIMIT</span></td><td>Toda factura de EASY Revolution tiene exactamente estos dos ítems con estos códigos y tratamientos de IVA. Sin excepciones. Una factura con un solo ítem o con tratamiento de IVA incorrecto es una factura inválida ante la DIAN.</td></tr>
+      <tr><td><strong>ADR-004: Never sendEmail — siempre createADraft</strong></td><td><span class="badge badge-red">ADR</span></td><td>Al enviar la factura al cliente, Make solo puede crear un borrador en Gmail. Daniel revisa y envía manualmente. Claude nunca ejecuta sendAnEmail() de forma autónoma.</td></tr>
+      <tr><td><strong>TRM del día de la entrega, no del día de la cotización</strong></td><td><span class="badge badge-yellow">REGLA NEGOCIO</span></td><td>El valor en COP de la factura usa la TRM del día en que se emite la factura (que debe ser el día del cierre de la operación o el día hábil siguiente). No la TRM que se usó al cotizar.</td></tr>
+      <tr><td><strong>No facturar sin confirmación del cliente</strong></td><td><span class="badge badge-yellow">REGLA NEGOCIO</span></td><td>La factura solo se emite una vez que el cliente ha confirmado la recepción de la carga. Facturar antes de la entrega crea disputas.</td></tr>
+      <tr><td><strong>Nunca anular una factura sin nota crédito</strong></td><td><span class="badge badge-red">REGLA LEGAL</span></td><td>Si una factura debe corregirse, el proceso obligatorio es emitir una nota crédito que la anule en la DIAN, luego emitir la factura correcta. No existe un "eliminar" en facturación electrónica.</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s15">
+  <div class="sec-header"><div class="sec-num">15</div><div class="sec-title-wrap"><h2>Riesgos y Fallbacks</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Riesgo</th><th>Prob.</th><th>Impacto</th><th>Fallback</th></tr></thead>
+    <tbody>
+      <tr><td><strong>DIAN no disponible — plataforma caída</strong></td><td><span class="badge badge-yellow">Baja</span></td><td><span class="badge badge-yellow">Medio</span></td><td>La FV queda en estado "pendiente de validación" en Siigo. Siigo reintenta la validación automáticamente cuando la DIAN vuelve. La factura no se envía al cliente hasta tener el CUFE.</td></tr>
+      <tr><td><strong>Error en la factura ya emitida (valor incorrecto)</strong></td><td><span class="badge badge-yellow">Baja</span></td><td><span class="badge badge-red">Alto</span></td><td>Emitir nota crédito en Siigo (también electrónica, también requiere CUFE) + nueva factura corregida. Proceso: ~30-40 min adicionales. Requiere coordinación con el cliente.</td></tr>
+      <tr><td><strong>Mac de Daniel apagado o sin conexión</strong></td><td><span class="badge badge-yellow">Media</span></td><td><span class="badge badge-yellow">Medio</span></td><td>La factura no se puede emitir hasta que el Mac esté disponible. Siigo tiene interfaz web que Daniel puede acceder desde cualquier computador con sus credenciales como alternativa.</td></tr>
+      <tr><td><strong>NIT del cliente incorrecto en Airtable</strong></td><td><span class="badge badge-yellow">Baja</span></td><td><span class="badge badge-red">Alto</span></td><td>La factura queda con datos del receptor incorrectos — inválida para el cliente. Debe anularse con nota crédito y re-emitirse. Por esto el NIT debe verificarse al momento del onboarding del cliente, no al momento de facturar.</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s16">
+  <div class="sec-header"><div class="sec-num">16</div><div class="sec-title-wrap"><h2>Dependencias</h2></div></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">Necesita de departamentos anteriores</div>
+      <table class="tbl"><tbody>
+        <tr><td><strong>Aduanas / Operaciones</strong></td><td>Estado "Entregado" + Fecha_Entrega_Real en Airtable. Sin esto, la factura no se puede emitir.</td></tr>
+        <tr><td><strong>Pricing</strong></td><td>Tarifa_USD y %_margen correctos en la QT. Son la base del cálculo IPT + CGEN.</td></tr>
+        <tr><td><strong>Comercial</strong></td><td>NIT y datos del cliente correctos en Airtable. Sin NIT correcto, la factura es inválida.</td></tr>
+      </tbody></table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--yellow)">Provee a departamentos siguientes</div>
+      <table class="tbl"><tbody>
+        <tr><td><strong>Cobranza y Reportes</strong></td><td>Número de factura + fecha de emisión + valor total. El proceso de cobranza empieza desde aquí.</td></tr>
+      </tbody></table>
+    </div>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s17">
+  <div class="sec-header"><div class="sec-num">17</div><div class="sec-title-wrap"><h2>Mejoras Posibles</h2></div></div>
+  <table class="tbl">
+    <thead><tr><th>Mejora</th><th>Prioridad</th><th>Impacto</th><th>Descripción</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Script local Mac: auto-facturación al detectar "Entregado"</strong></td><td><span class="badge badge-red">ALTA</span></td><td>Muy alto</td><td>Script Python/Node en el Mac que escucha webhooks de Airtable y, cuando una QT cambia a "Entregado", llama la API de Siigo automáticamente con los valores calculados, crea y emite la FV, y actualiza Airtable con el número de factura. Daniel solo recibe un draft del email para revisar antes de enviar al cliente.</td></tr>
+      <tr><td><strong>Make formatea los datos de facturación al detectar "Entregado"</strong></td><td><span class="badge badge-yellow">MEDIA</span></td><td>Medio</td><td>Aunque Make no puede emitir la FV directamente en Siigo, sí puede detectar el cambio de estado, calcular IPT + CGEN + IVA con la TRM del día, y presentarle a Daniel todos los valores listos en una notificación o email para que solo deba copiarlos en Siigo. Elimina el riesgo de errores de cálculo.</td></tr>
+      <tr><td><strong>Validación NIT en onboarding de cliente</strong></td><td><span class="badge badge-yellow">MEDIA</span></td><td>Medio</td><td>Al agregar un cliente nuevo en Airtable, Make verifica automáticamente el NIT contra la base de datos de la DIAN o un servicio de validación. Previene facturas con NIT incorrecto.</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="sec-div"></div>
+
+<div class="sec" id="s18">
+  <div class="sec-header"><div class="sec-num">18</div><div class="sec-title-wrap"><h2>Opinión Arquitectónica</h2></div></div>
+  <div class="card" style="border-color:var(--accent)">
+    <div class="card-title">El cuello de botella más automatizable del sistema</div>
+    <p>La facturación es paradójicamente el proceso más estructurado y predecible del sistema (siempre los mismos dos ítems, misma fórmula, mismos campos) y al mismo tiempo uno de los que más tiempo manual consume, precisamente porque la restricción de API local impide automatizarlo desde Make.</p>
+    <p>El script local Mac es la solución correcta y es técnicamente simple. Requiere Python o Node, las credenciales de Siigo (ya disponibles en el Mac), y acceso a la API de Airtable (ya disponible). Estimado de implementación: 4-8 horas de desarrollo.</p>
+  </div>
+  <div class="card" style="border-color:var(--teal);margin-top:12px">
+    <div class="card-title" style="color:var(--teal)">Recomendaciones del CTO</div>
+    <p><strong>Prioridad 1:</strong> Implementar el script local Mac para auto-facturación. Es el ROI más alto de todas las mejoras pendientes del sistema — elimina ~20 min de trabajo manual por operación y reduce errores de cálculo a cero.</p>
+    <p><strong>Prioridad 2:</strong> Mientras tanto, hacer que Make calcule y presente los valores de IPT + CGEN al detectar el estado "Entregado". Es implementable en pocas horas y reduce el riesgo de error de cálculo manual sin necesidad del script.</p>
+    <p><strong>Consideración estratégica:</strong> La arquitectura de dos ítems (IPT + CGEN) es sólida y correcta. No cambiarla. Es la base que permite a EASY ser transparente con sus clientes sobre la estructura de costos y cumplir correctamente con el régimen de IVA colombiano.</p>
+  </div>
+</div>
+<div class="sec-div"></div>
+
+<footer style="text-align:center;padding:40px 20px;color:var(--muted);font-size:12px;border-top:1px solid var(--border)">
+  <div style="font-size:18px;font-weight:700;color:var(--accent);margin-bottom:8px">SESIÓN 6 — Departamento de Facturación</div>
+  <div>EASY OS · EASY Revolution · easy-logistics.co · Julio 2026 · 18 secciones</div>
+  <div style="display:flex;justify-content:center;gap:40px;margin-top:16px">
+    <div><div style="font-size:20px;font-weight:700;color:var(--yellow)">Siigo</div><div style="font-size:10px;color:var(--muted)">ERP local</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--accent)">2</div><div style="font-size:10px;color:var(--muted)">Ítems por factura</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--teal)">CUFE</div><div style="font-size:10px;color:var(--muted)">Validación DIAN</div></div>
+    <div><div style="font-size:20px;font-weight:700;color:var(--green)">3</div><div style="font-size:10px;color:var(--muted)">Mejoras priorizadas</div></div>
+  </div>
+</footer>
+
+</main>
+</body>
+</html>
