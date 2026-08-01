@@ -86,45 +86,45 @@ export default function LearnMorePanel() {
           Gracias. Te contactaremos pronto.
         </p>
       ) : (
-        <div className="lp-trust-cta__bar">
-          {step === 1 ? (
-            <form className="lp-trust-cta__form" onSubmit={handlePhoneStep} noValidate>
-              <div className="lp-trust-cta__phone-row">
-                <label className="visually-hidden" htmlFor="trust-dial">
-                  Código de país
-                </label>
-                <select
-                  id="trust-dial"
-                  name="countryCode"
-                  className="lp-trust-cta__dial"
-                  defaultValue="+57"
-                >
-                  {DIAL_CODES.map((item) => (
-                    <option key={item.value} value={item.value}>
-                      {item.label}
-                    </option>
-                  ))}
-                </select>
-                <label className="visually-hidden" htmlFor="trust-phone">
-                  Teléfono
-                </label>
-                <input
-                  id="trust-phone"
-                  type="tel"
-                  name="phone"
-                  className="lp-trust-cta__input"
-                  autoComplete="tel-national"
-                  placeholder="320 123 4567"
-                  required
-                />
-              </div>
-              <button type="submit" className="btn btn--ghost btn--ghost-light lp-trust-cta__send">
-                Siguiente
-              </button>
-            </form>
-          ) : (
-            <form className="lp-trust-cta__form lp-trust-cta__form--submit" onSubmit={handleSubmit} noValidate>
-              <div className="lp-trust-cta__fields">
+        <div className="lp-trust-cta__panel">
+          <div className="lp-trust-cta__bar">
+            {step === 1 ? (
+              <form className="lp-trust-cta__form" onSubmit={handlePhoneStep} noValidate>
+                <div className="lp-trust-cta__phone-row">
+                  <label className="visually-hidden" htmlFor="trust-dial">
+                    Código de país
+                  </label>
+                  <select
+                    id="trust-dial"
+                    name="countryCode"
+                    className="lp-trust-cta__dial"
+                    defaultValue="+57"
+                  >
+                    {DIAL_CODES.map((item) => (
+                      <option key={item.value} value={item.value}>
+                        {item.label}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="visually-hidden" htmlFor="trust-phone">
+                    Teléfono
+                  </label>
+                  <input
+                    id="trust-phone"
+                    type="tel"
+                    name="phone"
+                    className="lp-trust-cta__input"
+                    autoComplete="tel-national"
+                    placeholder="320 123 4567"
+                    required
+                  />
+                </div>
+                <button type="submit" className="btn btn--ghost btn--ghost-light lp-trust-cta__send">
+                  Siguiente
+                </button>
+              </form>
+            ) : (
+              <form className="lp-trust-cta__form" onSubmit={handleSubmit} noValidate>
                 <label className="visually-hidden" htmlFor="trust-name">
                   Nombre
                 </label>
@@ -146,8 +146,17 @@ export default function LearnMorePanel() {
                 >
                   {submitting ? 'Enviando…' : 'Enviar'}
                 </button>
-              </div>
+              </form>
+            )}
 
+            <span className="lp-trust-cta__divider" aria-hidden="true" />
+            <Link to={QUOTE_PATH} className="btn btn--primary lp-trust-cta__quote">
+              Cotizar
+            </Link>
+          </div>
+
+          {step === 2 ? (
+            <div className="lp-trust-cta__verify">
               {TURNSTILE_SITE_KEY ? (
                 <div className="lp-trust-cta__captcha">
                   <Turnstile
@@ -155,7 +164,7 @@ export default function LearnMorePanel() {
                     siteKey={TURNSTILE_SITE_KEY}
                     options={{
                       theme: 'dark',
-                      size: 'flexible',
+                      size: 'normal',
                     }}
                     onSuccess={setCaptchaToken}
                     onExpire={clearCaptcha}
@@ -173,13 +182,8 @@ export default function LearnMorePanel() {
                   {errorMessage}
                 </p>
               ) : null}
-            </form>
-          )}
-
-          <span className="lp-trust-cta__divider" aria-hidden="true" />
-          <Link to={QUOTE_PATH} className="btn btn--primary lp-trust-cta__quote">
-            Cotizar
-          </Link>
+            </div>
+          ) : null}
         </div>
       )}
     </div>
