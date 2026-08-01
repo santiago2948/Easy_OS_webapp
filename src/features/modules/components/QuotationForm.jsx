@@ -1,5 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
+import DataConsentField from '../../legal/components/DataConsentField'
+import {
+  DATA_POLICY_VERSION,
+  QUOTE_PRIVACY_NOTICE,
+} from '../../legal/content/dataConsent'
 import { createQuote } from '../api/createQuote'
 import { fetchQuoteRoutes } from '../api/fetchQuoteRoutes'
 import { findCountry, findPort } from '../content/quotationRoutes'
@@ -661,6 +666,8 @@ function ContactStepForm({
   turnstileRef,
   onCaptchaSuccess,
   onCaptchaClear,
+  acceptedDataPolicy,
+  onAcceptedDataPolicyChange,
 }) {
   return (
     <section className="quote-form__section" aria-labelledby="quote-form-contact-label">
@@ -725,6 +732,14 @@ function ContactStepForm({
             />
           </div>
         </div>
+
+        <DataConsentField
+          id="quote-data-consent"
+          checked={acceptedDataPolicy}
+          onChange={onAcceptedDataPolicyChange}
+          disabled={disabled}
+          notice={QUOTE_PRIVACY_NOTICE}
+        />
 
         {TURNSTILE_SITE_KEY ? (
           <div className="quote-form__captcha">
@@ -901,6 +916,7 @@ export default function QuotationForm({ onBack }) {
   const [submitError, setSubmitError] = useState('')
   const [quoteSubmitted, setQuoteSubmitted] = useState(false)
   const [captchaToken, setCaptchaToken] = useState('')
+  const [acceptedDataPolicy, setAcceptedDataPolicy] = useState(false)
   const turnstileRef = useRef(null)
 
   const selectedOperation = OPERATION_TYPES.find((item) => item.id === operationType)
@@ -972,6 +988,7 @@ export default function QuotationForm({ onBack }) {
     EMAIL_RE.test(contact.email.trim()) &&
     phoneDigits.length >= 7 &&
     Boolean(captchaToken) &&
+    acceptedDataPolicy &&
     Boolean(TURNSTILE_SITE_KEY)
 
   const canContinue =
@@ -1102,6 +1119,8 @@ export default function QuotationForm({ onBack }) {
     email: contact.email.trim(),
     phoneNumber: `${contact.countryCode}${contact.phone.replace(/\s/g, '')}`,
     captchaToken,
+    acceptedDataPolicy: true,
+    dataPolicyVersion: DATA_POLICY_VERSION,
     quoteNumber: quoteMeta?.number,
     operationType,
     transportMode,
@@ -1130,7 +1149,9 @@ export default function QuotationForm({ onBack }) {
   })
 
   const handleSubmitQuote = async () => {
-    if (!canContinue || !cargoMetrics || !quoteMeta || !captchaToken) return
+    if (!canContinue || !cargoMetrics || !quoteMeta || !captchaToken || !acceptedDataPolicy) {
+      return
+    }
 
     setSubmitting(true)
     setSubmitError('')
@@ -1138,6 +1159,7 @@ export default function QuotationForm({ onBack }) {
     try {
       await createQuote(buildQuotePayload())
       setQuoteSubmitted(true)
+      setAcceptedDataPolicy(false)
       clearCaptcha()
     } catch (error) {
       setSubmitError(error.message || 'No se pudo enviar la cotización')
@@ -1450,6 +1472,8 @@ export default function QuotationForm({ onBack }) {
               turnstileRef={turnstileRef}
               onCaptchaSuccess={setCaptchaToken}
               onCaptchaClear={clearCaptcha}
+              acceptedDataPolicy={acceptedDataPolicy}
+              onAcceptedDataPolicyChange={setAcceptedDataPolicy}
             />
           )
         )}

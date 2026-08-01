@@ -63,11 +63,13 @@ export default function AppSidebar({ activeId, isOpen = false, onClose }) {
           </Link>
 
           <div className="app-sidebar__legal">
-            <a href="#privacidad">Privacy Policy</a>
+            <Link to="/legal/tratamiento-de-datos" onClick={onClose}>
+              Tratamiento de datos
+            </Link>
             <span aria-hidden="true">|</span>
-            <a href="#terminos">Terms of Service</a>
-            <span aria-hidden="true">|</span>
-            <a href="#shipping">Global Shipping Solutions</a>
+            <Link to="/legal/cookies" onClick={onClose}>
+              Cookies
+            </Link>
           </div>
         </div>
       </aside>

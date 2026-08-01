@@ -1,6 +1,11 @@
 import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Turnstile } from '@marsidev/react-turnstile'
+import DataConsentField from '../../legal/components/DataConsentField'
+import {
+  DATA_POLICY_VERSION,
+  LEAD_PRIVACY_NOTICE,
+} from '../../legal/content/dataConsent'
 import { createLead } from '../api/createLead'
 import { QUOTE_PATH } from '../content/landingNarrative'
 
@@ -23,6 +28,7 @@ export default function LearnMorePanel() {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [captchaToken, setCaptchaToken] = useState('')
+  const [acceptedDataPolicy, setAcceptedDataPolicy] = useState(false)
   const [contact, setContact] = useState({ countryCode: '+57', phone: '' })
   const nameInputRef = useRef(null)
   const turnstileRef = useRef(null)
@@ -55,7 +61,7 @@ export default function LearnMorePanel() {
     const form = event.currentTarget
     const name = form.name.value.trim()
 
-    if (!name || !captchaToken || submitting) return
+    if (!name || !captchaToken || !acceptedDataPolicy || submitting) return
 
     setSubmitting(true)
     setErrorMessage('')
@@ -63,10 +69,17 @@ export default function LearnMorePanel() {
     const phoneNumber = `${contact.countryCode}${contact.phone.replace(/\s/g, '')}`
 
     try {
-      await createLead({ name, phoneNumber, captchaToken })
+      await createLead({
+        name,
+        phoneNumber,
+        captchaToken,
+        acceptedDataPolicy: true,
+        dataPolicyVersion: DATA_POLICY_VERSION,
+      })
       setSubmitted(true)
       setStep(1)
       setContact({ countryCode: '+57', phone: '' })
+      setAcceptedDataPolicy(false)
       clearCaptcha()
       form.reset()
     } catch (error) {
@@ -142,7 +155,12 @@ export default function LearnMorePanel() {
                 <button
                   type="submit"
                   className="btn btn--ghost btn--ghost-light lp-trust-cta__send"
-                  disabled={!captchaToken || submitting || !TURNSTILE_SITE_KEY}
+                  disabled={
+                    !captchaToken ||
+                    !acceptedDataPolicy ||
+                    submitting ||
+                    !TURNSTILE_SITE_KEY
+                  }
                 >
                   {submitting ? 'Enviando…' : 'Enviar'}
                 </button>
@@ -157,6 +175,14 @@ export default function LearnMorePanel() {
 
           {step === 2 ? (
             <div className="lp-trust-cta__verify">
+              <DataConsentField
+                id="trust-data-consent"
+                checked={acceptedDataPolicy}
+                onChange={setAcceptedDataPolicy}
+                disabled={submitting}
+                notice={LEAD_PRIVACY_NOTICE}
+              />
+
               {TURNSTILE_SITE_KEY ? (
                 <div className="lp-trust-cta__captcha">
                   <Turnstile

@@ -1,3 +1,8 @@
+import { Link } from 'react-router-dom'
+import {
+  COOKIES_POLICY_PATH,
+  DATA_POLICY_PATH,
+} from '../../legal/content/dataConsent'
 import BrandLogo from './BrandLogo'
 import { CONTACT } from '../content/landingNarrative'
 
@@ -142,9 +147,9 @@ export default function Footer() {
 
       <div className="site-footer__legal">
         <div className="site-footer__policies">
-          <a href="#privacidad">Política de privacidad</a>
+          <Link to={DATA_POLICY_PATH}>Política de tratamiento de datos</Link>
           <span aria-hidden="true">|</span>
-          <a href="#cookies">Política de cookies</a>
+          <Link to={COOKIES_POLICY_PATH}>Política de cookies</Link>
         </div>
         <p className="site-footer__copy">
           Copyright © {new Date().getFullYear()} Easy Logistics. Todos los

@@ -1,10 +1,24 @@
+import { DATA_POLICY_VERSION } from '../../legal/content/dataConsent'
+
 const API_BASE = (import.meta.env.VITE_API_URL ?? '').replace(/\/$/, '')
 
-export async function createLead({ name, phoneNumber, captchaToken }) {
+export async function createLead({
+  name,
+  phoneNumber,
+  captchaToken,
+  acceptedDataPolicy,
+  dataPolicyVersion = DATA_POLICY_VERSION,
+}) {
   const response = await fetch(`${API_BASE}/api/v1/leads`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, phoneNumber, captchaToken }),
+    body: JSON.stringify({
+      name,
+      phoneNumber,
+      captchaToken,
+      acceptedDataPolicy,
+      dataPolicyVersion,
+    }),
   })
 
   let payload = {}
