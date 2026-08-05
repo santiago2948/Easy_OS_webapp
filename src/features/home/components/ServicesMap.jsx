@@ -125,9 +125,9 @@ export function ServicesMap() {
           />
           <defs>
             <linearGradient id="servicesRouteGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#6ec9d6" stopOpacity="0.2" />
-              <stop offset="50%" stopColor="#6ec9d6" stopOpacity="0.95" />
-              <stop offset="100%" stopColor="#a3dde6" stopOpacity="0.45" />
+              <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.25" />
+              <stop offset="50%" stopColor="#00e5ff" stopOpacity="1" />
+              <stop offset="100%" stopColor="#5ef8ff" stopOpacity="0.55" />
             </linearGradient>
           </defs>
         </svg>

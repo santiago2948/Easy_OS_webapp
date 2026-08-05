@@ -16,7 +16,7 @@
     transparent 100%
   );
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid color-mix(in srgb, var(--cyan) 12%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--cyan-bright) 28%, transparent);
 }
 
 .site-logo {
@@ -185,16 +185,19 @@
 }
 
 .btn--ghost:hover {
-  background: color-mix(in srgb, var(--cyan) 22%, transparent);
+  background: color-mix(in srgb, var(--cyan-bright) 18%, transparent);
+  border-color: var(--cyan-bright);
 }
 
 .btn--ghost-light {
-  border-color: color-mix(in srgb, var(--white) 55%, transparent);
+  border-color: color-mix(in srgb, var(--cyan-bright) 72%, transparent);
   color: var(--white);
 }
 
 .btn--ghost-light:hover {
-  background: color-mix(in srgb, var(--white) 10%, transparent);
+  background: color-mix(in srgb, var(--cyan-bright) 12%, transparent);
+  border-color: var(--cyan-bright);
+  color: var(--cyan-bright);
 }
 
 .cta-row {

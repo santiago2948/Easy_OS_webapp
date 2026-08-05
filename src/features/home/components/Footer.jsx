@@ -5,9 +5,10 @@ import {
 } from '../../legal/content/dataConsent'
 import BrandLogo from './BrandLogo'
 import { CONTACT } from '../content/landingNarrative'
+import { scrollToHomeTop } from '../utils/scrollToHomeTop'
 
 const LINKS = [
-  { href: '#inicio', label: 'Inicio' },
+  { href: '#inicio', label: 'Inicio', homeTop: true },
   { href: '#como', label: 'Cómo trabajamos' },
   { href: '#easy', label: 'Easy' },
   { href: '#contacto', label: 'Contacto' },
@@ -35,7 +36,18 @@ export default function Footer() {
           <ul>
             {LINKS.map((item) => (
               <li key={item.href}>
-                <a href={item.href}>
+                <a
+                  href={item.href}
+                  onClick={
+                    item.homeTop
+                      ? (event) => {
+                          event.preventDefault()
+                          scrollToHomeTop()
+                          window.history.replaceState(null, '', '/')
+                        }
+                      : undefined
+                  }
+                >
                   <span className="site-footer__bullet" aria-hidden="true">
                     ▹
                   </span>

@@ -8,7 +8,7 @@ const PrivacyPolicy = lazy(() => import("../features/legal/pages/PrivacyPolicy.j
 const CookiesPolicy = lazy(() => import("../features/legal/pages/CookiesPolicy.jsx"));
 
 const quoteFallback = (
-    <div className="orbit-page quote-module-page" style={{ minHeight: "100svh", background: "#02080c" }} />
+    <div className="orbit-page quote-module-page" style={{ minHeight: "100svh", background: "#0f171c" }} />
 );
 
 const legalFallback = (
@@ -19,7 +19,7 @@ const routes = {
     home: {
         path: "/",
         element: (
-            <Suspense fallback={<div className="orbit-page" style={{ minHeight: "100svh", background: "#00060a" }} />}>
+            <Suspense fallback={<div className="orbit-page" style={{ minHeight: "100svh", background: "#0f171c" }} />}>
                 <Home />
             </Suspense>
         )
@@ -27,7 +27,7 @@ const routes = {
     login: {
         path: "/login",
         element: (
-            <Suspense fallback={<div className="login-page" style={{ minHeight: "100svh", background: "#041018" }} />}>
+            <Suspense fallback={<div className="login-page" style={{ minHeight: "100svh", background: "#0f171c" }} />}>
                 <Login />
             </Suspense>
         )

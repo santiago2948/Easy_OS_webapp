@@ -8,7 +8,7 @@
  * Chevron: punta visible (miter) tangente al borde interior del hueco (ri = 19.75).
  */
 export const BRAND_COLORS = {
-  cyan: '#00A4BD',
+  cyan: '#00E5FF',
   navy: '#003D4C',
   white: '#FFFFFF',
 }

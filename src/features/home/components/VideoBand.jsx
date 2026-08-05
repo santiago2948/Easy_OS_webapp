@@ -1,4 +1,8 @@
-import { ServicesMap } from './ServicesMap'
+import { lazy, Suspense } from 'react'
+
+const ServicesMap = lazy(() =>
+  import('./ServicesMap').then((m) => ({ default: m.ServicesMap })),
+)
 
 /**
  * Banda cinematográfica con video y mapa de servicios.
@@ -13,7 +17,7 @@ export function VideoBand({ line, subline }) {
           muted
           loop
           playsInline
-          preload="metadata"
+          preload="none"
           poster="/media/mode-sea.jpg"
         >
           <source src="/media/ship-orbit.mp4" type="video/mp4" />
@@ -26,7 +30,9 @@ export function VideoBand({ line, subline }) {
         </div>
       </div>
 
-      <ServicesMap />
+      <Suspense fallback={null}>
+        <ServicesMap />
+      </Suspense>
     </section>
   )
 }

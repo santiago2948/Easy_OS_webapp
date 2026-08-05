@@ -50,6 +50,13 @@ const OPERATION_TYPES = [
   },
 ]
 
+const FCL_CONTAINER_TYPES = [
+  { id: '20STD', name: '20STD — Contenedor 20 pies estándar' },
+  { id: '40STD', name: '40STD — Contenedor 40 pies estándar' },
+  { id: '40HC', name: '40HC — Contenedor 40 pies high cube' },
+  { id: '40HC-REEFER', name: '40HC-REEFER — Contenedor reefer 40 pies' },
+]
+
 const TRANSPORT_MODES = [
   {
     id: 'fcl',
@@ -457,8 +464,27 @@ function formatMetric(value, digits = 2) {
   return value.toFixed(digits)
 }
 
-/** Ocean LCL: 1 m³ ≈ 1 freight ton. Peso tasable = max(peso real, volumétrico). */
-function computeCargoMetrics(cargo) {
+/** Ocean LCL/Air: W/M from dimensions. FCL: fixed rate per container type. */
+function computeCargoMetrics(cargo, transportMode) {
+  if (transportMode === 'fcl') {
+    const quantity = Number(cargo.quantity)
+    const containerType = cargo.containerType
+
+    const hasQuantity = Number.isFinite(quantity) && quantity >= 1
+    const hasContainerType = Boolean(containerType)
+
+    if (!hasQuantity || !hasContainerType) return null
+
+    return {
+      mode: 'fcl',
+      quantity,
+      containerType,
+      containerLabel:
+        FCL_CONTAINER_TYPES.find((item) => item.id === containerType)?.name ?? containerType,
+      isComplete: true,
+    }
+  }
+
   const quantity = Number(cargo.quantity)
   const length = Number(cargo.length)
   const width = Number(cargo.width)
@@ -479,6 +505,7 @@ function computeCargoMetrics(cargo) {
   const chargeableTons = actualTons == null ? volumetricTons : Math.max(actualTons, volumetricTons)
 
   return {
+    mode: 'lcl',
     quantity,
     length,
     width,
@@ -511,7 +538,39 @@ function CargoMetricsPanel({ metrics }) {
   )
 }
 
-function CargoSummary({ metrics }) {
+function FclCargoSummary({ metrics, declaredValueUsd }) {
+  return (
+    <section className="quote-form__summary" aria-live="polite">
+      <div className="quote-form__summary-head">
+        <span className="quote-form__summary-icon">
+          <CheckIcon />
+        </span>
+        <h2>Resumen de Datos de Carga</h2>
+      </div>
+
+      <div className="quote-form__summary-grid quote-form__summary-grid--cargo">
+        <div className="quote-form__summary-item">
+          <span className="quote-form__summary-label">Tipo de contenedor:</span>
+          <span className="quote-form__summary-badge quote-form__summary-badge--route">
+            {metrics.containerType}
+          </span>
+        </div>
+        <div className="quote-form__summary-item">
+          <span className="quote-form__summary-label">Cantidad:</span>
+          <span className="quote-form__summary-badge">{metrics.quantity}</span>
+        </div>
+        <div className="quote-form__summary-item">
+          <span className="quote-form__summary-label">Valor declarado:</span>
+          <span className="quote-form__summary-badge quote-form__summary-badge--soft">
+            USD {Number(declaredValueUsd).toLocaleString('en-US')}
+          </span>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function CargoSummary({ metrics, declaredValueUsd }) {
   const dimensionsLabel = `${metrics.length} x ${metrics.width} x ${metrics.height} m`
 
   return (
@@ -539,6 +598,12 @@ function CargoSummary({ metrics }) {
             <span className="quote-form__summary-label">Peso:</span>
             <span className="quote-form__summary-badge quote-form__summary-badge--soft">
               {metrics.weightKg} kg
+            </span>
+          </div>
+          <div className="quote-form__summary-item">
+            <span className="quote-form__summary-label">Valor declarado:</span>
+            <span className="quote-form__summary-badge quote-form__summary-badge--soft">
+              USD {Number(declaredValueUsd).toLocaleString('en-US')}
             </span>
           </div>
         </div>
@@ -784,8 +849,11 @@ function QuoteReview({
   destinationCountry,
   destinationPort,
   cargoMetrics,
+  declaredValueUsd,
   onEditStep,
 }) {
+  const isFcl = cargoMetrics?.mode === 'fcl'
+
   return (
     <div className="quote-form__review">
       <ReviewSection icon={InfoIcon} title="Información de la Cotización">
@@ -848,38 +916,65 @@ function QuoteReview({
       </ReviewSection>
 
       <ReviewSection icon={CubeIcon} title="Información de Carga" onEdit={() => onEditStep(3)}>
-        <div className="quote-form__review-grid quote-form__review-grid--cargo">
-          <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Cantidad de Cargas:</span>
-            <ReviewBadge>{cargoMetrics.quantity}</ReviewBadge>
+        {isFcl ? (
+          <div className="quote-form__review-grid quote-form__review-grid--cargo">
+            <div className="quote-form__summary-item">
+              <span className="quote-form__summary-label">Tipo de contenedor:</span>
+              <ReviewBadge tone="soft">{cargoMetrics.containerType}</ReviewBadge>
+            </div>
+            <div className="quote-form__summary-item">
+              <span className="quote-form__summary-label">Cantidad de contenedores:</span>
+              <ReviewBadge>{cargoMetrics.quantity}</ReviewBadge>
+            </div>
+            <div className="quote-form__summary-item">
+              <span className="quote-form__summary-label">Valor declarado:</span>
+              <ReviewBadge tone="soft">
+                USD {Number(declaredValueUsd).toLocaleString('en-US')}
+              </ReviewBadge>
+            </div>
           </div>
-          <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Dimensiones:</span>
-            <ReviewBadge tone="soft">
-              {cargoMetrics.length} x {cargoMetrics.width} x {cargoMetrics.height} m
-            </ReviewBadge>
-          </div>
-          <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Peso:</span>
-            <ReviewBadge tone="soft">{cargoMetrics.weightKg} kg</ReviewBadge>
-          </div>
-          <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Volumen:</span>
-            <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumeM3)} m³</ReviewBadge>
-          </div>
-          <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Peso Volumétrico:</span>
-            <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumetricTons)} TON</ReviewBadge>
-          </div>
-          <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Peso Tasable:</span>
-            <ReviewBadge tone="soft">{formatMetric(cargoMetrics.chargeableTons)} TON</ReviewBadge>
-          </div>
-        </div>
-        <p className="quote-form__review-note">
-          <InfoIcon />
-          El peso tasable es el peso al que se aplicará la tarifa.
-        </p>
+        ) : (
+          <>
+            <div className="quote-form__review-grid quote-form__review-grid--cargo">
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Cantidad de Cargas:</span>
+                <ReviewBadge>{cargoMetrics.quantity}</ReviewBadge>
+              </div>
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Dimensiones:</span>
+                <ReviewBadge tone="soft">
+                  {cargoMetrics.length} x {cargoMetrics.width} x {cargoMetrics.height} m
+                </ReviewBadge>
+              </div>
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Peso:</span>
+                <ReviewBadge tone="soft">{cargoMetrics.weightKg} kg</ReviewBadge>
+              </div>
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Volumen:</span>
+                <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumeM3)} m³</ReviewBadge>
+              </div>
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Peso Volumétrico:</span>
+                <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumetricTons)} TON</ReviewBadge>
+              </div>
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Peso Tasable:</span>
+                <ReviewBadge tone="soft">{formatMetric(cargoMetrics.chargeableTons)} TON</ReviewBadge>
+              </div>
+              <div className="quote-form__summary-item">
+                <span className="quote-form__summary-label">Valor declarado:</span>
+                <ReviewBadge tone="soft">
+                  USD {Number(declaredValueUsd).toLocaleString('en-US')}
+                </ReviewBadge>
+              </div>
+            </div>
+            <p className="quote-form__review-note">
+              <InfoIcon />
+              El peso tasable es el peso al que se aplicará la tarifa.
+            </p>
+          </>
+        )}
       </ReviewSection>
     </div>
   )
@@ -899,10 +994,12 @@ export default function QuotationForm({ onBack }) {
   const [routesReloadKey, setRoutesReloadKey] = useState(0)
   const [cargo, setCargo] = useState({
     quantity: '1',
+    containerType: '',
     length: '',
     width: '',
     height: '',
     weight: '',
+    declaredValueUsd: '',
   })
   const [summaryLoading, setSummaryLoading] = useState(false)
   const [quoteMeta, setQuoteMeta] = useState(null)
@@ -918,6 +1015,7 @@ export default function QuotationForm({ onBack }) {
   const [captchaToken, setCaptchaToken] = useState('')
   const [acceptedDataPolicy, setAcceptedDataPolicy] = useState(false)
   const turnstileRef = useRef(null)
+  const submittingRef = useRef(false)
 
   const selectedOperation = OPERATION_TYPES.find((item) => item.id === operationType)
   const selectedTransport = TRANSPORT_MODES.find((item) => item.id === transportMode)
@@ -934,9 +1032,15 @@ export default function QuotationForm({ onBack }) {
 
   const hasStep1Selections = Boolean(operationType || transportMode)
   const isStep1Complete = Boolean(operationType && transportMode)
-  const isStep2Complete = Boolean(originCountry && originPort && destinationCountry && destinationPort)
-  const cargoMetrics = computeCargoMetrics(cargo)
-  const isStep3Complete = Boolean(cargoMetrics?.isComplete)
+  const isFcl = transportMode === 'fcl'
+  const isFclContainerSelected = !isFcl || Boolean(cargo.containerType)
+  const isStep2Complete =
+    isFclContainerSelected &&
+    Boolean(originCountry && originPort && destinationCountry && destinationPort)
+  const cargoMetrics = computeCargoMetrics(cargo, transportMode)
+  const declaredValueNumber = Number(cargo.declaredValueUsd)
+  const hasDeclaredValue = Number.isFinite(declaredValueNumber) && declaredValueNumber > 0
+  const isStep3Complete = Boolean(cargoMetrics?.isComplete && hasDeclaredValue)
 
   const originLabel =
     originCountry && originPort ? `${originCountry.name} - ${originPort.name}` : null
@@ -953,12 +1057,16 @@ export default function QuotationForm({ onBack }) {
       subtitle: 'Selecciona el tipo de operación y el modo de transporte',
     },
     2: {
-      title: 'Origen y Destino',
-      subtitle: 'Selecciona el país y puerto de origen y destino',
+      title: isFcl ? 'Contenedor, origen y destino' : 'Origen y Destino',
+      subtitle: isFcl
+        ? 'Selecciona el tipo de contenedor y luego el origen y destino disponibles'
+        : 'Selecciona el país y puerto de origen y destino',
     },
     3: {
       title: 'Datos de la Carga',
-      subtitle: 'Ingresa los datos de tu carga',
+      subtitle: isFcl
+        ? 'Indica la cantidad de contenedores y el valor declarado'
+        : 'Ingresa los datos de tu carga',
     },
     4: {
       title: 'Resumen de su cotización',
@@ -1024,12 +1132,22 @@ export default function QuotationForm({ onBack }) {
 
   useEffect(() => {
     if (step !== 2 || !operationType || !transportMode) return undefined
+    if (isFcl && !cargo.containerType) {
+      setRouteOptions(null)
+      setRoutesError('')
+      setRoutesLoading(false)
+      return undefined
+    }
 
     let cancelled = false
     setRoutesLoading(true)
     setRoutesError('')
 
-    fetchQuoteRoutes({ operationType, transportMode })
+    fetchQuoteRoutes({
+      operationType,
+      transportMode,
+      containerType: isFcl ? cargo.containerType : undefined,
+    })
       .then((data) => {
         if (cancelled) return
         setRouteOptions(data)
@@ -1053,7 +1171,7 @@ export default function QuotationForm({ onBack }) {
     return () => {
       cancelled = true
     }
-  }, [step, operationType, transportMode, routesReloadKey])
+  }, [step, operationType, transportMode, routesReloadKey, isFcl, cargo.containerType])
 
   useEffect(() => {
     if (step !== 4) return undefined
@@ -1097,11 +1215,32 @@ export default function QuotationForm({ onBack }) {
   const handleOperationSelect = (nextOperationType) => {
     setOperationType(nextOperationType)
     resetRouteSelections()
+    setCargo((current) => ({ ...current, containerType: '' }))
+  }
+
+  const handleContainerTypeChange = (event) => {
+    const nextContainerType = event.target.value
+    setCargo((current) => ({ ...current, containerType: nextContainerType }))
+    setOriginCountryId('')
+    setOriginPortId('')
+    setDestinationCountryId('')
+    setDestinationPortId('')
+    setRouteOptions(null)
+    setRoutesError('')
   }
 
   const handleTransportSelect = (nextTransportMode) => {
     setTransportMode(nextTransportMode)
     resetRouteSelections()
+    setCargo({
+      quantity: '1',
+      containerType: '',
+      length: '',
+      width: '',
+      height: '',
+      weight: '',
+      declaredValueUsd: cargo.declaredValueUsd,
+    })
   }
 
   const handleEditStep = (targetStep) => {
@@ -1136,23 +1275,39 @@ export default function QuotationForm({ onBack }) {
       portId: destinationPort?.id,
       portName: destinationPort?.name,
     },
-    cargo: {
-      quantity: cargoMetrics.quantity,
-      length: cargoMetrics.length,
-      width: cargoMetrics.width,
-      height: cargoMetrics.height,
-      weightKg: cargoMetrics.weightKg,
-      volumeM3: cargoMetrics.volumeM3,
-      volumetricTons: cargoMetrics.volumetricTons,
-      chargeableTons: cargoMetrics.chargeableTons,
-    },
+    cargo:
+      transportMode === 'fcl'
+        ? {
+            quantity: cargoMetrics.quantity,
+            containerType: cargoMetrics.containerType,
+            declaredValueUsd: declaredValueNumber,
+          }
+        : {
+            quantity: cargoMetrics.quantity,
+            length: cargoMetrics.length,
+            width: cargoMetrics.width,
+            height: cargoMetrics.height,
+            weightKg: cargoMetrics.weightKg,
+            volumeM3: cargoMetrics.volumeM3,
+            volumetricTons: cargoMetrics.volumetricTons,
+            chargeableTons: cargoMetrics.chargeableTons,
+            declaredValueUsd: declaredValueNumber,
+          },
   })
 
   const handleSubmitQuote = async () => {
-    if (!canContinue || !cargoMetrics || !quoteMeta || !captchaToken || !acceptedDataPolicy) {
+    if (
+      submittingRef.current ||
+      !canContinue ||
+      !cargoMetrics ||
+      !quoteMeta ||
+      !captchaToken ||
+      !acceptedDataPolicy
+    ) {
       return
     }
 
+    submittingRef.current = true
     setSubmitting(true)
     setSubmitError('')
 
@@ -1165,6 +1320,7 @@ export default function QuotationForm({ onBack }) {
       setSubmitError(error.message || 'No se pudo enviar la cotización')
       resetCaptcha()
     } finally {
+      submittingRef.current = false
       setSubmitting(false)
     }
   }
@@ -1264,100 +1420,141 @@ export default function QuotationForm({ onBack }) {
         )}
 
         {step === 2 && (
-          routesLoading ? (
-            <div className="quote-form__loader" role="status" aria-live="polite">
-              <span className="quote-form__spinner" aria-hidden="true" />
-              <p>Cargando orígenes y destinos…</p>
-            </div>
-          ) : routesError ? (
-            <section className="quote-form__placeholder" aria-live="polite">
-              <p className="quote-form__error">{routesError}</p>
-              <button
-                type="button"
-                className="quote-form__nav quote-form__nav--next"
-                onClick={() => setRoutesReloadKey((current) => current + 1)}
-                style={{ marginTop: '0.75rem' }}
-              >
-                Reintentar
-              </button>
-            </section>
-          ) : (
-            <>
-              <section className="quote-form__section" aria-labelledby="quote-form-origin-label">
-                <h2 id="quote-form-origin-label" className="quote-form__section-label">
-                  <PinIcon />
-                  País de Origen
+          <>
+            {isFcl && (
+              <section className="quote-form__section" aria-labelledby="quote-form-container-label">
+                <h2 id="quote-form-container-label" className="quote-form__section-label">
+                  <CubeIcon />
+                  Tipo de contenedor
                 </h2>
-
-                <div className="quote-form__route-grid">
-                  {originLockedCountry ? (
-                    <LockedCountryField
-                      name={originLockedCountry.name}
-                      hint="País seleccionado"
-                    />
-                  ) : (
-                    <FieldSelect
-                      id="quote-origin-country"
-                      label="País"
-                      value={originCountryId}
-                      onChange={handleOriginCountryChange}
-                      options={originCountries}
-                      placeholder="Selecciona un país"
-                    />
-                  )}
-                  <FieldSelect
-                    id="quote-origin-port"
-                    label="Puerto"
-                    value={originPortId}
-                    onChange={(event) => setOriginPortId(event.target.value)}
-                    options={originPorts}
-                    placeholder={originCountryId ? 'Selecciona un puerto' : 'Primero elige el país'}
-                    disabled={!originCountryId}
-                  />
-                </div>
+                <FieldSelect
+                  id="quote-route-container-type"
+                  label="Tipo de contenedor"
+                  value={cargo.containerType}
+                  onChange={handleContainerTypeChange}
+                  options={FCL_CONTAINER_TYPES}
+                  placeholder="Selecciona un tipo de contenedor"
+                />
+                {!cargo.containerType && (
+                  <p className="quote-form__summary-hint">
+                    Elige el contenedor para ver solo los orígenes y destinos disponibles en CRM.
+                  </p>
+                )}
               </section>
+            )}
 
-              <section className="quote-form__section" aria-labelledby="quote-form-destination-label">
-                <h2 id="quote-form-destination-label" className="quote-form__section-label">
-                  <PinIcon />
-                  País de Destino
-                </h2>
-
-                <div className="quote-form__route-grid">
-                  {destinationLockedCountry ? (
-                    <LockedCountryField
-                      name={destinationLockedCountry.name}
-                      hint="País seleccionado"
-                    />
-                  ) : (
-                    <FieldSelect
-                      id="quote-destination-country"
-                      label="País"
-                      value={destinationCountryId}
-                      onChange={handleDestinationCountryChange}
-                      options={destinationCountries}
-                      placeholder="Selecciona un país"
-                    />
-                  )}
-                  <FieldSelect
-                    id="quote-destination-port"
-                    label="Puerto"
-                    value={destinationPortId}
-                    onChange={(event) => setDestinationPortId(event.target.value)}
-                    options={destinationPorts}
-                    placeholder={
-                      destinationCountryId ? 'Selecciona un puerto' : 'Primero elige el país'
-                    }
-                    disabled={!destinationCountryId}
-                  />
-                </div>
+            {isFcl && !cargo.containerType ? null : routesLoading ? (
+              <div className="quote-form__loader" role="status" aria-live="polite">
+                <span className="quote-form__spinner" aria-hidden="true" />
+                <p>Cargando orígenes y destinos…</p>
+              </div>
+            ) : routesError ? (
+              <section className="quote-form__placeholder" aria-live="polite">
+                <p className="quote-form__error">{routesError}</p>
+                <button
+                  type="button"
+                  className="quote-form__nav quote-form__nav--next"
+                  onClick={() => setRoutesReloadKey((current) => current + 1)}
+                  style={{ marginTop: '0.75rem' }}
+                >
+                  Reintentar
+                </button>
               </section>
+            ) : (
+              <>
+                {isFcl &&
+                  originCountries.length === 0 &&
+                  destinationCountries.length === 0 && (
+                    <section className="quote-form__placeholder" aria-live="polite">
+                      <p className="quote-form__error">
+                        No hay rutas configuradas en CRM para este tipo de contenedor.
+                      </p>
+                    </section>
+                  )}
 
-              {originLabel && destinationLabel && (
-                <RouteSummary originLabel={originLabel} destinationLabel={destinationLabel} />
-              )}
-            </>
-          )
+                {(originCountries.length > 0 || destinationCountries.length > 0) && (
+                  <>
+                    <section className="quote-form__section" aria-labelledby="quote-form-origin-label">
+                      <h2 id="quote-form-origin-label" className="quote-form__section-label">
+                        <PinIcon />
+                        País de Origen
+                      </h2>
+
+                      <div className="quote-form__route-grid">
+                        {originLockedCountry ? (
+                          <LockedCountryField
+                            name={originLockedCountry.name}
+                            hint="País seleccionado"
+                          />
+                        ) : (
+                          <FieldSelect
+                            id="quote-origin-country"
+                            label="País"
+                            value={originCountryId}
+                            onChange={handleOriginCountryChange}
+                            options={originCountries}
+                            placeholder="Selecciona un país"
+                          />
+                        )}
+                        <FieldSelect
+                          id="quote-origin-port"
+                          label="Puerto"
+                          value={originPortId}
+                          onChange={(event) => setOriginPortId(event.target.value)}
+                          options={originPorts}
+                          placeholder={originCountryId ? 'Selecciona un puerto' : 'Primero elige el país'}
+                          disabled={!originCountryId}
+                        />
+                      </div>
+                    </section>
+
+                    <section
+                      className="quote-form__section"
+                      aria-labelledby="quote-form-destination-label"
+                    >
+                      <h2 id="quote-form-destination-label" className="quote-form__section-label">
+                        <PinIcon />
+                        País de Destino
+                      </h2>
+
+                      <div className="quote-form__route-grid">
+                        {destinationLockedCountry ? (
+                          <LockedCountryField
+                            name={destinationLockedCountry.name}
+                            hint="País seleccionado"
+                          />
+                        ) : (
+                          <FieldSelect
+                            id="quote-destination-country"
+                            label="País"
+                            value={destinationCountryId}
+                            onChange={handleDestinationCountryChange}
+                            options={destinationCountries}
+                            placeholder="Selecciona un país"
+                          />
+                        )}
+                        <FieldSelect
+                          id="quote-destination-port"
+                          label="Puerto"
+                          value={destinationPortId}
+                          onChange={(event) => setDestinationPortId(event.target.value)}
+                          options={destinationPorts}
+                          placeholder={
+                            destinationCountryId ? 'Selecciona un puerto' : 'Primero elige el país'
+                          }
+                          disabled={!destinationCountryId}
+                        />
+                      </div>
+                    </section>
+
+                    {originLabel && destinationLabel && (
+                      <RouteSummary originLabel={originLabel} destinationLabel={destinationLabel} />
+                    )}
+                  </>
+                )}
+              </>
+            )}
+          </>
         )}
 
         {step === 3 && (
@@ -1370,71 +1567,115 @@ export default function QuotationForm({ onBack }) {
 
               <div className="quote-form__cargo-layout">
                 <div className="quote-form__cargo">
-                  <FieldInput
-                    id="quote-cargo-quantity"
-                    label="Cantidad de Cargas"
-                    type="number"
-                    inputMode="numeric"
-                    min="1"
-                    step="1"
-                    value={cargo.quantity}
-                    onChange={updateCargoField('quantity')}
-                  />
+                  {isFcl ? (
+                    <FieldInput
+                      id="quote-cargo-quantity"
+                      label="Cantidad de contenedores"
+                      type="number"
+                      inputMode="numeric"
+                      min="1"
+                      step="1"
+                      value={cargo.quantity}
+                      onChange={updateCargoField('quantity')}
+                    />
+                  ) : (
+                    <>
+                      <FieldInput
+                        id="quote-cargo-quantity"
+                        label="Cantidad de Cargas"
+                        type="number"
+                        inputMode="numeric"
+                        min="1"
+                        step="1"
+                        value={cargo.quantity}
+                        onChange={updateCargoField('quantity')}
+                      />
 
-                  <div className="quote-form__cargo-dims">
-                    <FieldInput
-                      id="quote-cargo-length"
-                      label="Largo (metros)"
-                      type="number"
-                      inputMode="decimal"
-                      min="0"
-                      step="0.01"
-                      placeholder="0.00"
-                      value={cargo.length}
-                      onChange={updateCargoField('length')}
-                    />
-                    <FieldInput
-                      id="quote-cargo-width"
-                      label="Ancho (metros)"
-                      type="number"
-                      inputMode="decimal"
-                      min="0"
-                      step="0.01"
-                      placeholder="0.00"
-                      value={cargo.width}
-                      onChange={updateCargoField('width')}
-                    />
-                    <FieldInput
-                      id="quote-cargo-height"
-                      label="Alto (metros)"
-                      type="number"
-                      inputMode="decimal"
-                      min="0"
-                      step="0.01"
-                      placeholder="0.00"
-                      value={cargo.height}
-                      onChange={updateCargoField('height')}
-                    />
-                  </div>
+                      <div className="quote-form__cargo-dims">
+                        <FieldInput
+                          id="quote-cargo-length"
+                          label="Largo (metros)"
+                          type="number"
+                          inputMode="decimal"
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                          value={cargo.length}
+                          onChange={updateCargoField('length')}
+                        />
+                        <FieldInput
+                          id="quote-cargo-width"
+                          label="Ancho (metros)"
+                          type="number"
+                          inputMode="decimal"
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                          value={cargo.width}
+                          onChange={updateCargoField('width')}
+                        />
+                        <FieldInput
+                          id="quote-cargo-height"
+                          label="Alto (metros)"
+                          type="number"
+                          inputMode="decimal"
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                          value={cargo.height}
+                          onChange={updateCargoField('height')}
+                        />
+                      </div>
+
+                      <FieldInput
+                        id="quote-cargo-weight"
+                        label="Peso (kg)"
+                        type="number"
+                        inputMode="decimal"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        value={cargo.weight}
+                        onChange={updateCargoField('weight')}
+                      />
+                    </>
+                  )}
 
                   <FieldInput
-                    id="quote-cargo-weight"
-                    label="Peso (kg)"
+                    id="quote-cargo-declared-value"
+                    label="Valor declarado de la carga (USD)"
                     type="number"
                     inputMode="decimal"
                     min="0"
                     step="0.01"
                     placeholder="0.00"
-                    value={cargo.weight}
-                    onChange={updateCargoField('weight')}
+                    value={cargo.declaredValueUsd}
+                    onChange={updateCargoField('declaredValueUsd')}
                   />
+                  <p className="quote-form__summary-hint">
+                    {isFcl
+                      ? 'Requerido para el cálculo del seguro y otros conceptos porcentuales.'
+                      : 'Monto en dólares estadounidenses. Requerido para seguros y conceptos porcentuales.'}
+                  </p>
                 </div>
 
-                {cargoMetrics && <CargoMetricsPanel metrics={cargoMetrics} />}
+                {!isFcl && cargoMetrics && <CargoMetricsPanel metrics={cargoMetrics} />}
               </div>
             </section>
 
-            {cargoMetrics?.isComplete && <CargoSummary metrics={cargoMetrics} />}
+            {cargoMetrics?.isComplete && hasDeclaredValue && (
+              isFcl ? (
+                <FclCargoSummary
+                  metrics={cargoMetrics}
+                  declaredValueUsd={declaredValueNumber}
+                />
+              ) : (
+                <CargoSummary
+                  metrics={cargoMetrics}
+                  declaredValueUsd={declaredValueNumber}
+                />
+              )
+            )}
           </>
         )}
 
@@ -1451,6 +1692,7 @@ export default function QuotationForm({ onBack }) {
               destinationCountry={destinationCountry}
               destinationPort={destinationPort}
               cargoMetrics={cargoMetrics}
+              declaredValueUsd={declaredValueNumber}
               onEditStep={handleEditStep}
             />
           )

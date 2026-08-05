@@ -86,28 +86,32 @@ export const METHOD = {
       label: 'Oficio',
       title: 'Interlocutor con oficio',
       body: 'Alguien que entiende la operación y responde cuando importa. El juicio no se automatiza.',
-      img: '/media/mode-sea.jpg',
+      img: '/media/method-team-oficio.webp',
+      imgFallback: '/media/method-team-oficio.png',
     },
     {
       id: 'sistema',
       label: 'Sistema',
       title: 'Easy OS',
       body: 'Ordena lo repetible: menos fricción, menos error, más continuidad. La tecnología libera tiempo para acompañarlo.',
-      img: '/media/slide-sistema.jpg',
+      img: '/media/method-logistics-sistema.webp',
+      imgFallback: '/media/method-logistics-sistema.png',
     },
     {
       id: 'resultado',
       label: 'Resultado',
       title: 'Un solo resultado',
       body: 'Conectamos su importación con operadores marítimos y aéreos, y acompañamos hasta el cierre. La tecnología es el medio. El acompañamiento es el producto.',
-      img: '/media/mode-road.jpg',
+      img: '/media/method-logistics-resultado.webp',
+      imgFallback: '/media/method-logistics-resultado.png',
     },
     {
       id: 'criterio',
       label: 'Criterio',
       title: 'Claridad para decidir',
       body: 'Errores que encarecen una importación. Cómo leer una cotización. Documentación que no puede esperar. Compartimos criterio, no ruido.',
-      img: '/media/slide-criterio.jpg',
+      img: '/media/method-team-criterio.webp',
+      imgFallback: '/media/method-team-criterio.png',
     },
   ],
 }
@@ -220,6 +224,17 @@ export const TRUST = {
       { mode: 'Terrestre', d: 'Del puerto o aeropuerto a su bodega, con seguimiento.' },
     ],
   },
+}
+
+/** CTA de contacto al pie de confianza */
+export const CONTACT_CTA = {
+  title: 'Hablemos de tu operación',
+  lead: 'Si necesita orientación antes de cotizar — o tiene una operación con matices — deje su número. Un especialista revisa su caso y le responde con criterio.',
+  points: [
+    'Respuesta en horas hábiles, no en días.',
+    'Un interlocutor que conoce su tramo.',
+    'Si ya tiene el brief claro, puede cotizar directo.',
+  ],
 }
 
 export const GEO = {

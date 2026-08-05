@@ -9,7 +9,7 @@
   flex-direction: column;
   position: relative;
   background:
-    radial-gradient(ellipse 90% 70% at 50% 40%, #0a2a36 0%, #041018 55%, #02080c 100%);
+    radial-gradient(ellipse 90% 70% at 50% 40%, #154555 0%, #0a1820 55%, #0f171c 100%);
 }
 
 .quote-module-page .login-backdrop {
@@ -37,8 +37,8 @@
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(110, 201, 214, 0.24) 0%,
-    rgba(110, 201, 214, 0.07) 42%,
+    rgba(0, 229, 255, 0.32) 0%,
+    rgba(0, 229, 255, 0.1) 42%,
     transparent 72%
   );
   filter: blur(8px);

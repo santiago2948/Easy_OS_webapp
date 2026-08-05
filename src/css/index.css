@@ -1,8 +1,8 @@
 :root {
   --navy: #003d4c;
   --navy-deep: #002833;
-  --cyan: #00a4bd;
-  --cyan-bright: #00c4d6;
+  --cyan: #00c8e0;
+  --cyan-bright: #00eaff;
   --ink: #1a2b32;
   --ink-muted: #4a6068;
   --fog: #e8f4f6;
@@ -11,7 +11,7 @@
   --sea: #007a8f;
   --sky-top: #003d4c;
   --sky-mid: #0a6b7c;
-  --sky-low: #b8e4eb;
+  --sky-low: #8ef4ff;
 
   --sans: 'Figtree', sans-serif;
   --display: 'Syne', sans-serif;

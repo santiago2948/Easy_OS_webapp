@@ -1,13 +1,10 @@
-import { lazy, Suspense, useEffect, useRef } from 'react'
+import { lazy, Suspense, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import LearnMorePanel from '../components/LearnMorePanel'
-import BrandAssembly from '../components/BrandAssembly'
+import SuccessStoriesMarquee from '../components/SuccessStoriesMarquee'
 import BrandLogo from '../components/BrandLogo'
-import { RouteMesh } from '../components/RouteMesh'
 import {
   CONTACT,
   FLOW,
@@ -16,33 +13,93 @@ import {
   METHOD,
   QUOTE_PATH,
   TRUST,
-  VIDEO_BAND,
 } from '../content/landingNarrative'
 import '../styles/landing.css'
 import '../styles/orbit.css'
 
-gsap.registerPlugin(ScrollTrigger)
-
 const GlobeOrbit = lazy(() => import('../components/GlobeOrbit'))
+const BrandAssembly = lazy(() => import('../components/BrandAssembly'))
 const MethodReel = lazy(() => import('../components/MethodReel'))
-const VideoBand = lazy(() =>
-  import('../components/VideoBand').then((m) => ({ default: m.VideoBand })),
-)
 const FlowRail = lazy(() =>
   import('../components/FlowRail').then((m) => ({ default: m.FlowRail })),
 )
+const RouteMesh = lazy(() =>
+  import('../components/RouteMesh').then((m) => ({ default: m.RouteMesh })),
+)
 
-export default function Home() {
-  const rootRef = useRef(null)
+function getEarthTextureUrls() {
+  const mobile = window.matchMedia('(max-width: 768px)').matches
+  const tablet = window.matchMedia('(max-width: 1200px)').matches
+  if (mobile) {
+    return {
+      day: '/media/earth-day-sm.jpg',
+      topo: '/media/earth-topo-sm.jpg',
+    }
+  }
+  if (tablet) {
+    return {
+      day: '/media/earth-day-lg.jpg',
+      topo: '/media/earth-topo-lg.jpg',
+    }
+  }
+  return {
+    day: '/media/earth-day-xl.jpg',
+    topo: '/media/earth-topo-lg.jpg',
+  }
+}
 
-  useEffect(() => {
+function preloadGlobeTextures() {
+  const { day, topo } = getEarthTextureUrls()
+  for (const href of [day, topo]) {
+    if (document.querySelector(`link[rel="preload"][href="${href}"]`)) continue
     const link = document.createElement('link')
     link.rel = 'preload'
     link.as = 'image'
-    const mobile = window.matchMedia('(max-width: 768px)').matches
-    link.href = mobile ? '/media/earth-day-sm.jpg' : '/media/earth-day-xl.jpg'
+    link.href = href
     document.head.appendChild(link)
-    return () => link.remove()
+  }
+  void import('three')
+}
+
+export default function Home() {
+  const rootRef = useRef(null)
+  const [showGlobe, setShowGlobe] = useState(false)
+  const [showBrandAssembly, setShowBrandAssembly] = useState(false)
+
+  useEffect(() => {
+    preloadGlobeTextures()
+
+    const frameId = window.requestAnimationFrame(() => {
+      setShowGlobe(true)
+      setShowBrandAssembly(true)
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [])
+
+  useEffect(() => {
+    const section = document.getElementById(METHOD.id)
+    if (!section || typeof IntersectionObserver === 'undefined') return undefined
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return
+        METHOD.slides.forEach((slide) => {
+          const href = slide.img
+          if (document.querySelector(`link[rel="preload"][href="${href}"]`)) return
+          const link = document.createElement('link')
+          link.rel = 'preload'
+          link.as = 'image'
+          link.href = href
+          document.head.appendChild(link)
+        })
+        observer.disconnect()
+      },
+      { rootMargin: '640px 0px' },
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
   }, [])
 
   useEffect(() => {
@@ -87,78 +144,91 @@ export default function Home() {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     if (reduce) return undefined
 
-    const ctx = gsap.context(() => {
-      gsap.utils.toArray('[data-rise]').forEach((el) => {
-        gsap.fromTo(
-          el,
-          { y: 36, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            ease: 'power3.out',
-            scrollTrigger: {
-              trigger: el,
-              start: 'top 88%',
-              toggleActions: 'play none none reverse',
+    let ctx
+    let cancelled = false
+
+    Promise.all([import('gsap'), import('gsap/ScrollTrigger')]).then(
+      ([{ default: gsap }, { ScrollTrigger }]) => {
+        if (cancelled) return
+        gsap.registerPlugin(ScrollTrigger)
+
+        ctx = gsap.context(() => {
+          gsap.utils.toArray('[data-rise]').forEach((el) => {
+            gsap.fromTo(
+              el,
+              { y: 36, opacity: 0 },
+              {
+                y: 0,
+                opacity: 1,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                  trigger: el,
+                  start: 'top 88%',
+                  toggleActions: 'play none none reverse',
+                },
+              },
+            )
+          })
+
+          gsap.fromTo(
+            '.lp-method__empathy',
+            { y: 48, opacity: 0, clipPath: 'inset(0 0 100% 0)' },
+            {
+              y: 0,
+              opacity: 1,
+              clipPath: 'inset(0 0 0% 0)',
+              duration: 1,
+              ease: 'power3.out',
+              scrollTrigger: {
+                trigger: '.lp-method__intro',
+                start: 'top 78%',
+                toggleActions: 'play none none reverse',
+              },
             },
-          },
-        )
-      })
+          )
 
-      gsap.fromTo(
-        '.lp-method__empathy',
-        { y: 48, opacity: 0, clipPath: 'inset(0 0 100% 0)' },
-        {
-          y: 0,
-          opacity: 1,
-          clipPath: 'inset(0 0 0% 0)',
-          duration: 1,
-          ease: 'power3.out',
-          scrollTrigger: {
-            trigger: '.lp-method__intro',
-            start: 'top 78%',
-            toggleActions: 'play none none reverse',
-          },
-        },
-      )
+          gsap.fromTo(
+            '.lp-flow-rail__card',
+            { y: 24, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              stagger: 0.08,
+              duration: 0.55,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: '.lp-flow-rail__track',
+                start: 'top 78%',
+                toggleActions: 'play none none reverse',
+              },
+            },
+          )
 
-      gsap.fromTo(
-        '.lp-flow-rail__card',
-        { y: 24, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.08,
-          duration: 0.55,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.lp-flow-rail__track',
-            start: 'top 78%',
-            toggleActions: 'play none none reverse',
-          },
-        },
-      )
+          gsap.fromTo(
+            '.lp-trust__card',
+            { y: 24, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              stagger: 0.1,
+              duration: 0.55,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: '.lp-trust__grid',
+                start: 'top 75%',
+                toggleActions: 'play none none reverse',
+              },
+            },
+          )
+        }, root)
+      },
+    )
 
-      gsap.fromTo(
-        '.lp-trust__card',
-        { y: 24, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.55,
-          ease: 'power2.out',
-          scrollTrigger: {
-            trigger: '.lp-trust__grid',
-            start: 'top 75%',
-            toggleActions: 'play none none reverse',
-          },
-        },
-      )
-    }, root)
-
-    return () => ctx.revert()
+    return () => {
+      cancelled = true
+      ctx?.revert()
+    }
   }, [])
 
   return (
@@ -168,13 +238,17 @@ export default function Home() {
       <main>
         {/* 0 · Hero: globo intocable */}
         <section className="orbit-hero" id="inicio">
-          <Suspense
-            fallback={
-              <div className="globe-orbit globe-orbit--fallback" aria-hidden="true" />
-            }
-          >
-            <GlobeOrbit pinEnd="+=320%" />
-          </Suspense>
+          {showGlobe ? (
+            <Suspense
+              fallback={
+                <div className="globe-orbit globe-orbit--fallback" aria-hidden="true" />
+              }
+            >
+              <GlobeOrbit pinEnd="+=320%" />
+            </Suspense>
+          ) : (
+            <div className="globe-orbit globe-orbit--fallback" aria-hidden="true" />
+          )}
 
           <div className="orbit-hero__copy">
             <p className="orbit-kicker">{HERO.kicker}</p>
@@ -204,7 +278,11 @@ export default function Home() {
           </p>
 
           <div className="orbit-hero__exit-veil" aria-hidden="true" />
-          <BrandAssembly variant="hero" pinEnd="+=320%" />
+          {showBrandAssembly && (
+            <Suspense fallback={null}>
+              <BrandAssembly variant="hero" pinEnd="+=320%" />
+            </Suspense>
+          )}
         </section>
 
         {/* 1 · Cómo trabajamos */}
@@ -220,7 +298,9 @@ export default function Home() {
           />
         </Suspense>
 
-        <RouteMesh />
+        <Suspense fallback={null}>
+          <RouteMesh />
+        </Suspense>
 
         {/* 2 · Método Easy */}
         <section className="lp-section lp-method" id={METHOD.id}>
@@ -236,9 +316,7 @@ export default function Home() {
           </div>
         </section>
 
-        <Suspense fallback={null}>
-          <VideoBand line={VIDEO_BAND.line} subline={VIDEO_BAND.subline} />
-        </Suspense>
+        <SuccessStoriesMarquee />
 
         {/* 4 · Confianza */}
         <section className="lp-section lp-trust" id={TRUST.id}>

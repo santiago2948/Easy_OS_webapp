@@ -71,8 +71,8 @@ export function FlowRail({ id, kicker, title, subtitle, steps, cta, contact }) {
           />
           <defs>
             <linearGradient id="flowLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#6ec9d6" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#6ec9d6" stopOpacity="1" />
+              <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="#00e5ff" stopOpacity="1" />
             </linearGradient>
           </defs>
         </svg>

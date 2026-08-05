@@ -14,9 +14,9 @@ export function RouteMesh() {
       >
         <defs>
           <linearGradient id="routeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#6ec9d6" stopOpacity="0" />
-            <stop offset="45%" stopColor="#6ec9d6" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#a3dde6" stopOpacity="0.35" />
+            <stop offset="0%" stopColor="#00e5ff" stopOpacity="0" />
+            <stop offset="45%" stopColor="#00e5ff" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#5ef8ff" stopOpacity="0.45" />
           </linearGradient>
           <filter id="routeGlow" x="-50%" y="-50%" width="200%" height="200%">
             <feGaussianBlur stdDeviation="2.5" result="blur" />

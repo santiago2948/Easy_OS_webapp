@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 
-const DOT = 'rgba(110, 201, 214, 0.72)'
-const DOT_DIM = 'rgba(110, 201, 214, 0.22)'
+const DOT = 'rgba(0, 229, 255, 0.88)'
+const DOT_DIM = 'rgba(0, 229, 255, 0.28)'
 
 function pointInRing(x, y, ring) {
   let inside = false

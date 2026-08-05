@@ -567,7 +567,7 @@
   gap: 0.75rem;
   padding: 0.7rem 0.9rem;
   background: linear-gradient(90deg, #0a3544 0%, #003d4c 100%);
-  color: #f3f7f8;
+  color: #ffffff;
 }
 
 .quote-form__review-title {
@@ -575,11 +575,12 @@
   align-items: center;
   gap: 0.5rem;
   min-width: 0;
+  color: #ffffff;
 }
 
 .quote-form__review-icon {
   display: inline-flex;
-  color: var(--o-accent-soft);
+  color: #ffffff;
   flex-shrink: 0;
 }
 
@@ -589,6 +590,7 @@
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: 0.01em;
+  color: #ffffff;
 }
 
 .quote-form__review-edit {
@@ -597,10 +599,10 @@
   gap: 0.35rem;
   flex-shrink: 0;
   padding: 0.35rem 0.7rem;
-  border: 1px solid rgba(243, 247, 248, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   border-radius: 6px;
   background: transparent;
-  color: #f3f7f8;
+  color: #ffffff;
   font: inherit;
   font-size: 0.78rem;
   font-weight: 600;

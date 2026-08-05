@@ -7,7 +7,7 @@ import {
   LEAD_PRIVACY_NOTICE,
 } from '../../legal/content/dataConsent'
 import { createLead } from '../api/createLead'
-import { QUOTE_PATH } from '../content/landingNarrative'
+import { QUOTE_PATH, CONTACT_CTA } from '../content/landingNarrative'
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -92,7 +92,15 @@ export default function LearnMorePanel() {
 
   return (
     <div className="lp-trust-cta" id="contacto" data-rise>
-      <p className="lp-trust-cta__label">Hablemos de tu operación</p>
+      <div className="lp-trust-cta__head">
+        <p className="lp-trust-cta__label">{CONTACT_CTA.title}</p>
+        <p className="lp-trust-cta__lead">{CONTACT_CTA.lead}</p>
+        <ul className="lp-trust-cta__points">
+          {CONTACT_CTA.points.map((point) => (
+            <li key={point}>{point}</li>
+          ))}
+        </ul>
+      </div>
 
       {submitted ? (
         <p className="lp-trust-cta__success" role="status">

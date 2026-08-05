@@ -206,7 +206,8 @@ export default function GlobeOrbit({
       ro.observe(stage)
 
       const loader = new THREE.TextureLoader()
-      const dayUrl = lite ? DAY_SM : DAY_XL
+      const desktop = !lite && !window.matchMedia('(max-width: 1200px)').matches
+      const dayUrl = lite ? DAY_SM : desktop ? DAY_XL : DAY_LG
       const topoUrl = lite ? TOPO_SM : TOPO_LG
 
       const applyEarth = (dayMap, topo) => {
@@ -285,22 +286,20 @@ export default function GlobeOrbit({
       triggerEl.addEventListener('pointerdown', onPointerMove)
       triggerEl.addEventListener('pointerleave', onPointerLeave)
 
-      loader.load(dayUrl, (dayMap) => {
-        if (lite) {
-          loader.load(
-            topoUrl,
-            (topo) => applyEarth(dayMap, topo),
-            undefined,
-            () => applyEarth(dayMap),
-          )
+      const attachTopo = (topo) => {
+        if (disposed) {
+          topo?.dispose()
           return
         }
-        loader.load(
-          topoUrl,
-          (topo) => applyEarth(dayMap, topo),
-          undefined,
-          () => applyEarth(dayMap),
-        )
+        if (!earth?.material || !topo) return
+        earth.material.bumpMap = topo
+        earth.material.bumpScale = lite ? 0.025 : 0.035
+        earth.material.needsUpdate = true
+      }
+
+      loader.load(dayUrl, (dayMap) => {
+        applyEarth(dayMap, null)
+        loader.load(topoUrl, attachTopo, undefined, () => {})
       })
 
       ctx = gsap.context(() => {

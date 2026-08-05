@@ -1,24 +1,54 @@
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 import { QUOTE_PATH } from '../content/landingNarrative'
+import { scrollToHomeTop } from '../utils/scrollToHomeTop'
 
 const NAV = [
-  { href: '/#inicio', label: 'Inicio' },
+  { href: '/#inicio', label: 'Inicio', homeTop: true },
   { href: '/#como', label: 'Cómo' },
   { href: '/#easy', label: 'Easy' },
   { href: '/#contacto', label: 'Contacto' },
 ]
 
 export default function Header() {
+  const location = useLocation()
+  const navigate = useNavigate()
+  const isHome = location.pathname === '/'
+
+  const handleLogoClick = (event) => {
+    if (!isHome) return
+    event.preventDefault()
+    scrollToHomeTop()
+  }
+
+  const handleNavClick = (event, item) => {
+    if (!item.homeTop) return
+
+    event.preventDefault()
+
+    if (!isHome) {
+      navigate('/')
+      return
+    }
+
+    scrollToHomeTop()
+    window.history.replaceState(null, '', '/')
+  }
+
   return (
     <header className="site-header">
-      <Link to="/" className="site-logo" aria-label="Easy Logistics inicio">
+      <Link
+        to="/"
+        className="site-logo"
+        aria-label="Easy Logistics inicio"
+        onClick={handleLogoClick}
+      >
         <BrandLogo variant="onDark" size="sm" />
       </Link>
 
       <nav className="site-nav" aria-label="Principal">
         {NAV.map((item) => (
-          <a key={item.href} href={item.href}>
+          <a key={item.href} href={item.href} onClick={(event) => handleNavClick(event, item)}>
             {item.label}
           </a>
         ))}
