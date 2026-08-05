@@ -656,10 +656,6 @@ function formatQuoteDate(date) {
   }).format(date)
 }
 
-function createQuoteNumber() {
-  return `QT-${String(Math.floor(10000 + Math.random() * 90000))}`
-}
-
 function ReviewBadge({ children, tone = 'accent' }) {
   return (
     <span className={`quote-form__review-badge quote-form__review-badge--${tone}`}>
@@ -860,7 +856,9 @@ function QuoteReview({
         <div className="quote-form__review-grid">
           <div className="quote-form__summary-item">
             <span className="quote-form__summary-label">Número de Cotización:</span>
-            <ReviewBadge tone="soft">{quoteMeta.number}</ReviewBadge>
+            <ReviewBadge tone="soft">
+              {quoteMeta.number ?? 'Se asignará al confirmar'}
+            </ReviewBadge>
           </div>
           <div className="quote-form__summary-item">
             <span className="quote-form__summary-label">Fecha de Creación:</span>
@@ -1183,7 +1181,6 @@ export default function QuotationForm({ onBack }) {
       if (cancelled) return
       setQuoteMeta((current) =>
         current ?? {
-          number: createQuoteNumber(),
           createdAt: new Date(),
         },
       )
@@ -1260,7 +1257,6 @@ export default function QuotationForm({ onBack }) {
     captchaToken,
     acceptedDataPolicy: true,
     dataPolicyVersion: DATA_POLICY_VERSION,
-    quoteNumber: quoteMeta?.number,
     operationType,
     transportMode,
     origin: {
@@ -1312,7 +1308,14 @@ export default function QuotationForm({ onBack }) {
     setSubmitError('')
 
     try {
-      await createQuote(buildQuotePayload())
+      const response = await createQuote(buildQuotePayload())
+      const officialQuoteNumber = response?.data?.quoteNumber
+      if (officialQuoteNumber) {
+        setQuoteMeta((current) => ({
+          ...(current ?? { createdAt: new Date() }),
+          number: officialQuoteNumber,
+        }))
+      }
       setQuoteSubmitted(true)
       setAcceptedDataPolicy(false)
       clearCaptcha()
