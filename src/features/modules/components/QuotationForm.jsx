@@ -464,7 +464,9 @@ function formatMetric(value, digits = 2) {
   return value.toFixed(digits)
 }
 
-/** Ocean LCL/Air: W/M from dimensions. FCL: fixed rate per container type. */
+const AIR_VOLUMETRIC_KG_PER_M3 = 167
+
+/** Ocean LCL: W/M in tons. Air: chargeable weight in kg (IATA ≈ m³ × 167). FCL: per container. */
 function computeCargoMetrics(cargo, transportMode) {
   if (transportMode === 'fcl') {
     const quantity = Number(cargo.quantity)
@@ -499,9 +501,31 @@ function computeCargoMetrics(cargo, transportMode) {
   if (!hasDimensions) return null
 
   const volumeM3 = length * width * height * quantity
-  const volumetricTons = volumeM3
   const hasWeight = Number.isFinite(weightKg) && weightKg > 0
-  const actualTons = hasWeight ? (weightKg * quantity) / 1000 : null
+  const actualWeightKg = hasWeight ? weightKg * quantity : null
+
+  if (transportMode === 'air') {
+    const volumetricKg = volumeM3 * AIR_VOLUMETRIC_KG_PER_M3
+    const chargeableKg =
+      actualWeightKg == null ? volumetricKg : Math.max(actualWeightKg, volumetricKg)
+
+    return {
+      mode: 'air',
+      quantity,
+      length,
+      width,
+      height,
+      weightKg: hasWeight ? weightKg : null,
+      actualWeightKg,
+      volumeM3,
+      volumetricKg,
+      chargeableKg,
+      isComplete: hasWeight,
+    }
+  }
+
+  const volumetricTons = volumeM3
+  const actualTons = actualWeightKg == null ? null : actualWeightKg / 1000
   const chargeableTons = actualTons == null ? volumetricTons : Math.max(actualTons, volumetricTons)
 
   return {
@@ -519,6 +543,32 @@ function computeCargoMetrics(cargo, transportMode) {
 }
 
 function CargoMetricsPanel({ metrics }) {
+  const isAir = metrics.mode === 'air'
+
+  if (isAir) {
+    return (
+      <aside className="quote-form__cargo-metrics" aria-live="polite">
+        <div className="quote-form__cargo-metric">
+          <strong>Volumen Calculado</strong>
+          <span>{formatMetric(metrics.volumeM3)} m³</span>
+        </div>
+        <div className="quote-form__cargo-metric">
+          <strong>Peso Bruto</strong>
+          <span>
+            {metrics.actualWeightKg == null
+              ? '—'
+              : `${formatMetric(metrics.actualWeightKg)} kg`}
+          </span>
+        </div>
+        <div className="quote-form__cargo-metric">
+          <strong>Peso Cargable</strong>
+          <span>{formatMetric(metrics.chargeableKg)} kg</span>
+          <small>Mayor entre peso bruto y volumétrico (m³ × 167)</small>
+        </div>
+      </aside>
+    )
+  }
+
   return (
     <aside className="quote-form__cargo-metrics" aria-live="polite">
       <div className="quote-form__cargo-metric">
@@ -572,6 +622,7 @@ function FclCargoSummary({ metrics, declaredValueUsd }) {
 
 function CargoSummary({ metrics, declaredValueUsd }) {
   const dimensionsLabel = `${metrics.length} x ${metrics.width} x ${metrics.height} m`
+  const isAir = metrics.mode === 'air'
 
   return (
     <section className="quote-form__summary" aria-live="polite">
@@ -616,19 +667,33 @@ function CargoSummary({ metrics, declaredValueUsd }) {
             </span>
           </div>
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Peso Volumétrico:</span>
+            <span className="quote-form__summary-label">
+              {isAir ? 'Peso Bruto:' : 'Peso Volumétrico:'}
+            </span>
             <span className="quote-form__summary-badge quote-form__summary-badge--soft">
-              {formatMetric(metrics.volumetricTons)} TON
+              {isAir
+                ? metrics.actualWeightKg == null
+                  ? '—'
+                  : `${formatMetric(metrics.actualWeightKg)} kg`
+                : `${formatMetric(metrics.volumetricTons)} TON`}
             </span>
           </div>
           <div className="quote-form__summary-item quote-form__summary-item--stack">
             <div className="quote-form__summary-item-row">
-              <span className="quote-form__summary-label">Peso Tasable:</span>
+              <span className="quote-form__summary-label">
+                {isAir ? 'Peso Cargable:' : 'Peso Tasable:'}
+              </span>
               <span className="quote-form__summary-badge quote-form__summary-badge--soft">
-                {formatMetric(metrics.chargeableTons)} TON
+                {isAir
+                  ? `${formatMetric(metrics.chargeableKg)} kg`
+                  : `${formatMetric(metrics.chargeableTons)} TON`}
               </span>
             </div>
-            <small className="quote-form__summary-hint">Peso al que se aplicará la tarifa</small>
+            <small className="quote-form__summary-hint">
+              {isAir
+                ? 'Mayor entre peso bruto y volumétrico (m³ × 167)'
+                : 'Peso al que se aplicará la tarifa'}
+            </small>
           </div>
         </div>
       </div>
@@ -836,6 +901,10 @@ function ContactStepForm({
   )
 }
 
+function getLocationPointLabel(transportMode) {
+  return transportMode === 'air' ? 'Aeropuerto' : 'Puerto'
+}
+
 function QuoteReview({
   quoteMeta,
   operation,
@@ -849,6 +918,8 @@ function QuoteReview({
   onEditStep,
 }) {
   const isFcl = cargoMetrics?.mode === 'fcl'
+  const isAir = cargoMetrics?.mode === 'air'
+  const locationPointLabel = getLocationPointLabel(transport?.id)
 
   return (
     <div className="quote-form__review">
@@ -895,7 +966,7 @@ function QuoteReview({
               <strong>País:</strong> {originCountry?.name}
             </p>
             <p>
-              <strong>Puerto:</strong> {originPort?.name}
+              <strong>{locationPointLabel}:</strong> {originPort?.name}
             </p>
           </div>
           <div className="quote-form__review-route-block">
@@ -907,7 +978,7 @@ function QuoteReview({
               <strong>País:</strong> {destinationCountry?.name}
             </p>
             <p>
-              <strong>Puerto:</strong> {destinationPort?.name}
+              <strong>{locationPointLabel}:</strong> {destinationPort?.name}
             </p>
           </div>
         </div>
@@ -953,12 +1024,26 @@ function QuoteReview({
                 <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumeM3)} m³</ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Peso Volumétrico:</span>
-                <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumetricTons)} TON</ReviewBadge>
+                <span className="quote-form__summary-label">
+                  {isAir ? 'Peso Bruto:' : 'Peso Volumétrico:'}
+                </span>
+                <ReviewBadge tone="soft">
+                  {isAir
+                    ? cargoMetrics.actualWeightKg == null
+                      ? '—'
+                      : `${formatMetric(cargoMetrics.actualWeightKg)} kg`
+                    : `${formatMetric(cargoMetrics.volumetricTons)} TON`}
+                </ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Peso Tasable:</span>
-                <ReviewBadge tone="soft">{formatMetric(cargoMetrics.chargeableTons)} TON</ReviewBadge>
+                <span className="quote-form__summary-label">
+                  {isAir ? 'Peso Cargable:' : 'Peso Tasable:'}
+                </span>
+                <ReviewBadge tone="soft">
+                  {isAir
+                    ? `${formatMetric(cargoMetrics.chargeableKg)} kg`
+                    : `${formatMetric(cargoMetrics.chargeableTons)} TON`}
+                </ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
                 <span className="quote-form__summary-label">Valor declarado:</span>
@@ -969,7 +1054,9 @@ function QuoteReview({
             </div>
             <p className="quote-form__review-note">
               <InfoIcon />
-              El peso tasable es el peso al que se aplicará la tarifa.
+              {isAir
+                ? 'El peso cargable es el mayor entre el peso bruto y el volumétrico (m³ × 167).'
+                : 'El peso tasable es el peso al que se aplicará la tarifa.'}
             </p>
           </>
         )}
@@ -1031,6 +1118,9 @@ export default function QuotationForm({ onBack }) {
   const hasStep1Selections = Boolean(operationType || transportMode)
   const isStep1Complete = Boolean(operationType && transportMode)
   const isFcl = transportMode === 'fcl'
+  const isAir = transportMode === 'air'
+  const locationPointLabel = getLocationPointLabel(transportMode)
+  const locationPointLabelLower = locationPointLabel.toLowerCase()
   const isFclContainerSelected = !isFcl || Boolean(cargo.containerType)
   const isStep2Complete =
     isFclContainerSelected &&
@@ -1058,7 +1148,9 @@ export default function QuotationForm({ onBack }) {
       title: isFcl ? 'Contenedor, origen y destino' : 'Origen y Destino',
       subtitle: isFcl
         ? 'Selecciona el tipo de contenedor y luego el origen y destino disponibles'
-        : 'Selecciona el país y puerto de origen y destino',
+        : isAir
+          ? 'Selecciona el país y aeropuerto de origen y destino'
+          : 'Selecciona el país y puerto de origen y destino',
     },
     3: {
       title: 'Datos de la Carga',
@@ -1278,17 +1370,29 @@ export default function QuotationForm({ onBack }) {
             containerType: cargoMetrics.containerType,
             declaredValueUsd: declaredValueNumber,
           }
-        : {
-            quantity: cargoMetrics.quantity,
-            length: cargoMetrics.length,
-            width: cargoMetrics.width,
-            height: cargoMetrics.height,
-            weightKg: cargoMetrics.weightKg,
-            volumeM3: cargoMetrics.volumeM3,
-            volumetricTons: cargoMetrics.volumetricTons,
-            chargeableTons: cargoMetrics.chargeableTons,
-            declaredValueUsd: declaredValueNumber,
-          },
+        : transportMode === 'air'
+          ? {
+              quantity: cargoMetrics.quantity,
+              length: cargoMetrics.length,
+              width: cargoMetrics.width,
+              height: cargoMetrics.height,
+              weightKg: cargoMetrics.weightKg,
+              volumeM3: cargoMetrics.volumeM3,
+              volumetricKg: cargoMetrics.volumetricKg,
+              chargeableKg: cargoMetrics.chargeableKg,
+              declaredValueUsd: declaredValueNumber,
+            }
+          : {
+              quantity: cargoMetrics.quantity,
+              length: cargoMetrics.length,
+              width: cargoMetrics.width,
+              height: cargoMetrics.height,
+              weightKg: cargoMetrics.weightKg,
+              volumeM3: cargoMetrics.volumeM3,
+              volumetricTons: cargoMetrics.volumetricTons,
+              chargeableTons: cargoMetrics.chargeableTons,
+              declaredValueUsd: declaredValueNumber,
+            },
   })
 
   const handleSubmitQuote = async () => {
@@ -1501,11 +1605,15 @@ export default function QuotationForm({ onBack }) {
                         )}
                         <FieldSelect
                           id="quote-origin-port"
-                          label="Puerto"
+                          label={locationPointLabel}
                           value={originPortId}
                           onChange={(event) => setOriginPortId(event.target.value)}
                           options={originPorts}
-                          placeholder={originCountryId ? 'Selecciona un puerto' : 'Primero elige el país'}
+                          placeholder={
+                            originCountryId
+                              ? `Selecciona un ${locationPointLabelLower}`
+                              : 'Primero elige el país'
+                          }
                           disabled={!originCountryId}
                         />
                       </div>
@@ -1538,12 +1646,14 @@ export default function QuotationForm({ onBack }) {
                         )}
                         <FieldSelect
                           id="quote-destination-port"
-                          label="Puerto"
+                          label={locationPointLabel}
                           value={destinationPortId}
                           onChange={(event) => setDestinationPortId(event.target.value)}
                           options={destinationPorts}
                           placeholder={
-                            destinationCountryId ? 'Selecciona un puerto' : 'Primero elige el país'
+                            destinationCountryId
+                              ? `Selecciona un ${locationPointLabelLower}`
+                              : 'Primero elige el país'
                           }
                           disabled={!destinationCountryId}
                         />
