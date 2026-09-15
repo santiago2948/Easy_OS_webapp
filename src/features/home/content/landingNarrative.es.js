@@ -205,12 +205,72 @@ export const ES = {
     ],
   },
 
+  /**
+   * Preguntas frecuentes. Se renderizan visibles y además alimentan el
+   * schema FAQPage: Google exige que el marcado corresponda a contenido
+   * visible en la página. Toda respuesta debe ser verificable.
+   */
+  faq: {
+    kicker: 'Preguntas frecuentes',
+    title: 'Lo que preguntan antes de importar.',
+    subtitle: 'Respuestas concretas sobre cómo funciona una operación con nosotros.',
+    items: [
+      {
+        q: '¿Qué hace un freight broker y en qué se diferencia de una naviera?',
+        a: 'La naviera mueve el barco; el freight broker organiza la importación completa: cotiza el flete, reserva el espacio, coordina documentos y aduana, y responde por el recorrido entero. En Easy Logistics trabajamos con operadores marítimos, aéreos y terrestres, y usted trata siempre con la misma persona.',
+      },
+      {
+        q: '¿Cuánto tarda recibir una cotización?',
+        a: 'Puede cotizar en línea en pocos minutos indicando origen, destino, incoterm, los datos de la carga y el valor declarado. Si la operación tiene matices, un especialista revisa el caso y responde en horas hábiles, no en días.',
+      },
+      {
+        q: '¿Qué incluye el flete que cotizan?',
+        a: 'La propuesta se arma por tramos: recogida en origen, despacho de exportación cuando el incoterm lo exige, flete internacional, seguro de carga, aduana de importación en Colombia, transporte terrestre hasta su bodega, almacenamiento y entrega final. No todos aplican en cada operación. Los gastos locales y la aduana se cotizan desde el inicio.',
+      },
+      {
+        q: '¿Cuál es la diferencia entre FCL y LCL?',
+        a: 'FCL (Full Container Load) es un contenedor completo para su carga exclusiva. LCL (Less than Container Load) comparte contenedor con otras cargas y se cobra sobre el peso tasable: el mayor entre el peso real y el volumen. En aéreo el peso cargable se calcula igual, tomando el mayor entre el peso bruto y el volumétrico (m³ × 167).',
+      },
+      {
+        q: '¿Desde qué países traen carga hacia Colombia?',
+        a: 'Coordinamos importaciones desde Asia, Europa y América hacia puertos y aeropuertos colombianos, en marítimo FCL y LCL y en carga aérea. Los orígenes y destinos disponibles aparecen en el cotizador según el modo de transporte y el tipo de contenedor.',
+      },
+      {
+        q: '¿Se encargan de la aduana?',
+        a: 'Sí. Coordinamos con el agente aduanero la declaración y el levante en destino, y el despacho de exportación en origen cuando el incoterm lo exige.',
+      },
+      {
+        q: '¿Qué documentos necesito para una importación?',
+        a: 'Los habituales son el BL o la guía aérea, la factura comercial, el packing list y los certificados que exija el producto. Los revisamos antes de que la carga llegue, para que un documento incompleto no termine en sobrecostos de almacenaje.',
+      },
+      {
+        q: '¿Qué datos necesitan para cotizar?',
+        a: 'Origen, destino, incoterm y fecha límite, más los datos de la carga: cantidad, dimensiones, peso y valor declarado en dólares. Con eso armamos una propuesta revisada y comparable, no una lista de tarifas sueltas.',
+      },
+    ],
+  },
+
+  /** Metadatos por ruta. Título ≤ 60 caracteres, descripción ≤ 155. */
+  seo: {
+    home: {
+      title: 'Easy Logistics | Freight broker B2B en Colombia',
+      description:
+        'Importación marítima, aérea y terrestre hacia Colombia. FCL, LCL y carga aérea con costos claros, aduana coordinada y una sola persona a cargo.',
+    },
+    quote: {
+      title: 'Cotizar flete internacional | Easy Logistics',
+      description:
+        'Cotice su importación en minutos: origen, destino, incoterm y datos de la carga. Marítimo FCL y LCL o carga aérea hacia Colombia.',
+    },
+  },
+
   routeTags: ['Marítimo', 'Aéreo', 'Terrestre', 'Seguimiento'],
 
   nav: [
     { key: 'inicio', label: 'Inicio' },
     { key: 'como', label: 'Cómo' },
     { key: 'easy', label: 'Easy' },
+    { key: 'preguntas', label: 'Preguntas' },
     { key: 'contacto', label: 'Contacto' },
   ],
 
@@ -222,6 +282,7 @@ export const ES = {
       { key: 'inicio', label: 'Inicio' },
       { key: 'como', label: 'Cómo trabajamos' },
       { key: 'easy', label: 'Easy' },
+      { key: 'preguntas', label: 'Preguntas frecuentes' },
       { key: 'contacto', label: 'Contacto' },
     ],
     servicesTitle: 'Servicios',

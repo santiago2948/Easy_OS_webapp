@@ -5,10 +5,12 @@ import {
 } from '../../legal/content/dataConsent'
 import BrandLogo from './BrandLogo'
 import { CONTACT, SECTION_IDS, useLandingCopy } from '../content/landingNarrative'
+import { useLangPath } from '../../../i18n/LanguageContext'
 import { scrollToHomeTop } from '../utils/scrollToHomeTop'
 
 export default function Footer() {
   const copy = useLandingCopy()
+  const langPath = useLangPath()
   const { footer } = copy
 
   return (
@@ -31,7 +33,7 @@ export default function Footer() {
                       ? (event) => {
                           event.preventDefault()
                           scrollToHomeTop()
-                          window.history.replaceState(null, '', '/')
+                          window.history.replaceState(null, '', langPath('/'))
                         }
                       : undefined
                   }

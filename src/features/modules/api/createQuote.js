@@ -15,7 +15,9 @@ export async function createQuote(payload) {
   }
 
   if (!response.ok) {
-    const error = new Error(data.message || 'No se pudo enviar la cotización')
+    // Sin mensaje del servidor se deja vacío a propósito: quien llama
+    // pone el texto de respaldo en el idioma activo.
+    const error = new Error(data.message || '')
     error.status = response.status
     error.details = data.details
     throw error

@@ -205,12 +205,72 @@ export const EN = {
     ],
   },
 
+  /**
+   * FAQ. Rendered visibly and also feeding the FAQPage schema: Google
+   * requires the markup to match content visible on the page. Every answer
+   * must be verifiable.
+   */
+  faq: {
+    kicker: 'Frequently asked questions',
+    title: 'What people ask before importing.',
+    subtitle: 'Straight answers on how a shipment works with us.',
+    items: [
+      {
+        q: 'What does a freight broker do, and how is it different from a carrier?',
+        a: 'The carrier moves the vessel; the freight broker runs the whole import: quoting the freight, booking the space, coordinating documents and customs, and answering for the entire journey. At Easy Logistics we work with ocean, air and ground operators, and you always deal with the same person.',
+      },
+      {
+        q: 'How long does a quote take?',
+        a: 'You can quote online in a few minutes by entering origin, destination, incoterm, cargo details and declared value. If your shipment has complications, a specialist reviews the case and replies within business hours, not business days.',
+      },
+      {
+        q: 'What does the quoted freight include?',
+        a: 'The proposal is built leg by leg: pickup at origin, export clearance where the incoterm requires it, international freight, cargo insurance, import customs in Colombia, inland transport to your warehouse, warehousing and final delivery. Not all of them apply to every shipment. Local charges and customs are quoted upfront.',
+      },
+      {
+        q: 'What is the difference between FCL and LCL?',
+        a: 'FCL (Full Container Load) is a whole container for your cargo alone. LCL (Less than Container Load) shares a container with other cargo and is charged on chargeable weight: the greater of actual weight and volume. Air freight works the same way, taking the greater of gross and volumetric weight (m³ × 167).',
+      },
+      {
+        q: 'Which countries do you ship from into Colombia?',
+        a: 'We coordinate imports from Asia, Europe and the Americas into Colombian ports and airports, by ocean FCL and LCL and by air freight. Available origins and destinations appear in the quoting tool according to transport mode and container type.',
+      },
+      {
+        q: 'Do you handle customs?',
+        a: 'Yes. We coordinate the declaration and release at destination with the customs broker, and export clearance at origin when the incoterm requires it.',
+      },
+      {
+        q: 'Which documents do I need to import?',
+        a: 'Typically the bill of lading or air waybill, the commercial invoice, the packing list and any certificates the product requires. We review them before the cargo lands, so an incomplete document does not turn into demurrage and storage costs.',
+      },
+      {
+        q: 'What do you need in order to quote?',
+        a: 'Origin, destination, incoterm and deadline, plus the cargo details: quantity, dimensions, weight and declared value in US dollars. With that we build one reviewed, comparable proposal rather than a list of loose rates.',
+      },
+    ],
+  },
+
+  /** Per-route metadata. Title ≤ 60 characters, description ≤ 155. */
+  seo: {
+    home: {
+      title: 'Easy Logistics | B2B freight broker in Colombia',
+      description:
+        'Ocean, air and ground imports into Colombia. FCL, LCL and air freight with clear costs, coordinated customs and one person accountable.',
+    },
+    quote: {
+      title: 'Quote international freight | Easy Logistics',
+      description:
+        'Quote your import in minutes: origin, destination, incoterm and cargo details. Ocean FCL and LCL or air freight into Colombia.',
+    },
+  },
+
   routeTags: ['Ocean', 'Air', 'Ground', 'Tracking'],
 
   nav: [
     { key: 'inicio', label: 'Home' },
     { key: 'como', label: 'How' },
     { key: 'easy', label: 'Easy' },
+    { key: 'preguntas', label: 'FAQ' },
     { key: 'contacto', label: 'Contact' },
   ],
 
@@ -222,6 +282,7 @@ export const EN = {
       { key: 'inicio', label: 'Home' },
       { key: 'como', label: 'How we work' },
       { key: 'easy', label: 'Easy' },
+      { key: 'preguntas', label: 'FAQ' },
       { key: 'contacto', label: 'Contact' },
     ],
     servicesTitle: 'Services',

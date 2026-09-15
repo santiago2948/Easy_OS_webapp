@@ -20,7 +20,8 @@ export async function fetchQuoteRoutes({ operationType, transportMode, container
   }
 
   if (!response.ok) {
-    const error = new Error(payload.message || 'No se pudieron cargar orígenes y destinos')
+    // Igual que en createQuote: el respaldo traducido lo pone el componente.
+    const error = new Error(payload.message || '')
     error.status = response.status
     error.details = payload.details
     throw error

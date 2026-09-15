@@ -1,9 +1,10 @@
-import { lazy, Suspense, useEffect, useRef, useState } from 'react'
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import LearnMorePanel from '../components/LearnMorePanel'
 import SuccessStoriesMarquee from '../components/SuccessStoriesMarquee'
+import FaqSection from '../components/FaqSection'
 import BrandLogo from '../components/BrandLogo'
 import {
   CONTACT,
@@ -12,6 +13,9 @@ import {
   SECTION_IDS,
   useLandingCopy,
 } from '../content/landingNarrative'
+import { useLangPath, useLanguage } from '../../../i18n/LanguageContext'
+import { useSeo, SITE_URL } from '../../../seo/useSeo'
+import { buildHomeSchema } from '../../../seo/schema'
 import '../styles/landing.css'
 import '../styles/orbit.css'
 
@@ -61,7 +65,28 @@ function preloadGlobeTextures() {
 
 export default function Home() {
   const copy = useLandingCopy()
+  const langPath = useLangPath()
+  const { lang } = useLanguage()
   const rootRef = useRef(null)
+
+  const schema = useMemo(
+    () =>
+      buildHomeSchema({
+        copy,
+        lang,
+        contact: CONTACT,
+        pageUrl: lang === 'en' ? `${SITE_URL}/en` : `${SITE_URL}/`,
+      }),
+    [copy, lang],
+  )
+
+  useSeo({
+    lang,
+    title: copy.seo.home.title,
+    description: copy.seo.home.description,
+    canonicalPath: '/',
+    schema,
+  })
   const [showGlobe, setShowGlobe] = useState(false)
   const [showBrandAssembly, setShowBrandAssembly] = useState(false)
 
@@ -100,42 +125,6 @@ export default function Home() {
     observer.observe(section)
     return () => observer.disconnect()
   }, [])
-
-  useEffect(() => {
-    const { geo } = copy
-    const schema = {
-      '@context': 'https://schema.org',
-      '@graph': [
-        {
-          '@type': 'Organization',
-          name: 'Easy Logistics',
-          url: 'https://easy-logistics.co',
-          email: 'c.hernandez@easy-logistics.co',
-          telephone: '+57-320-897-6999',
-          address: {
-            '@type': 'PostalAddress',
-            streetAddress: CONTACT.address,
-            addressCountry: 'CO',
-          },
-          description: geo.what,
-        },
-        {
-          '@type': 'ProfessionalService',
-          name: 'Easy Logistics. Forwarder B2B',
-          serviceType: 'International freight brokerage',
-          areaServed: 'Colombia',
-          description: geo.differentiator,
-          provider: { '@type': 'Organization', name: 'Easy Logistics' },
-        },
-      ],
-    }
-    const el = document.createElement('script')
-    el.type = 'application/ld+json'
-    el.id = 'easy-landing-schema'
-    el.textContent = JSON.stringify(schema)
-    document.head.appendChild(el)
-    return () => el.remove()
-  }, [copy])
 
   useEffect(() => {
     const root = rootRef.current
@@ -259,7 +248,7 @@ export default function Home() {
             </h1>
             <p className="orbit-lead">{copy.hero.lead}</p>
             <div className="orbit-actions">
-              <Link to={QUOTE_PATH} className="btn btn--primary">
+              <Link to={langPath(QUOTE_PATH)} className="btn btn--primary">
                 {copy.hero.ctaQuote}
               </Link>
               <a
@@ -317,6 +306,8 @@ export default function Home() {
         </section>
 
         <SuccessStoriesMarquee />
+
+        <FaqSection />
 
         {/* 3 · Confianza */}
         <section className="lp-section lp-trust" id={SECTION_IDS.trust}>

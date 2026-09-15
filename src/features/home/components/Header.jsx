@@ -2,13 +2,16 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
 import LanguageSwitch from './LanguageSwitch'
 import { QUOTE_PATH, SECTION_IDS, useLandingCopy } from '../content/landingNarrative'
+import { stripLangPrefix, useLangPath } from '../../../i18n/LanguageContext'
 import { scrollToHomeTop } from '../utils/scrollToHomeTop'
 
 export default function Header() {
   const copy = useLandingCopy()
+  const langPath = useLangPath()
   const location = useLocation()
   const navigate = useNavigate()
-  const isHome = location.pathname === '/'
+  const homePath = langPath('/')
+  const isHome = stripLangPrefix(location.pathname) === '/'
 
   const handleLogoClick = (event) => {
     if (!isHome) return
@@ -22,18 +25,18 @@ export default function Header() {
     event.preventDefault()
 
     if (!isHome) {
-      navigate('/')
+      navigate(homePath)
       return
     }
 
     scrollToHomeTop()
-    window.history.replaceState(null, '', '/')
+    window.history.replaceState(null, '', homePath)
   }
 
   return (
     <header className="site-header">
       <Link
-        to="/"
+        to={homePath}
         className="site-logo"
         aria-label={copy.ui.homeAria}
         onClick={handleLogoClick}
@@ -43,7 +46,10 @@ export default function Header() {
 
       <nav className="site-nav" aria-label={copy.ui.navAria}>
         {copy.nav.map((item) => {
-          const anchor = { href: `/#${item.key}`, homeTop: item.key === SECTION_IDS.hero }
+          const anchor = {
+            href: `${homePath}#${item.key}`,
+            homeTop: item.key === SECTION_IDS.hero,
+          }
           return (
             <a
               key={item.key}
@@ -59,7 +65,7 @@ export default function Header() {
       <div className="site-header__actions">
         <LanguageSwitch label={copy.ui.langAria} />
 
-        <Link to={QUOTE_PATH} className="btn-cotizar">
+        <Link to={langPath(QUOTE_PATH)} className="btn-cotizar">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
             <path

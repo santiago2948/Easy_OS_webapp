@@ -5,6 +5,7 @@ import DataConsentField from '../../legal/components/DataConsentField'
 import { DATA_POLICY_VERSION } from '../../legal/content/dataConsent'
 import { createLead } from '../api/createLead'
 import { QUOTE_PATH, SECTION_IDS, useLandingCopy } from '../content/landingNarrative'
+import { useLangPath } from '../../../i18n/LanguageContext'
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -21,6 +22,7 @@ const DIAL_CODES = [
 
 export default function LearnMorePanel() {
   const copy = useLandingCopy()
+  const langPath = useLangPath()
   const cta = copy.contactCta
   const form = cta.form
 
@@ -177,7 +179,7 @@ export default function LearnMorePanel() {
             )}
 
             <span className="lp-trust-cta__divider" aria-hidden="true" />
-            <Link to={QUOTE_PATH} className="btn btn--primary lp-trust-cta__quote">
+            <Link to={langPath(QUOTE_PATH)} className="btn btn--primary lp-trust-cta__quote">
               {copy.ui.quote}
             </Link>
           </div>

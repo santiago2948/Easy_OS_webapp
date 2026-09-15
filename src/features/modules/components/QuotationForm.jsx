@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Turnstile } from '@marsidev/react-turnstile'
 import DataConsentField from '../../legal/components/DataConsentField'
-import {
-  DATA_POLICY_VERSION,
-  QUOTE_PRIVACY_NOTICE,
-} from '../../legal/content/dataConsent'
+import { DATA_POLICY_VERSION } from '../../legal/content/dataConsent'
 import { createQuote } from '../api/createQuote'
 import { fetchQuoteRoutes } from '../api/fetchQuoteRoutes'
 import { findCountry, findPort } from '../content/quotationRoutes'
+import { useQuotationCopy } from '../content/quotationCopy'
 import '../styles/quotation-form.css'
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
@@ -28,61 +26,6 @@ const DIAL_CODES = [
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 const TOTAL_STEPS = 5
-
-const OPERATION_TYPES = [
-  {
-    id: 'import',
-    title: 'Importación',
-    summaryLabel: 'IMPORT',
-    description:
-      'Trae tus productos desde el extranjero. Te ayudamos con toda la logística de importación.',
-    tags: ['Aduanas', 'Transporte', 'Almacenamiento'],
-    icon: 'import',
-  },
-  {
-    id: 'export',
-    title: 'Exportación',
-    summaryLabel: 'EXPORT',
-    description:
-      'Lleva tus productos al mundo. Gestionamos toda la logística de exportación.',
-    tags: ['Documentación', 'Embarque', 'Entrega'],
-    icon: 'export',
-  },
-]
-
-const FCL_CONTAINER_TYPES = [
-  { id: '20STD', name: '20STD — Contenedor 20 pies estándar' },
-  { id: '40STD', name: '40STD — Contenedor 40 pies estándar' },
-  { id: '40HC', name: '40HC — Contenedor 40 pies high cube' },
-  { id: '40HC-REEFER', name: '40HC-REEFER — Contenedor reefer 40 pies' },
-]
-
-const TRANSPORT_MODES = [
-  {
-    id: 'fcl',
-    title: 'FCL',
-    summaryLabel: 'FCL',
-    description: 'Full Container Load. Contenedor completo para tu carga exclusiva.',
-    tags: ['Contenedor Completo', 'Carga Exclusiva'],
-    icon: 'fcl',
-  },
-  {
-    id: 'lcl',
-    title: 'LCL',
-    summaryLabel: 'LCL',
-    description: 'Less than Container Load. Comparte contenedor con otras cargas.',
-    tags: ['Carga Parcial', 'Económico'],
-    icon: 'lcl',
-  },
-  {
-    id: 'air',
-    title: 'Aéreo',
-    summaryLabel: 'AÉREO',
-    description: 'Transporte aéreo. Ideal para cargas urgentes y de alto valor.',
-    tags: ['Rápido', 'Urgente'],
-    icon: 'air',
-  },
-]
 
 function GearIcon() {
   return (
@@ -268,7 +211,7 @@ function SelectionCard({ option, isSelected, onSelect, icon: Icon }) {
       onClick={() => onSelect(option.id)}
     >
       <div className="quote-form__card-icon">
-        <Icon name={option.icon} />
+        <Icon name={option.id} />
       </div>
       <h3>{option.title}</h3>
       <p>{option.description}</p>
@@ -342,25 +285,27 @@ function ChevronDownIcon() {
 }
 
 function SelectionSummary({ operation, transport }) {
+  const { form } = useQuotationCopy()
+
   return (
     <section className="quote-form__summary" aria-live="polite">
       <div className="quote-form__summary-head">
         <span className="quote-form__summary-icon">
           <CheckIcon />
         </span>
-        <h2>Resumen de tu selección</h2>
+        <h2>{form.summary.selection}</h2>
       </div>
 
       <div className="quote-form__summary-grid">
         {operation && (
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Tipo de Operación:</span>
+            <span className="quote-form__summary-label">{form.summary.operationType}</span>
             <span className="quote-form__summary-badge">{operation.summaryLabel}</span>
           </div>
         )}
         {transport && (
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Modo de Transporte:</span>
+            <span className="quote-form__summary-label">{form.summary.transportMode}</span>
             <span className="quote-form__summary-badge">{transport.summaryLabel}</span>
           </div>
         )}
@@ -370,24 +315,26 @@ function SelectionSummary({ operation, transport }) {
 }
 
 function RouteSummary({ originLabel, destinationLabel }) {
+  const { form } = useQuotationCopy()
+
   return (
     <section className="quote-form__summary" aria-live="polite">
       <div className="quote-form__summary-head">
         <span className="quote-form__summary-icon">
           <CheckIcon />
         </span>
-        <h2>Resumen de Origen y Destino</h2>
+        <h2>{form.summary.route}</h2>
       </div>
 
       <div className="quote-form__summary-grid">
         <div className="quote-form__summary-item">
-          <span className="quote-form__summary-label">Origen:</span>
+          <span className="quote-form__summary-label">{form.summary.origin}</span>
           <span className="quote-form__summary-badge quote-form__summary-badge--route">
             {originLabel}
           </span>
         </div>
         <div className="quote-form__summary-item">
-          <span className="quote-form__summary-label">Destino:</span>
+          <span className="quote-form__summary-label">{form.summary.destination}</span>
           <span className="quote-form__summary-badge quote-form__summary-badge--route">
             {destinationLabel}
           </span>
@@ -481,8 +428,6 @@ function computeCargoMetrics(cargo, transportMode) {
       mode: 'fcl',
       quantity,
       containerType,
-      containerLabel:
-        FCL_CONTAINER_TYPES.find((item) => item.id === containerType)?.name ?? containerType,
       isComplete: true,
     }
   }
@@ -543,17 +488,18 @@ function computeCargoMetrics(cargo, transportMode) {
 }
 
 function CargoMetricsPanel({ metrics }) {
+  const { form } = useQuotationCopy()
   const isAir = metrics.mode === 'air'
 
   if (isAir) {
     return (
       <aside className="quote-form__cargo-metrics" aria-live="polite">
         <div className="quote-form__cargo-metric">
-          <strong>Volumen Calculado</strong>
+          <strong>{form.metrics.volume}</strong>
           <span>{formatMetric(metrics.volumeM3)} m³</span>
         </div>
         <div className="quote-form__cargo-metric">
-          <strong>Peso Bruto</strong>
+          <strong>{form.metrics.grossWeight}</strong>
           <span>
             {metrics.actualWeightKg == null
               ? '—'
@@ -561,9 +507,9 @@ function CargoMetricsPanel({ metrics }) {
           </span>
         </div>
         <div className="quote-form__cargo-metric">
-          <strong>Peso Cargable</strong>
+          <strong>{form.metrics.chargeableAir}</strong>
           <span>{formatMetric(metrics.chargeableKg)} kg</span>
-          <small>Mayor entre peso bruto y volumétrico (m³ × 167)</small>
+          <small>{form.metrics.hintAir}</small>
         </div>
       </aside>
     )
@@ -572,45 +518,47 @@ function CargoMetricsPanel({ metrics }) {
   return (
     <aside className="quote-form__cargo-metrics" aria-live="polite">
       <div className="quote-form__cargo-metric">
-        <strong>Volumen Calculado</strong>
+        <strong>{form.metrics.volume}</strong>
         <span>{formatMetric(metrics.volumeM3)} m³</span>
       </div>
       <div className="quote-form__cargo-metric">
-        <strong>Peso Volumétrico</strong>
+        <strong>{form.metrics.volumetricWeight}</strong>
         <span>{formatMetric(metrics.volumetricTons)} TON</span>
       </div>
       <div className="quote-form__cargo-metric">
-        <strong>Peso Tasable</strong>
+        <strong>{form.metrics.chargeableSea}</strong>
         <span>{formatMetric(metrics.chargeableTons)} TON</span>
-        <small>Peso al que se aplicará la tarifa</small>
+        <small>{form.metrics.hintSea}</small>
       </div>
     </aside>
   )
 }
 
 function FclCargoSummary({ metrics, declaredValueUsd }) {
+  const { form } = useQuotationCopy()
+
   return (
     <section className="quote-form__summary" aria-live="polite">
       <div className="quote-form__summary-head">
         <span className="quote-form__summary-icon">
           <CheckIcon />
         </span>
-        <h2>Resumen de Datos de Carga</h2>
+        <h2>{form.summary.cargo}</h2>
       </div>
 
       <div className="quote-form__summary-grid quote-form__summary-grid--cargo">
         <div className="quote-form__summary-item">
-          <span className="quote-form__summary-label">Tipo de contenedor:</span>
+          <span className="quote-form__summary-label">{form.summary.containerType}</span>
           <span className="quote-form__summary-badge quote-form__summary-badge--route">
             {metrics.containerType}
           </span>
         </div>
         <div className="quote-form__summary-item">
-          <span className="quote-form__summary-label">Cantidad:</span>
+          <span className="quote-form__summary-label">{form.summary.quantity}</span>
           <span className="quote-form__summary-badge">{metrics.quantity}</span>
         </div>
         <div className="quote-form__summary-item">
-          <span className="quote-form__summary-label">Valor declarado:</span>
+          <span className="quote-form__summary-label">{form.summary.declaredValue}</span>
           <span className="quote-form__summary-badge quote-form__summary-badge--soft">
             USD {Number(declaredValueUsd).toLocaleString('en-US')}
           </span>
@@ -621,6 +569,7 @@ function FclCargoSummary({ metrics, declaredValueUsd }) {
 }
 
 function CargoSummary({ metrics, declaredValueUsd }) {
+  const { form } = useQuotationCopy()
   const dimensionsLabel = `${metrics.length} x ${metrics.width} x ${metrics.height} m`
   const isAir = metrics.mode === 'air'
 
@@ -630,29 +579,29 @@ function CargoSummary({ metrics, declaredValueUsd }) {
         <span className="quote-form__summary-icon">
           <CheckIcon />
         </span>
-        <h2>Resumen de Datos de Carga</h2>
+        <h2>{form.summary.cargo}</h2>
       </div>
 
       <div className="quote-form__summary-grid quote-form__summary-grid--cargo">
         <div className="quote-form__summary-col">
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Cantidad:</span>
+            <span className="quote-form__summary-label">{form.summary.quantity}</span>
             <span className="quote-form__summary-badge">{metrics.quantity}</span>
           </div>
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Dimensiones:</span>
+            <span className="quote-form__summary-label">{form.summary.dimensions}</span>
             <span className="quote-form__summary-badge quote-form__summary-badge--route">
               {dimensionsLabel}
             </span>
           </div>
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Peso:</span>
+            <span className="quote-form__summary-label">{form.summary.weight}</span>
             <span className="quote-form__summary-badge quote-form__summary-badge--soft">
               {metrics.weightKg} kg
             </span>
           </div>
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Valor declarado:</span>
+            <span className="quote-form__summary-label">{form.summary.declaredValue}</span>
             <span className="quote-form__summary-badge quote-form__summary-badge--soft">
               USD {Number(declaredValueUsd).toLocaleString('en-US')}
             </span>
@@ -661,14 +610,14 @@ function CargoSummary({ metrics, declaredValueUsd }) {
 
         <div className="quote-form__summary-col">
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Volumen:</span>
+            <span className="quote-form__summary-label">{form.summary.volume}</span>
             <span className="quote-form__summary-badge quote-form__summary-badge--soft">
               {formatMetric(metrics.volumeM3)} m³
             </span>
           </div>
           <div className="quote-form__summary-item">
             <span className="quote-form__summary-label">
-              {isAir ? 'Peso Bruto:' : 'Peso Volumétrico:'}
+              {isAir ? form.summary.grossWeight : form.summary.volumetricWeight}
             </span>
             <span className="quote-form__summary-badge quote-form__summary-badge--soft">
               {isAir
@@ -681,7 +630,7 @@ function CargoSummary({ metrics, declaredValueUsd }) {
           <div className="quote-form__summary-item quote-form__summary-item--stack">
             <div className="quote-form__summary-item-row">
               <span className="quote-form__summary-label">
-                {isAir ? 'Peso Cargable:' : 'Peso Tasable:'}
+                {isAir ? form.summary.chargeableWeightAir : form.summary.chargeableWeightSea}
               </span>
               <span className="quote-form__summary-badge quote-form__summary-badge--soft">
                 {isAir
@@ -690,9 +639,7 @@ function CargoSummary({ metrics, declaredValueUsd }) {
               </span>
             </div>
             <small className="quote-form__summary-hint">
-              {isAir
-                ? 'Mayor entre peso bruto y volumétrico (m³ × 167)'
-                : 'Peso al que se aplicará la tarifa'}
+              {isAir ? form.metrics.hintAir : form.metrics.hintSea}
             </small>
           </div>
         </div>
@@ -702,9 +649,11 @@ function CargoSummary({ metrics, declaredValueUsd }) {
 }
 
 function LockedCountryField({ name, hint }) {
+  const { form } = useQuotationCopy()
+
   return (
     <div className="quote-form__field">
-      <span className="quote-form__field-label">País</span>
+      <span className="quote-form__field-label">{form.fields.country}</span>
       <div className="quote-form__locked-country" aria-live="polite">
         <strong>{name}</strong>
         <span>{hint}</span>
@@ -713,8 +662,8 @@ function LockedCountryField({ name, hint }) {
   )
 }
 
-function formatQuoteDate(date) {
-  return new Intl.DateTimeFormat('es-CO', {
+function formatQuoteDate(date, locale) {
+  return new Intl.DateTimeFormat(locale, {
     day: 'numeric',
     month: 'long',
     year: 'numeric',
@@ -729,7 +678,9 @@ function ReviewBadge({ children, tone = 'accent' }) {
   )
 }
 
-function ReviewSection({ icon: Icon, title, onEdit, editLabel = 'Editar', children }) {
+function ReviewSection({ icon: Icon, title, onEdit, children }) {
+  const { form } = useQuotationCopy()
+
   return (
     <section className="quote-form__review-card">
       <header className="quote-form__review-head">
@@ -742,7 +693,7 @@ function ReviewSection({ icon: Icon, title, onEdit, editLabel = 'Editar', childr
         {onEdit && (
           <button type="button" className="quote-form__review-edit" onClick={onEdit}>
             <PencilIcon />
-            {editLabel}
+            {form.review.edit}
           </button>
         )}
       </header>
@@ -752,23 +703,27 @@ function ReviewSection({ icon: Icon, title, onEdit, editLabel = 'Editar', childr
 }
 
 function QuoteSummaryLoader() {
+  const { form } = useQuotationCopy()
+
   return (
     <div className="quote-form__loader" role="status" aria-live="polite">
       <span className="quote-form__spinner" aria-hidden="true" />
-      <p>Cargando el resumen de su cotización…</p>
+      <p>{form.loading.summary}</p>
     </div>
   )
 }
 
 function QuoteSuccess({ email, quoteNumber, onFinish }) {
+  const { form } = useQuotationCopy()
+
   return (
     <section className="quote-form__success" role="status" aria-live="polite">
       <span className="quote-form__success-icon" aria-hidden="true">
         <CheckIcon />
       </span>
-      <h2>¡Cotización enviada!</h2>
+      <h2>{form.success.title}</h2>
       <p>
-        Recibirás un correo en <strong>{email}</strong> con el resultado de tu cotización
+        {form.success.leadStart} <strong>{email}</strong> {form.success.leadEnd}
         {quoteNumber ? (
           <>
             {' '}
@@ -778,7 +733,7 @@ function QuoteSuccess({ email, quoteNumber, onFinish }) {
         .
       </p>
       <button type="button" className="quote-form__nav quote-form__nav--next" onClick={onFinish}>
-        Volver al inicio
+        {form.success.finish}
       </button>
     </section>
   )
@@ -795,19 +750,21 @@ function ContactStepForm({
   acceptedDataPolicy,
   onAcceptedDataPolicyChange,
 }) {
+  const { form } = useQuotationCopy()
+
   return (
     <section className="quote-form__section" aria-labelledby="quote-form-contact-label">
       <h2 id="quote-form-contact-label" className="quote-form__section-label">
         <InfoIcon />
-        Datos de contacto
+        {form.sections.contact}
       </h2>
 
       <div className="quote-form__contact">
         <FieldInput
           id="quote-contact-name"
-          label="Nombre completo"
+          label={form.contact.name}
           type="text"
-          placeholder="Tu nombre"
+          placeholder={form.contact.namePlaceholder}
           value={contact.name}
           onChange={(event) => onChange('name', event.target.value)}
           disabled={disabled}
@@ -815,10 +772,10 @@ function ContactStepForm({
 
         <FieldInput
           id="quote-contact-email"
-          label="Correo electrónico"
+          label={form.contact.email}
           type="email"
           inputMode="email"
-          placeholder="tu@correo.com"
+          placeholder={form.contact.emailPlaceholder}
           value={contact.email}
           onChange={(event) => onChange('email', event.target.value)}
           disabled={disabled}
@@ -826,11 +783,11 @@ function ContactStepForm({
 
         <div className="quote-form__field">
           <span className="quote-form__field-label" id="quote-contact-phone-label">
-            Teléfono celular
+            {form.contact.phone}
           </span>
           <div className="quote-form__phone-row" role="group" aria-labelledby="quote-contact-phone-label">
             <label className="visually-hidden" htmlFor="quote-contact-dial">
-              Código de país
+              {form.contact.dialLabel}
             </label>
             <select
               id="quote-contact-dial"
@@ -851,7 +808,7 @@ function ContactStepForm({
               type="tel"
               inputMode="tel"
               autoComplete="tel-national"
-              placeholder="320 123 4567"
+              placeholder={form.contact.phonePlaceholder}
               value={contact.phone}
               onChange={(event) => onChange('phone', event.target.value)}
               disabled={disabled}
@@ -864,7 +821,9 @@ function ContactStepForm({
           checked={acceptedDataPolicy}
           onChange={onAcceptedDataPolicyChange}
           disabled={disabled}
-          notice={QUOTE_PRIVACY_NOTICE}
+          notice={form.contact.privacyNotice}
+          label={form.contact.consentLabel}
+          policyLabel={form.contact.consentPolicy}
         />
 
         {TURNSTILE_SITE_KEY ? (
@@ -883,7 +842,7 @@ function ContactStepForm({
           </div>
         ) : (
           <p className="quote-form__error" role="alert">
-            Falta configurar VITE_TURNSTILE_SITE_KEY.
+            {form.contact.captchaMissing}
           </p>
         )}
 
@@ -894,15 +853,15 @@ function ContactStepForm({
         ) : null}
 
         <p className="quote-form__contact-note">
-          Al enviar, te enviaremos un correo con el resultado de tu cotización.
+          {form.contact.note}
         </p>
       </div>
     </section>
   )
 }
 
-function getLocationPointLabel(transportMode) {
-  return transportMode === 'air' ? 'Aeropuerto' : 'Puerto'
+function getLocationPointLabel(transportMode, point) {
+  return transportMode === 'air' ? point.air : point.sea
 }
 
 function QuoteReview({
@@ -917,53 +876,56 @@ function QuoteReview({
   declaredValueUsd,
   onEditStep,
 }) {
+  const { form, locale } = useQuotationCopy()
   const isFcl = cargoMetrics?.mode === 'fcl'
   const isAir = cargoMetrics?.mode === 'air'
-  const locationPointLabel = getLocationPointLabel(transport?.id)
+  const locationPointLabel = getLocationPointLabel(transport?.id, form.point)
 
   return (
     <div className="quote-form__review">
-      <ReviewSection icon={InfoIcon} title="Información de la Cotización">
+      <ReviewSection icon={InfoIcon} title={form.review.quoteInfo}>
         <div className="quote-form__review-grid">
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Número de Cotización:</span>
+            <span className="quote-form__summary-label">{form.review.quoteNumber}</span>
             <ReviewBadge tone="soft">
-              {quoteMeta.number ?? 'Se asignará al confirmar'}
+              {quoteMeta.number ?? form.review.quoteNumberPending}
             </ReviewBadge>
           </div>
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Fecha de Creación:</span>
-            <span className="quote-form__review-text">{formatQuoteDate(quoteMeta.createdAt)}</span>
+            <span className="quote-form__summary-label">{form.review.createdAt}</span>
+            <span className="quote-form__review-text">
+              {formatQuoteDate(quoteMeta.createdAt, locale)}
+            </span>
           </div>
         </div>
       </ReviewSection>
 
       <ReviewSection
         icon={GearIcon}
-        title="Configuración de Operación"
+        title={form.review.operationSetup}
         onEdit={() => onEditStep(1)}
       >
         <div className="quote-form__review-grid">
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Tipo de Operación:</span>
+            <span className="quote-form__summary-label">{form.summary.operationType}</span>
             <ReviewBadge>{operation?.title?.toUpperCase()}</ReviewBadge>
           </div>
           <div className="quote-form__summary-item">
-            <span className="quote-form__summary-label">Modo de Transporte:</span>
+            <span className="quote-form__summary-label">{form.summary.transportMode}</span>
             <ReviewBadge>{transport?.summaryLabel}</ReviewBadge>
           </div>
         </div>
       </ReviewSection>
 
-      <ReviewSection icon={PinIcon} title="Origen y Destino" onEdit={() => onEditStep(2)}>
+      <ReviewSection icon={PinIcon} title={form.review.route} onEdit={() => onEditStep(2)}>
         <div className="quote-form__review-route">
           <div className="quote-form__review-route-block">
             <h3>
               <RouteArrowIcon direction="up" />
-              Origen
+              {form.review.origin}
             </h3>
             <p>
-              <strong>País:</strong> {originCountry?.name}
+              <strong>{form.review.country}</strong> {originCountry?.name}
             </p>
             <p>
               <strong>{locationPointLabel}:</strong> {originPort?.name}
@@ -972,10 +934,10 @@ function QuoteReview({
           <div className="quote-form__review-route-block">
             <h3>
               <RouteArrowIcon direction="down" />
-              Destino
+              {form.review.destination}
             </h3>
             <p>
-              <strong>País:</strong> {destinationCountry?.name}
+              <strong>{form.review.country}</strong> {destinationCountry?.name}
             </p>
             <p>
               <strong>{locationPointLabel}:</strong> {destinationPort?.name}
@@ -984,19 +946,19 @@ function QuoteReview({
         </div>
       </ReviewSection>
 
-      <ReviewSection icon={CubeIcon} title="Información de Carga" onEdit={() => onEditStep(3)}>
+      <ReviewSection icon={CubeIcon} title={form.review.cargoInfo} onEdit={() => onEditStep(3)}>
         {isFcl ? (
           <div className="quote-form__review-grid quote-form__review-grid--cargo">
             <div className="quote-form__summary-item">
-              <span className="quote-form__summary-label">Tipo de contenedor:</span>
+              <span className="quote-form__summary-label">{form.summary.containerType}</span>
               <ReviewBadge tone="soft">{cargoMetrics.containerType}</ReviewBadge>
             </div>
             <div className="quote-form__summary-item">
-              <span className="quote-form__summary-label">Cantidad de contenedores:</span>
+              <span className="quote-form__summary-label">{form.review.containerQuantity}</span>
               <ReviewBadge>{cargoMetrics.quantity}</ReviewBadge>
             </div>
             <div className="quote-form__summary-item">
-              <span className="quote-form__summary-label">Valor declarado:</span>
+              <span className="quote-form__summary-label">{form.summary.declaredValue}</span>
               <ReviewBadge tone="soft">
                 USD {Number(declaredValueUsd).toLocaleString('en-US')}
               </ReviewBadge>
@@ -1006,26 +968,26 @@ function QuoteReview({
           <>
             <div className="quote-form__review-grid quote-form__review-grid--cargo">
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Cantidad de Cargas:</span>
+                <span className="quote-form__summary-label">{form.review.cargoQuantity}</span>
                 <ReviewBadge>{cargoMetrics.quantity}</ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Dimensiones:</span>
+                <span className="quote-form__summary-label">{form.summary.dimensions}</span>
                 <ReviewBadge tone="soft">
                   {cargoMetrics.length} x {cargoMetrics.width} x {cargoMetrics.height} m
                 </ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Peso:</span>
+                <span className="quote-form__summary-label">{form.summary.weight}</span>
                 <ReviewBadge tone="soft">{cargoMetrics.weightKg} kg</ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Volumen:</span>
+                <span className="quote-form__summary-label">{form.summary.volume}</span>
                 <ReviewBadge tone="soft">{formatMetric(cargoMetrics.volumeM3)} m³</ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
                 <span className="quote-form__summary-label">
-                  {isAir ? 'Peso Bruto:' : 'Peso Volumétrico:'}
+                  {isAir ? form.summary.grossWeight : form.summary.volumetricWeight}
                 </span>
                 <ReviewBadge tone="soft">
                   {isAir
@@ -1037,7 +999,7 @@ function QuoteReview({
               </div>
               <div className="quote-form__summary-item">
                 <span className="quote-form__summary-label">
-                  {isAir ? 'Peso Cargable:' : 'Peso Tasable:'}
+                  {isAir ? form.summary.chargeableWeightAir : form.summary.chargeableWeightSea}
                 </span>
                 <ReviewBadge tone="soft">
                   {isAir
@@ -1046,7 +1008,7 @@ function QuoteReview({
                 </ReviewBadge>
               </div>
               <div className="quote-form__summary-item">
-                <span className="quote-form__summary-label">Valor declarado:</span>
+                <span className="quote-form__summary-label">{form.summary.declaredValue}</span>
                 <ReviewBadge tone="soft">
                   USD {Number(declaredValueUsd).toLocaleString('en-US')}
                 </ReviewBadge>
@@ -1054,9 +1016,7 @@ function QuoteReview({
             </div>
             <p className="quote-form__review-note">
               <InfoIcon />
-              {isAir
-                ? 'El peso cargable es el mayor entre el peso bruto y el volumétrico (m³ × 167).'
-                : 'El peso tasable es el peso al que se aplicará la tarifa.'}
+              {isAir ? form.metrics.noteAir : form.metrics.noteSea}
             </p>
           </>
         )}
@@ -1066,6 +1026,7 @@ function QuoteReview({
 }
 
 export default function QuotationForm({ onBack }) {
+  const { form } = useQuotationCopy()
   const [step, setStep] = useState(1)
   const [operationType, setOperationType] = useState(null)
   const [transportMode, setTransportMode] = useState(null)
@@ -1075,7 +1036,7 @@ export default function QuotationForm({ onBack }) {
   const [destinationPortId, setDestinationPortId] = useState('')
   const [routeOptions, setRouteOptions] = useState(null)
   const [routesLoading, setRoutesLoading] = useState(false)
-  const [routesError, setRoutesError] = useState('')
+  const [routesError, setRoutesError] = useState(null)
   const [routesReloadKey, setRoutesReloadKey] = useState(0)
   const [cargo, setCargo] = useState({
     quantity: '1',
@@ -1102,8 +1063,8 @@ export default function QuotationForm({ onBack }) {
   const turnstileRef = useRef(null)
   const submittingRef = useRef(false)
 
-  const selectedOperation = OPERATION_TYPES.find((item) => item.id === operationType)
-  const selectedTransport = TRANSPORT_MODES.find((item) => item.id === transportMode)
+  const selectedOperation = form.operations.find((item) => item.id === operationType)
+  const selectedTransport = form.transports.find((item) => item.id === transportMode)
   const originCountries = routeOptions?.origin?.countries ?? []
   const destinationCountries = routeOptions?.destination?.countries ?? []
   const originLockedCountry = routeOptions?.origin?.lockedCountry ?? null
@@ -1119,7 +1080,7 @@ export default function QuotationForm({ onBack }) {
   const isStep1Complete = Boolean(operationType && transportMode)
   const isFcl = transportMode === 'fcl'
   const isAir = transportMode === 'air'
-  const locationPointLabel = getLocationPointLabel(transportMode)
+  const locationPointLabel = getLocationPointLabel(transportMode, form.point)
   const locationPointLabelLower = locationPointLabel.toLowerCase()
   const isFclContainerSelected = !isFcl || Boolean(cargo.containerType)
   const isStep2Complete =
@@ -1139,46 +1100,38 @@ export default function QuotationForm({ onBack }) {
 
   const progress = Math.round((step / TOTAL_STEPS) * 100)
 
+  const steps = form.steps
   const stepCopyByStep = {
-    1: {
-      title: 'Configura tu operación logística',
-      subtitle: 'Selecciona el tipo de operación y el modo de transporte',
-    },
+    1: steps.s1,
     2: {
-      title: isFcl ? 'Contenedor, origen y destino' : 'Origen y Destino',
+      title: isFcl ? steps.s2.titleFcl : steps.s2.title,
       subtitle: isFcl
-        ? 'Selecciona el tipo de contenedor y luego el origen y destino disponibles'
+        ? steps.s2.subtitleFcl
         : isAir
-          ? 'Selecciona el país y aeropuerto de origen y destino'
-          : 'Selecciona el país y puerto de origen y destino',
+          ? steps.s2.subtitleAir
+          : steps.s2.subtitle,
     },
     3: {
-      title: 'Datos de la Carga',
-      subtitle: isFcl
-        ? 'Indica la cantidad de contenedores y el valor declarado'
-        : 'Ingresa los datos de tu carga',
+      title: steps.s3.title,
+      subtitle: isFcl ? steps.s3.subtitleFcl : steps.s3.subtitle,
     },
     4: {
-      title: 'Resumen de su cotización',
-      subtitle: summaryLoading
-        ? 'Estamos preparando tu resumen'
-        : 'Revisa los datos antes de continuar',
+      title: steps.s4.title,
+      subtitle: summaryLoading ? steps.s4.subtitleLoading : steps.s4.subtitle,
     },
     5: {
-      title: quoteSubmitted ? 'Cotización enviada' : 'Datos de contacto',
-      subtitle: quoteSubmitted
-        ? 'Revisa tu correo para el resultado'
-        : 'Ingresa tus datos para enviarte el resultado de la cotización',
+      title: quoteSubmitted ? steps.s5.titleSent : steps.s5.title,
+      subtitle: quoteSubmitted ? steps.s5.subtitleSent : steps.s5.subtitle,
     },
   }
   const stepCopy = stepCopyByStep[step] ?? {
-    title: `Paso ${step}`,
-    subtitle: 'Continúa completando tu cotización',
+    title: steps.fallbackTitle(step),
+    subtitle: steps.fallbackSubtitle,
   }
 
   const cargoSectionTitle = selectedTransport
-    ? `Datos de la Carga ${selectedTransport.title}`
-    : 'Datos de la Carga'
+    ? `${form.sections.cargo} ${selectedTransport.title}`
+    : form.sections.cargo
 
   const phoneDigits = contact.phone.replace(/\D/g, '')
   const isStep5Complete =
@@ -1217,21 +1170,21 @@ export default function QuotationForm({ onBack }) {
     setDestinationCountryId('')
     setDestinationPortId('')
     setRouteOptions(null)
-    setRoutesError('')
+    setRoutesError(null)
   }
 
   useEffect(() => {
     if (step !== 2 || !operationType || !transportMode) return undefined
     if (isFcl && !cargo.containerType) {
       setRouteOptions(null)
-      setRoutesError('')
+      setRoutesError(null)
       setRoutesLoading(false)
       return undefined
     }
 
     let cancelled = false
     setRoutesLoading(true)
-    setRoutesError('')
+    setRoutesError(null)
 
     fetchQuoteRoutes({
       operationType,
@@ -1252,7 +1205,7 @@ export default function QuotationForm({ onBack }) {
       .catch((error) => {
         if (cancelled) return
         setRouteOptions(null)
-        setRoutesError(error.message || 'No se pudieron cargar orígenes y destinos')
+        setRoutesError(error.message || '')
       })
       .finally(() => {
         if (!cancelled) setRoutesLoading(false)
@@ -1315,7 +1268,7 @@ export default function QuotationForm({ onBack }) {
     setDestinationCountryId('')
     setDestinationPortId('')
     setRouteOptions(null)
-    setRoutesError('')
+    setRoutesError(null)
   }
 
   const handleTransportSelect = (nextTransportMode) => {
@@ -1424,7 +1377,7 @@ export default function QuotationForm({ onBack }) {
       setAcceptedDataPolicy(false)
       clearCaptcha()
     } catch (error) {
-      setSubmitError(error.message || 'No se pudo enviar la cotización')
+      setSubmitError(error.message || form.errors.submit)
       resetCaptcha()
     } finally {
       submittingRef.current = false
@@ -1457,10 +1410,8 @@ export default function QuotationForm({ onBack }) {
     <article className="quote-form">
       <div className="quote-form__progress">
         <div className="quote-form__progress-meta">
-          <span>
-            Paso {step} de {TOTAL_STEPS}
-          </span>
-          <span>{progress}% completado</span>
+          <span>{form.progress.stepOf(step, TOTAL_STEPS)}</span>
+          <span>{form.progress.completed(progress)}</span>
         </div>
         <div
           className="quote-form__progress-bar"
@@ -1468,7 +1419,7 @@ export default function QuotationForm({ onBack }) {
           aria-valuenow={progress}
           aria-valuemin={0}
           aria-valuemax={100}
-          aria-label={`Progreso de cotización: ${progress}%`}
+          aria-label={form.progress.aria(progress)}
         >
           <span style={{ width: `${progress}%` }} />
         </div>
@@ -1485,11 +1436,11 @@ export default function QuotationForm({ onBack }) {
             <section className="quote-form__section" aria-labelledby="quote-form-operation-label">
               <h2 id="quote-form-operation-label" className="quote-form__section-label">
                 <GearIcon />
-                Tipo de Operación
+                {form.sections.operation}
               </h2>
 
               <div className="quote-form__cards quote-form__cards--two">
-                {OPERATION_TYPES.map((option) => (
+                {form.operations.map((option) => (
                   <SelectionCard
                     key={option.id}
                     option={option}
@@ -1504,11 +1455,11 @@ export default function QuotationForm({ onBack }) {
             <section className="quote-form__section" aria-labelledby="quote-form-transport-label">
               <h2 id="quote-form-transport-label" className="quote-form__section-label">
                 <TruckIcon />
-                Modo de Transporte
+                {form.sections.transport}
               </h2>
 
               <div className="quote-form__cards quote-form__cards--three">
-                {TRANSPORT_MODES.map((option) => (
+                {form.transports.map((option) => (
                   <SelectionCard
                     key={option.id}
                     option={option}
@@ -1532,19 +1483,19 @@ export default function QuotationForm({ onBack }) {
               <section className="quote-form__section" aria-labelledby="quote-form-container-label">
                 <h2 id="quote-form-container-label" className="quote-form__section-label">
                   <CubeIcon />
-                  Tipo de contenedor
+                  {form.sections.containerType}
                 </h2>
                 <FieldSelect
                   id="quote-route-container-type"
-                  label="Tipo de contenedor"
+                  label={form.fields.containerType}
                   value={cargo.containerType}
                   onChange={handleContainerTypeChange}
-                  options={FCL_CONTAINER_TYPES}
-                  placeholder="Selecciona un tipo de contenedor"
+                  options={form.containerTypes}
+                  placeholder={form.placeholders.containerType}
                 />
                 {!cargo.containerType && (
                   <p className="quote-form__summary-hint">
-                    Elige el contenedor para ver solo los orígenes y destinos disponibles en CRM.
+                    {form.hints.containerFirst}
                   </p>
                 )}
               </section>
@@ -1553,18 +1504,18 @@ export default function QuotationForm({ onBack }) {
             {isFcl && !cargo.containerType ? null : routesLoading ? (
               <div className="quote-form__loader" role="status" aria-live="polite">
                 <span className="quote-form__spinner" aria-hidden="true" />
-                <p>Cargando orígenes y destinos…</p>
+                <p>{form.loading.routes}</p>
               </div>
-            ) : routesError ? (
+            ) : routesError !== null ? (
               <section className="quote-form__placeholder" aria-live="polite">
-                <p className="quote-form__error">{routesError}</p>
+                <p className="quote-form__error">{routesError || form.errors.routes}</p>
                 <button
                   type="button"
                   className="quote-form__nav quote-form__nav--next"
                   onClick={() => setRoutesReloadKey((current) => current + 1)}
                   style={{ marginTop: '0.75rem' }}
                 >
-                  Reintentar
+                  {form.nav.retry}
                 </button>
               </section>
             ) : (
@@ -1574,7 +1525,7 @@ export default function QuotationForm({ onBack }) {
                   destinationCountries.length === 0 && (
                     <section className="quote-form__placeholder" aria-live="polite">
                       <p className="quote-form__error">
-                        No hay rutas configuradas en CRM para este tipo de contenedor.
+                        {form.errors.noRoutesForContainer}
                       </p>
                     </section>
                   )}
@@ -1584,23 +1535,23 @@ export default function QuotationForm({ onBack }) {
                     <section className="quote-form__section" aria-labelledby="quote-form-origin-label">
                       <h2 id="quote-form-origin-label" className="quote-form__section-label">
                         <PinIcon />
-                        País de Origen
+                        {form.sections.originCountry}
                       </h2>
 
                       <div className="quote-form__route-grid">
                         {originLockedCountry ? (
                           <LockedCountryField
                             name={originLockedCountry.name}
-                            hint="País seleccionado"
+                            hint={form.hints.lockedCountry}
                           />
                         ) : (
                           <FieldSelect
                             id="quote-origin-country"
-                            label="País"
+                            label={form.fields.country}
                             value={originCountryId}
                             onChange={handleOriginCountryChange}
                             options={originCountries}
-                            placeholder="Selecciona un país"
+                            placeholder={form.placeholders.country}
                           />
                         )}
                         <FieldSelect
@@ -1611,8 +1562,8 @@ export default function QuotationForm({ onBack }) {
                           options={originPorts}
                           placeholder={
                             originCountryId
-                              ? `Selecciona un ${locationPointLabelLower}`
-                              : 'Primero elige el país'
+                              ? form.placeholders.point(locationPointLabelLower)
+                              : form.placeholders.pointLocked
                           }
                           disabled={!originCountryId}
                         />
@@ -1625,23 +1576,23 @@ export default function QuotationForm({ onBack }) {
                     >
                       <h2 id="quote-form-destination-label" className="quote-form__section-label">
                         <PinIcon />
-                        País de Destino
+                        {form.sections.destinationCountry}
                       </h2>
 
                       <div className="quote-form__route-grid">
                         {destinationLockedCountry ? (
                           <LockedCountryField
                             name={destinationLockedCountry.name}
-                            hint="País seleccionado"
+                            hint={form.hints.lockedCountry}
                           />
                         ) : (
                           <FieldSelect
                             id="quote-destination-country"
-                            label="País"
+                            label={form.fields.country}
                             value={destinationCountryId}
                             onChange={handleDestinationCountryChange}
                             options={destinationCountries}
-                            placeholder="Selecciona un país"
+                            placeholder={form.placeholders.country}
                           />
                         )}
                         <FieldSelect
@@ -1652,8 +1603,8 @@ export default function QuotationForm({ onBack }) {
                           options={destinationPorts}
                           placeholder={
                             destinationCountryId
-                              ? `Selecciona un ${locationPointLabelLower}`
-                              : 'Primero elige el país'
+                              ? form.placeholders.point(locationPointLabelLower)
+                              : form.placeholders.pointLocked
                           }
                           disabled={!destinationCountryId}
                         />
@@ -1683,7 +1634,7 @@ export default function QuotationForm({ onBack }) {
                   {isFcl ? (
                     <FieldInput
                       id="quote-cargo-quantity"
-                      label="Cantidad de contenedores"
+                      label={form.fields.containerQuantity}
                       type="number"
                       inputMode="numeric"
                       min="1"
@@ -1695,7 +1646,7 @@ export default function QuotationForm({ onBack }) {
                     <>
                       <FieldInput
                         id="quote-cargo-quantity"
-                        label="Cantidad de Cargas"
+                        label={form.fields.cargoQuantity}
                         type="number"
                         inputMode="numeric"
                         min="1"
@@ -1707,34 +1658,34 @@ export default function QuotationForm({ onBack }) {
                       <div className="quote-form__cargo-dims">
                         <FieldInput
                           id="quote-cargo-length"
-                          label="Largo (metros)"
+                          label={form.fields.length}
                           type="number"
                           inputMode="decimal"
                           min="0"
                           step="0.01"
-                          placeholder="0.00"
+                          placeholder={form.placeholders.decimal}
                           value={cargo.length}
                           onChange={updateCargoField('length')}
                         />
                         <FieldInput
                           id="quote-cargo-width"
-                          label="Ancho (metros)"
+                          label={form.fields.width}
                           type="number"
                           inputMode="decimal"
                           min="0"
                           step="0.01"
-                          placeholder="0.00"
+                          placeholder={form.placeholders.decimal}
                           value={cargo.width}
                           onChange={updateCargoField('width')}
                         />
                         <FieldInput
                           id="quote-cargo-height"
-                          label="Alto (metros)"
+                          label={form.fields.height}
                           type="number"
                           inputMode="decimal"
                           min="0"
                           step="0.01"
-                          placeholder="0.00"
+                          placeholder={form.placeholders.decimal}
                           value={cargo.height}
                           onChange={updateCargoField('height')}
                         />
@@ -1742,12 +1693,12 @@ export default function QuotationForm({ onBack }) {
 
                       <FieldInput
                         id="quote-cargo-weight"
-                        label="Peso (kg)"
+                        label={form.fields.weight}
                         type="number"
                         inputMode="decimal"
                         min="0"
                         step="0.01"
-                        placeholder="0.00"
+                        placeholder={form.placeholders.decimal}
                         value={cargo.weight}
                         onChange={updateCargoField('weight')}
                       />
@@ -1756,19 +1707,17 @@ export default function QuotationForm({ onBack }) {
 
                   <FieldInput
                     id="quote-cargo-declared-value"
-                    label="Valor declarado de la carga (USD)"
+                    label={form.fields.declaredValue}
                     type="number"
                     inputMode="decimal"
                     min="0"
                     step="0.01"
-                    placeholder="0.00"
+                    placeholder={form.placeholders.decimal}
                     value={cargo.declaredValueUsd}
                     onChange={updateCargoField('declaredValueUsd')}
                   />
                   <p className="quote-form__summary-hint">
-                    {isFcl
-                      ? 'Requerido para el cálculo del seguro y otros conceptos porcentuales.'
-                      : 'Monto en dólares estadounidenses. Requerido para seguros y conceptos porcentuales.'}
+                    {isFcl ? form.hints.declaredValueFcl : form.hints.declaredValue}
                   </p>
                 </div>
 
@@ -1838,7 +1787,7 @@ export default function QuotationForm({ onBack }) {
         <footer className="quote-form__footer">
           <button type="button" className="quote-form__nav quote-form__nav--back" onClick={handleBack}>
             <ArrowLeftIcon />
-            Volver
+            {form.nav.back}
           </button>
           <button
             type="button"
@@ -1846,7 +1795,11 @@ export default function QuotationForm({ onBack }) {
             disabled={!canContinue}
             onClick={handleContinue}
           >
-            {step === 5 ? (submitting ? 'Enviando…' : 'Enviar cotización') : 'Continuar'}
+            {step === 5
+              ? submitting
+                ? form.nav.submitting
+                : form.nav.submit
+              : form.nav.continue}
             {step === 5 ? null : <ArrowRightIcon />}
           </button>
         </footer>

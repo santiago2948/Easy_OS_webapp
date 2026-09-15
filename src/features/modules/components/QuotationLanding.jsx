@@ -1,28 +1,4 @@
-const BENEFITS = ['Cotización en 7 minutos', '20+ países', 'Sin compromiso']
-
-const SERVICES = [
-  {
-    id: 'sea',
-    title: 'Marítimo',
-    description: 'FCL, LCL y carga de proyectos.',
-    tags: ['FCL', 'LCL'],
-    icon: 'sea',
-  },
-  {
-    id: 'air',
-    title: 'Aéreo',
-    description: 'Express y consolidada para cargas urgentes.',
-    tags: ['Express', 'Urgente'],
-    icon: 'air',
-  },
-  {
-    id: 'road',
-    title: 'Terrestre',
-    description: 'Distribución nacional e internacional.',
-    tags: ['Nacional', 'Última milla'],
-    icon: 'road',
-  },
-]
+import { useQuotationCopy } from '../content/quotationCopy'
 
 function ServiceIcon({ name }) {
   if (name === 'sea') {
@@ -68,20 +44,20 @@ function ServiceIcon({ name }) {
 }
 
 export default function QuotationLanding({ onStartQuote }) {
+  const { landing } = useQuotationCopy()
+
   return (
     <div className="quote-shell">
       <div className="quote-shell__intro">
-        <p className="orbit-kicker">Cotización B2B</p>
+        <p className="orbit-kicker">{landing.kicker}</p>
         <h1>
-          Cotiza tu operación en{' '}
-          <span className="quote-shell__accent">pocos minutos</span>
+          {landing.titleLead}{' '}
+          <span className="quote-shell__accent">{landing.titleAccent}</span>
         </h1>
-        <p className="quote-shell__lead">
-          Marítimo, aéreo o terrestre. Una propuesta revisada, lista para decidir.
-        </p>
+        <p className="quote-shell__lead">{landing.lead}</p>
 
         <ul className="quote-shell__benefits">
-          {BENEFITS.map((item) => (
+          {landing.benefits.map((item) => (
             <li key={item}>
               <span className="quote-shell__check" aria-hidden="true" />
               {item}
@@ -90,15 +66,15 @@ export default function QuotationLanding({ onStartQuote }) {
         </ul>
 
         <button type="button" className="btn btn--primary quote-shell__cta" onClick={onStartQuote}>
-          Iniciar cotización
+          {landing.cta}
         </button>
       </div>
 
       <div className="quote-shell__services">
-        {SERVICES.map((service) => (
+        {landing.services.map((service) => (
           <article key={service.id} className="quote-service-card">
             <div className="quote-service-card__icon">
-              <ServiceIcon name={service.icon} />
+              <ServiceIcon name={service.id} />
             </div>
             <div className="quote-service-card__body">
               <h3>{service.title}</h3>

@@ -1,0 +1,52 @@
+# Easy Logistics
+
+> Freight broker B2B en Colombia. Conecta empresas importadoras con operadores
+> de transporte marítimo, aéreo y terrestre, y coordina la operación de punta a
+> punta con un solo interlocutor responsable.
+
+Easy Logistics Colombia S.A.S — Avenida calle 26 # 69-76, Torre 3, Of. 1501, Bogotá, Colombia.
+Contacto: c.hernandez@easy-logistics.co · (+57) 320 8976999
+
+## Qué hace
+
+- **Flete marítimo FCL** — contenedor completo (20STD, 40STD, 40HC, 40HC reefer).
+- **Flete marítimo LCL** — carga consolidada, tarifada sobre el peso tasable
+  (el mayor entre peso real y volumen).
+- **Carga aérea** — peso cargable = mayor entre peso bruto y volumétrico (m³ × 167).
+- **Transporte terrestre** — recogida en origen y última milla en destino.
+- **Coordinación aduanera** — despacho de exportación en origen cuando el
+  incoterm lo exige; declaración y levante en Colombia.
+- **Seguro de carga y almacenamiento** según lo requiera el recorrido.
+
+## A quién sirve
+
+Empresas importadoras en Colombia que traen mercancía desde Asia, Europa y
+América hacia puertos y aeropuertos colombianos.
+
+## Cómo se cotiza
+
+Cotizador en línea: origen, destino, incoterm, tipo de operación (importación o
+exportación), modo de transporte y datos de la carga (cantidad, dimensiones,
+peso y valor declarado en USD). Las operaciones con matices las revisa un
+especialista, con respuesta en horas hábiles.
+
+## Cómo trabaja
+
+1. Necesidad — origen, destino, incoterm y fecha límite.
+2. Cotización — una propuesta revisada y comparable, no una lista de tarifas sueltas.
+3. Coordinación — booking, documentos y operadores alineados antes del zarpe.
+4. Seguimiento — aviso en cada hito: zarpe, tránsito, llegada y levante.
+5. Cierre — factura sin cargos sorpresa y documentos entregados.
+
+## Diferenciador
+
+Combina criterio humano con Easy OS, su sistema operativo interno, que ordena
+documentos, hitos y tiempos para dedicar más tiempo a acompañar al cliente.
+
+## Páginas
+
+- [Inicio (español)](https://easy-logistics.co/): propuesta, método, cobertura y preguntas frecuentes.
+- [Home (English)](https://easy-logistics.co/en): same content in English.
+- [Cotizador](https://easy-logistics.co/app/cotizacion): herramienta de cotización en línea.
+- [Política de tratamiento de datos](https://easy-logistics.co/legal/tratamiento-de-datos)
+- [Política de cookies](https://easy-logistics.co/legal/cookies)

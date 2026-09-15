@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
 import { Navigate, Routes, Route } from "react-router-dom";
+import { EN_PREFIX } from "../i18n/LanguageContext";
 
 const Home = lazy(() => import("../features/home/pages/index.jsx"));
 const Login = lazy(() => import("../features/users/pages/login.jsx"));
@@ -58,17 +59,38 @@ const routes = {
     }
 }
 
+/**
+ * Rutas que existen en los dos idiomas. Se montan en su ruta canónica
+ * (español) y otra vez bajo /en. El idioma sale del prefijo de la URL,
+ * así cada versión es indexable por separado.
+ */
+const LOCALIZED = [routes.home, routes.quotation];
+
+/** Solo en español: los textos legales no están traducidos. */
+const SPANISH_ONLY = [routes.login, routes.privacy, routes.cookies];
+
 export default function AppRoutes() {
 
     return (
             <Routes>
-                <Route path={routes.home.path} element={routes.home.element} />
-                <Route path={routes.login.path} element={routes.login.element} />
-                <Route path={routes.quotation.path} element={routes.quotation.element} />
-                <Route path={routes.privacy.path} element={routes.privacy.element} />
-                <Route path={routes.cookies.path} element={routes.cookies.element} />
+                {LOCALIZED.map((route) => (
+                    <Route key={route.path} path={route.path} element={route.element} />
+                ))}
+                {LOCALIZED.map((route) => (
+                    <Route
+                        key={`en-${route.path}`}
+                        path={route.path === "/" ? EN_PREFIX : `${EN_PREFIX}${route.path}`}
+                        element={route.element}
+                    />
+                ))}
+
+                {SPANISH_ONLY.map((route) => (
+                    <Route key={route.path} path={route.path} element={route.element} />
+                ))}
+
                 <Route path="/legal/privacidad" element={<Navigate to="/legal/tratamiento-de-datos" replace />} />
                 <Route path="/app" element={<Navigate to="/app/cotizacion" replace />} />
+                <Route path={`${EN_PREFIX}/app`} element={<Navigate to={`${EN_PREFIX}/app/cotizacion`} replace />} />
             </Routes>
     );
 }

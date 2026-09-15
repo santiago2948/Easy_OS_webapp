@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CONTACT, QUOTE_PATH, useLandingCopy } from '../content/landingNarrative'
+import { useLangPath } from '../../../i18n/LanguageContext'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -11,6 +12,7 @@ gsap.registerPlugin(ScrollTrigger)
  */
 export function FlowRail({ id, kicker, title, subtitle, steps, cta, contact }) {
   const copy = useLandingCopy()
+  const langPath = useLangPath()
   const [open, setOpen] = useState(false)
   const panelId = useId()
   const sectionRef = useRef(null)
@@ -115,7 +117,7 @@ export function FlowRail({ id, kicker, title, subtitle, steps, cta, contact }) {
             aria-hidden={!open}
           >
             <div className="lp-flow-rail__contact-panel">
-              <Link to={QUOTE_PATH} className="btn btn--primary lp-flow-rail__quote">
+              <Link to={langPath(QUOTE_PATH)} className="btn btn--primary lp-flow-rail__quote">
                 {copy.ui.quote}
               </Link>
               <a

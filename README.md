@@ -23,10 +23,30 @@ npm run dev
 Otros scripts:
 
 ```bash
-npm run build    # build de producción → dist/
-npm run preview  # servir el build localmente
-npm run lint     # oxlint
+npm run build     # build de producción + prerenderizado → dist/
+npm run build:spa # solo el build, sin prerenderizar
+npm run prerender # prerenderizar un dist/ ya existente
+npm run preview   # servir el build localmente
+npm run lint      # oxlint
 ```
+
+### SEO y prerenderizado
+
+`npm run build` compila y después ejecuta `scripts/prerender.mjs`, que abre cada
+ruta pública en un navegador real y guarda el HTML ya renderizado sobre `dist/`.
+
+Esto no es opcional para el posicionamiento: una SPA sirve un `<div id="root">`
+vacío y los rastreadores de los motores generativos (GPTBot, ClaudeBot,
+PerplexityBot) no ejecutan JavaScript. Sin prerenderizar, para ellos la web no
+tiene contenido.
+
+Requisito: un navegador Chromium disponible. Usa el Chrome del sistema si lo
+encuentra; si no, `npx playwright install chromium`. **Si no hay navegador el
+script avisa y continúa**, de modo que el despliegue no se rompe, pero el build
+sale sin prerenderizar: conviene revisar la salida del build en CI.
+
+El idioma vive en la URL (`/` español, `/en` inglés) precisamente para que cada
+versión sea indexable y pueda declarar su `hreflang`.
 
 ---
 

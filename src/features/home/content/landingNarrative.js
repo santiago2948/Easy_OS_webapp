@@ -28,6 +28,7 @@ export const SECTION_IDS = {
   method: 'easy',
   stories: 'casos',
   trust: 'confianza',
+  faq: 'preguntas',
   contact: 'contacto',
 }
 
