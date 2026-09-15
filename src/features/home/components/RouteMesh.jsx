@@ -1,8 +1,13 @@
+import { useLandingCopy } from '../content/landingNarrative'
+
 /**
  * Red animada de rutas marítimas y aéreas hacia Colombia.
  * Interludio visual post-hero.
  */
 export function RouteMesh() {
+  const { routeTags } = useLandingCopy()
+  const tags = [...routeTags, ...routeTags]
+
   return (
     <div className="lp-route-mesh" aria-hidden="true">
       <div className="lp-route-mesh__glow" />
@@ -64,14 +69,9 @@ export function RouteMesh() {
       </svg>
 
       <div className="lp-route-mesh__tags">
-        <span>Marítimo</span>
-        <span>Aéreo</span>
-        <span>Terrestre</span>
-        <span>Seguimiento</span>
-        <span>Marítimo</span>
-        <span>Aéreo</span>
-        <span>Terrestre</span>
-        <span>Seguimiento</span>
+        {tags.map((tag, index) => (
+          <span key={`${tag}-${index}`}>{tag}</span>
+        ))}
       </div>
     </div>
   )

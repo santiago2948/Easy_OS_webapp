@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { CONTACT, QUOTE_PATH } from '../content/landingNarrative'
+import { CONTACT, QUOTE_PATH, useLandingCopy } from '../content/landingNarrative'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger)
  * Timeline de flujo + línea animada + CTA expandible.
  */
 export function FlowRail({ id, kicker, title, subtitle, steps, cta, contact }) {
+  const copy = useLandingCopy()
   const [open, setOpen] = useState(false)
   const panelId = useId()
   const sectionRef = useRef(null)
@@ -115,7 +116,7 @@ export function FlowRail({ id, kicker, title, subtitle, steps, cta, contact }) {
           >
             <div className="lp-flow-rail__contact-panel">
               <Link to={QUOTE_PATH} className="btn btn--primary lp-flow-rail__quote">
-                Cotizar
+                {copy.ui.quote}
               </Link>
               <a
                 href={CONTACT.whatsapp}

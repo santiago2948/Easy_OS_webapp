@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { BRAND_ASSEMBLY } from '../content/landingNarrative'
+import { useLandingCopy } from '../content/landingNarrative'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -14,6 +14,7 @@ export default function BrandAssembly({
   pinEnd = '+=320%',
   triggerSelector = '.orbit-hero',
 }) {
+  const copy = useLandingCopy()
   const rootRef = useRef(null)
   const frameRef = useRef(null)
   const discRef = useRef(null)
@@ -259,7 +260,7 @@ export default function BrandAssembly({
         </div>
 
         <p className="lp-brand-assembly__line" ref={lineRef}>
-          {BRAND_ASSEMBLY.line}
+          {copy.brandAssembly.line}
         </p>
       </div>
     </Tag>

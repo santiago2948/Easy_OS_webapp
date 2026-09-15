@@ -1,35 +1,23 @@
 import { useState } from 'react'
-import { TRUST } from '../content/landingNarrative'
-
-const MODE_VISUALS = {
-  Marítimo: {
-    media: '/media/mode-sea.jpg',
-    video: '/media/ship-orbit.mp4',
-  },
-  Aéreo: {
-    media: '/media/mode-air.jpg',
-  },
-  Terrestre: {
-    media: '/media/mode-road.jpg',
-  },
-}
+import { MODE_MEDIA, useLandingCopy } from '../content/landingNarrative'
 
 export function TrustCoverage() {
-  const modes = TRUST.coverage.modes
+  const { trust } = useLandingCopy()
+  const modes = trust.coverage.modes
   const [active, setActive] = useState(0)
 
   return (
     <div className="lp-trust-coverage" data-rise>
-      <h3>{TRUST.coverage.t}</h3>
+      <h3>{trust.coverage.t}</h3>
 
       <div className="lp-trust-coverage__layout">
         <div className="lp-trust-coverage__stage">
           {modes.map((m, i) => {
-            const v = MODE_VISUALS[m.mode]
+            const v = MODE_MEDIA[m.key]
             if (!v) return null
             return (
               <div
-                key={m.mode}
+                key={m.key}
                 className={`lp-trust-coverage__panel${i === active ? ' is-active' : ''}`}
                 aria-hidden={i !== active}
               >
@@ -60,7 +48,7 @@ export function TrustCoverage() {
         <div className="lp-trust-coverage__modes">
           {modes.map((m, i) => (
             <button
-              key={m.mode}
+              key={m.key}
               type="button"
               className={`lp-trust-coverage__mode${i === active ? ' is-active' : ''}`}
               onMouseEnter={() => setActive(i)}

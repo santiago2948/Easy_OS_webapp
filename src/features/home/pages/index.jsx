@@ -7,12 +7,10 @@ import SuccessStoriesMarquee from '../components/SuccessStoriesMarquee'
 import BrandLogo from '../components/BrandLogo'
 import {
   CONTACT,
-  FLOW,
-  GEO,
-  HERO,
-  METHOD,
+  METHOD_MEDIA,
   QUOTE_PATH,
-  TRUST,
+  SECTION_IDS,
+  useLandingCopy,
 } from '../content/landingNarrative'
 import '../styles/landing.css'
 import '../styles/orbit.css'
@@ -62,6 +60,7 @@ function preloadGlobeTextures() {
 }
 
 export default function Home() {
+  const copy = useLandingCopy()
   const rootRef = useRef(null)
   const [showGlobe, setShowGlobe] = useState(false)
   const [showBrandAssembly, setShowBrandAssembly] = useState(false)
@@ -78,19 +77,19 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
-    const section = document.getElementById(METHOD.id)
+    const section = document.getElementById(SECTION_IDS.method)
     if (!section || typeof IntersectionObserver === 'undefined') return undefined
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return
-        METHOD.slides.forEach((slide) => {
-          const href = slide.img
-          if (document.querySelector(`link[rel="preload"][href="${href}"]`)) return
+        Object.values(METHOD_MEDIA).forEach(({ img }) => {
+          if (!img) return
+          if (document.querySelector(`link[rel="preload"][href="${img}"]`)) return
           const link = document.createElement('link')
           link.rel = 'preload'
           link.as = 'image'
-          link.href = href
+          link.href = img
           document.head.appendChild(link)
         })
         observer.disconnect()
@@ -103,6 +102,7 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
+    const { geo } = copy
     const schema = {
       '@context': 'https://schema.org',
       '@graph': [
@@ -110,21 +110,21 @@ export default function Home() {
           '@type': 'Organization',
           name: 'Easy Logistics',
           url: 'https://easy-logistics.co',
-          email: 's.moreno@easy-logistics.co',
+          email: 'c.hernandez@easy-logistics.co',
           telephone: '+57-320-897-6999',
           address: {
             '@type': 'PostalAddress',
-            streetAddress: 'Avenida calle 26 # 69 - 76 TORRE 3 OF 1501',
+            streetAddress: CONTACT.address,
             addressCountry: 'CO',
           },
-          description: GEO.what,
+          description: geo.what,
         },
         {
           '@type': 'ProfessionalService',
           name: 'Easy Logistics. Forwarder B2B',
           serviceType: 'International freight brokerage',
           areaServed: 'Colombia',
-          description: GEO.differentiator,
+          description: geo.differentiator,
           provider: { '@type': 'Organization', name: 'Easy Logistics' },
         },
       ],
@@ -135,7 +135,7 @@ export default function Home() {
     el.textContent = JSON.stringify(schema)
     document.head.appendChild(el)
     return () => el.remove()
-  }, [])
+  }, [copy])
 
   useEffect(() => {
     const root = rootRef.current
@@ -237,7 +237,7 @@ export default function Home() {
 
       <main>
         {/* 0 · Hero: globo intocable */}
-        <section className="orbit-hero" id="inicio">
+        <section className="orbit-hero" id={SECTION_IDS.hero}>
           {showGlobe ? (
             <Suspense
               fallback={
@@ -251,16 +251,16 @@ export default function Home() {
           )}
 
           <div className="orbit-hero__copy">
-            <p className="orbit-kicker">{HERO.kicker}</p>
+            <p className="orbit-kicker">{copy.hero.kicker}</p>
             <BrandLogo variant="onDark" size="lg" showSubtitle={false} />
             <h1>
-              {HERO.title}
-              <span>{HERO.titleAccent}</span>
+              {copy.hero.title}
+              <span>{copy.hero.titleAccent}</span>
             </h1>
-            <p className="orbit-lead">{HERO.lead}</p>
+            <p className="orbit-lead">{copy.hero.lead}</p>
             <div className="orbit-actions">
               <Link to={QUOTE_PATH} className="btn btn--primary">
-                {HERO.ctaQuote}
+                {copy.hero.ctaQuote}
               </Link>
               <a
                 href={CONTACT.whatsapp}
@@ -268,13 +268,13 @@ export default function Home() {
                 target="_blank"
                 rel="noreferrer"
               >
-                {HERO.ctaSecondary}
+                {copy.hero.ctaSecondary}
               </a>
             </div>
           </div>
 
           <p className="orbit-hero__hint" aria-hidden="true">
-            {HERO.hint}
+            {copy.hero.hint}
           </p>
 
           <div className="orbit-hero__exit-veil" aria-hidden="true" />
@@ -288,13 +288,13 @@ export default function Home() {
         {/* 1 · Cómo trabajamos */}
         <Suspense fallback={null}>
           <FlowRail
-            id={FLOW.id}
-            kicker={FLOW.kicker}
-            title={FLOW.title}
-            subtitle={FLOW.subtitle}
-            steps={FLOW.steps}
-            cta={{ label: FLOW.ctaSoft }}
-            contact={FLOW.contact}
+            id={SECTION_IDS.flow}
+            kicker={copy.flow.kicker}
+            title={copy.flow.title}
+            subtitle={copy.flow.subtitle}
+            steps={copy.flow.steps}
+            cta={{ label: copy.flow.ctaSoft }}
+            contact={copy.flow.contact}
           />
         </Suspense>
 
@@ -303,11 +303,11 @@ export default function Home() {
         </Suspense>
 
         {/* 2 · Método Easy */}
-        <section className="lp-section lp-method" id={METHOD.id}>
+        <section className="lp-section lp-method" id={SECTION_IDS.method}>
           <div className="lp-method__intro" data-rise>
-            <p className="orbit-kicker">{METHOD.kicker}</p>
-            <p className="lp-method__empathy">{METHOD.empathy}</p>
-            <p className="lp-method__lead">{METHOD.intro}</p>
+            <p className="orbit-kicker">{copy.method.kicker}</p>
+            <p className="lp-method__empathy">{copy.method.empathy}</p>
+            <p className="lp-method__lead">{copy.method.intro}</p>
           </div>
           <div data-rise>
             <Suspense fallback={null}>
@@ -318,15 +318,15 @@ export default function Home() {
 
         <SuccessStoriesMarquee />
 
-        {/* 4 · Confianza */}
-        <section className="lp-section lp-trust" id={TRUST.id}>
+        {/* 3 · Confianza */}
+        <section className="lp-section lp-trust" id={SECTION_IDS.trust}>
           <div className="lp-section__head" data-rise>
-            <p className="orbit-kicker">{TRUST.kicker}</p>
-            <h2>{TRUST.title}</h2>
-            <p className="lp-section__lead">{TRUST.subtitle}</p>
+            <p className="orbit-kicker">{copy.trust.kicker}</p>
+            <h2>{copy.trust.title}</h2>
+            <p className="lp-section__lead">{copy.trust.subtitle}</p>
           </div>
           <div className="lp-trust__grid">
-            {TRUST.blocks.map((b) => (
+            {copy.trust.blocks.map((b) => (
               <article key={b.t} className="lp-trust__card">
                 <h3>{b.t}</h3>
                 <p>{b.d}</p>

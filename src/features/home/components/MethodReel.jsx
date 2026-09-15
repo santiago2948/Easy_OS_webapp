@@ -1,15 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { METHOD } from '../content/landingNarrative'
+import { METHOD_MEDIA, useLandingCopy } from '../content/landingNarrative'
 import { preloadImage, preloadImages } from '../utils/preloadImage'
 
 const AUTO_ADVANCE_MS = 5000
+
+const mediaFor = (slideId) => METHOD_MEDIA[slideId] ?? {}
 
 /**
  * Paneles expansibles “Por qué Easy”: acordeón cinematográfico
  * en lugar de carrusel de tarjetas.
  */
 export default function MethodReel() {
-  const slides = METHOD.slides
+  const copy = useLandingCopy()
+  const slides = copy.method.slides
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
   const [loadedSlides, setLoadedSlides] = useState(() => new Set())
@@ -68,11 +71,11 @@ export default function MethodReel() {
         if (!entry.isIntersecting || cancelled) return
 
         const first = slides[0]
-        preloadImage(first.img)
+        preloadImage(mediaFor(first.id).img)
           .then(() => markLoaded(first.id))
           .catch(() => markLoaded(first.id))
 
-        const rest = slides.slice(1).map((slide) => slide.img)
+        const rest = slides.slice(1).map((slide) => mediaFor(slide.id).img)
         const schedule = () => {
           preloadImages(rest, { staggerMs: 80 }).then(() => {
             if (cancelled) return
@@ -101,7 +104,7 @@ export default function MethodReel() {
     if (!slide || loadedSlides.has(slide.id)) return undefined
 
     let cancelled = false
-    preloadImage(slide.img)
+    preloadImage(mediaFor(slide.id).img)
       .then(() => {
         if (!cancelled) markLoaded(slide.id)
       })
@@ -150,10 +153,15 @@ export default function MethodReel() {
     >
       <div className="lp-method-reel__scan" aria-hidden="true" />
 
-      <div className="lp-method-reel__panels" role="tablist" aria-label="Por qué Easy">
+      <div
+        className="lp-method-reel__panels"
+        role="tablist"
+        aria-label={copy.method.reelLabel}
+      >
         {slides.map((slide, i) => {
           const isActive = i === active
           const isLoaded = loadedSlides.has(slide.id)
+          const media = mediaFor(slide.id)
           return (
             <button
               key={slide.id}
@@ -173,9 +181,9 @@ export default function MethodReel() {
               >
                 {isLoaded ? (
                   <picture>
-                    <source srcSet={slide.img} type="image/webp" />
+                    <source srcSet={media.img} type="image/webp" />
                     <img
-                      src={slide.imgFallback || slide.img}
+                      src={media.imgFallback || media.img}
                       alt=""
                       decoding="async"
                       loading="lazy"

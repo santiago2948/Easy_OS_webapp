@@ -54,14 +54,14 @@ export function BrandMark({ colors, size, className = 'brand-logo__mark' }) {
 
 export default function BrandLogo({
   variant = 'onDark',
-  size = 'md',
+  size = 'lg',
   showSubtitle = true,
   className = '',
 }) {
   const isDark = variant === 'onDark'
   const ink = isDark ? BRAND_COLORS.white : BRAND_COLORS.navy
   const markColors = getMarkColors(variant)
-  const markSize = size === 'lg' ? 58 : size === 'sm' ? 32 : 38
+  const markSize = size === 'lg' ? 70 : size === 'sm' ? 38 : 46
 
   return (
     <span className={`brand-logo brand-logo--${size} ${className}`.trim()}>

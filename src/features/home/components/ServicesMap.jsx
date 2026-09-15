@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { SERVICES } from '../content/landingNarrative'
+import { useLandingCopy } from '../content/landingNarrative'
 import { TrustCoverage } from './TrustCoverage'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -52,6 +52,7 @@ const PHASE_ICONS = {
  * Mapa visual de servicios con ruta que se dibuja al scroll.
  */
 export function ServicesMap() {
+  const { services } = useLandingCopy()
   const rootRef = useRef(null)
   const pathRef = useRef(null)
 
@@ -106,9 +107,9 @@ export function ServicesMap() {
   return (
     <div className="lp-services-map" ref={rootRef}>
       <div className="lp-services-map__head" data-rise>
-        <p className="lp-recognize__label">{SERVICES.kicker}</p>
-        <h2>{SERVICES.title}</h2>
-        <p className="lp-services-map__lead">{SERVICES.lead}</p>
+        <p className="lp-recognize__label">{services.kicker}</p>
+        <h2>{services.title}</h2>
+        <p className="lp-services-map__lead">{services.lead}</p>
       </div>
 
       <TrustCoverage />
@@ -131,7 +132,7 @@ export function ServicesMap() {
             </linearGradient>
           </defs>
         </svg>
-        {SERVICES.phases.map((phase, i) => (
+        {services.phases.map((phase, i) => (
           <span
             key={phase.id}
             className="lp-services-map__route-node"
@@ -141,7 +142,7 @@ export function ServicesMap() {
       </div>
 
       <ol className="lp-services-map__phases">
-        {SERVICES.phases.map((phase) => (
+        {services.phases.map((phase) => (
           <li key={phase.id} className="lp-services-map__phase" data-rise>
             <div className="lp-services-map__phase-head">
               <span className="lp-services-map__phase-icon">
@@ -168,7 +169,7 @@ export function ServicesMap() {
       </ol>
 
       <p className="lp-services-map__note" data-rise>
-        {SERVICES.note}
+        {services.note}
       </p>
     </div>
   )

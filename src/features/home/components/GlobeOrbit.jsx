@@ -2,11 +2,12 @@ import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import {
-  applyEarthMouseGlow,
-  createCoastlineBorders,
+  ATMOSPHERE_COLORS,
+  applyEarthStyle,
+  createAtmosphereShell,
   createMouseUniforms,
-  createSurfaceGlowMesh,
-} from './globeCoastlines'
+} from './globeSurface'
+import { createNetworkTraces } from './globeNetwork'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -16,6 +17,12 @@ const DAY_LG = '/media/earth-day-lg.jpg'
 const DAY_XL = '/media/earth-day-xl.jpg'
 const TOPO_SM = '/media/earth-topo-sm.jpg'
 const TOPO_LG = '/media/earth-topo-lg.jpg'
+/** Malla hexagonal neón superpuesta (equirectangular, mismos UV) */
+const MESH_MAP = '/media/earth-mesh-texture.png'
+
+/** Recorrido del FOV durante el scroll */
+const START_FOV = 40
+const END_FOV = 52
 
 /**
  * Globo 3D ligero: Three se importa en runtime, texturas chicas,
@@ -55,7 +62,16 @@ export default function GlobeOrbit({
       stage
 
     const startRadius = lite ? 6.1 : 5.8
-    const endRadius = lite ? 1.72 : 1.48
+    /**
+     * Distancia final de la camara. El globo tiene radio 1, asi que a 1.48
+     * su diametro ocupaba el 188% de la altura del viewport y estiraba la
+     * textura ~3.8x. A 2.3 la llena casi exacta (99%) con ~2x.
+     */
+    const endRadius = lite ? 2.7 : 2.3
+    /** Ancho de la equirectangular mas estrecha que se proyecta encima */
+    const narrowestTexture = lite ? 1024 : 1774
+    /** Magnificacion maxima tolerada antes de que se vean los texeles */
+    const maxMagnification = 2.6
 
     ;(async () => {
       // Code-split: three.js solo se descarga al montar este componente
@@ -75,7 +91,7 @@ export default function GlobeOrbit({
       renderer.outputColorSpace = THREE.SRGBColorSpace
 
       const scene = new THREE.Scene()
-      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100)
+      const camera = new THREE.PerspectiveCamera(START_FOV, 1, 0.1, 100)
       camera.position.set(0, 0.35, startRadius)
 
       scene.add(new THREE.AmbientLight(0x6ec8d8, 0.55))
@@ -95,10 +111,15 @@ export default function GlobeOrbit({
       const earthGeo = new THREE.SphereGeometry(1, segs, segs)
 
       let earth
-      let mouseLight
-      let coastPulseMaterials = []
+      let network
+      let earthStyle
       let mouseUniforms
+      let meshReady = false
+      let meshFade = 0
       let glowTime = 0
+      let netTime = 0
+      let netReveal = 0
+      let netRevealTarget = 0.55
       let stars
 
       const raycaster = new THREE.Raycaster()
@@ -110,20 +131,20 @@ export default function GlobeOrbit({
       }
       let pointerInside = false
 
-      mouseUniforms = createMouseUniforms(THREE, { lite })
+      mouseUniforms = createMouseUniforms(THREE)
 
       const state = {
         orbit: 0,
         radius: startRadius,
         tilt: 0.18,
         earthSpin: 0,
-        fov: 40,
+        fov: START_FOV,
       }
       const target = {
         orbit: 0,
         radius: startRadius,
         tilt: 0.18,
-        fov: 40,
+        fov: START_FOV,
       }
 
       // Estrellas: pocas / ninguna en save-data
@@ -154,31 +175,26 @@ export default function GlobeOrbit({
         scene.add(stars)
       }
 
-      // Atmósfera simple (1 mesh en lite, 2 en desktop)
+      // Atmósfera por Fresnel: halo en el limbo, centro limpio
       {
-        const atmo = new THREE.Mesh(
-          new THREE.SphereGeometry(1.05, lite ? 32 : 48, lite ? 32 : 48),
-          new THREE.MeshBasicMaterial({
-            color: 0x3ec4d8,
-            transparent: true,
-            opacity: 0.13,
-            side: THREE.BackSide,
-            depthWrite: false,
+        group.add(
+          createAtmosphereShell(THREE, {
+            radius: 1.055,
+            color: ATMOSPHERE_COLORS.inner,
+            opacity: lite ? 0.5 : 0.62,
+            power: 3.2,
+            segments: lite ? 32 : 48,
           }),
         )
-        group.add(atmo)
         if (!lite) {
           group.add(
-            new THREE.Mesh(
-              new THREE.SphereGeometry(1.12, lite ? 36 : 56, lite ? 36 : 56),
-              new THREE.MeshBasicMaterial({
-                color: 0x00a4bd,
-                transparent: true,
-                opacity: 0.06,
-                side: THREE.BackSide,
-                depthWrite: false,
-              }),
-            ),
+            createAtmosphereShell(THREE, {
+              radius: 1.18,
+              color: ATMOSPHERE_COLORS.outer,
+              opacity: 0.3,
+              power: 2.1,
+              segments: 56,
+            }),
           )
         }
       }
@@ -193,6 +209,22 @@ export default function GlobeOrbit({
         camera.lookAt(0, 0, 0)
       }
 
+      // Una pantalla alta o con mucho DPR estira mas la textura sobre el
+      // mismo globo, asi que el acercamiento se frena antes en esos casos.
+      const zoom = { end: endRadius }
+      const updateZoomLimit = () => {
+        const heightPx = stage.clientHeight * renderer.getPixelRatio()
+        if (!heightPx) return
+        // Solo se ve un hemisferio: media equirectangular cubre el diametro
+        const texelsAcross = narrowestTexture / 2
+        const tanHalfFov = Math.tan(THREE.MathUtils.degToRad(END_FOV) / 2)
+        const tanTheta =
+          (maxMagnification * texelsAcross * tanHalfFov) / heightPx
+        // Con radio de esfera 1:  tan(theta) = 1 / sqrt(d^2 - 1)
+        const floor = Math.sqrt(1 + 1 / (tanTheta * tanTheta))
+        zoom.end = Math.max(endRadius, floor)
+      }
+
       const resize = () => {
         const w = stage.clientWidth
         const h = stage.clientHeight
@@ -200,6 +232,8 @@ export default function GlobeOrbit({
         renderer.setSize(w, h, false)
         camera.aspect = w / h
         camera.updateProjectionMatrix()
+        updateZoomLimit()
+        network?.setViewport(w, h, renderer.getPixelRatio())
       }
       resize()
       ro = new ResizeObserver(resize)
@@ -227,41 +261,32 @@ export default function GlobeOrbit({
 
         const mat = new THREE.MeshStandardMaterial({
           map: dayMap,
-          roughness: 0.85,
-          metalness: 0.05,
+          // Mate total: un specular rompería la máscara plana de neón
+          roughness: 1,
+          metalness: 0,
           ...(topo
             ? { bumpMap: topo, bumpScale: lite ? 0.025 : 0.035 }
             : {}),
         })
-        applyEarthMouseGlow(mat, mouseUniforms)
+        earthStyle = applyEarthStyle(THREE, mat, mouseUniforms, { lite })
 
         earth = new THREE.Mesh(earthGeo, mat)
         earth.rotation.z = THREE.MathUtils.degToRad(23.4) * 0.35
         group.add(earth)
 
-        const surfaceGlow = createSurfaceGlowMesh(THREE, mouseUniforms, { lite })
-        earth.add(surfaceGlow)
-
-        mouseLight = new THREE.PointLight(0x6ec9d6, 0, lite ? 3.5 : 5)
-        mouseLight.distance = lite ? 1.55 : 2.15
-        mouseLight.decay = 2.35
-        earth.add(mouseLight)
+        // Red de rutas: gira con el planeta para que los hubs no se despeguen
+        network = createNetworkTraces(THREE, {
+          lite,
+          viewport: {
+            width: stage.clientWidth,
+            height: stage.clientHeight,
+            pixelRatio: renderer.getPixelRatio(),
+          },
+        })
+        network.setReveal(reduce ? 1 : 0)
+        earth.add(network.root)
 
         stage.classList.add('is-globe-ready')
-
-        fetch('/media/world-coastlines.json')
-          .then((res) => (res.ok ? res.json() : null))
-          .then((geojson) => {
-            if (disposed || !earth || !geojson?.features?.length) return
-            const { root, pulseMaterials } = createCoastlineBorders(
-              geojson,
-              THREE,
-              { lite, mouseUniforms },
-            )
-            coastPulseMaterials = pulseMaterials
-            earth.add(root)
-          })
-          .catch(() => {})
       }
 
       const updatePointerFromEvent = (clientX, clientY) => {
@@ -297,16 +322,40 @@ export default function GlobeOrbit({
         earth.material.needsUpdate = true
       }
 
+      const attachMesh = (meshMap) => {
+        if (disposed || !earthStyle) {
+          meshMap?.dispose()
+          return
+        }
+        meshMap.colorSpace = THREE.SRGBColorSpace
+        // La longitud es cíclica: sin repeat, el offset en u pegaría la
+        // columna del borde a lo largo de toda la costura
+        meshMap.wrapS = THREE.RepeatWrapping
+        meshMap.anisotropy = Math.min(
+          8,
+          renderer.capabilities.getMaxAnisotropy(),
+        )
+        meshMap.generateMipmaps = true
+        meshMap.minFilter = THREE.LinearMipmapLinearFilter
+        meshMap.magFilter = THREE.LinearFilter
+        earthStyle.setMeshMap(meshMap)
+        meshReady = true
+      }
+
       loader.load(dayUrl, (dayMap) => {
         applyEarth(dayMap, null)
         loader.load(topoUrl, attachTopo, undefined, () => {})
+        // Es un PNG pesado: va de últimas y se salta en modo ahorro de datos
+        if (!saveData) loader.load(MESH_MAP, attachMesh, undefined, () => {})
       })
 
       ctx = gsap.context(() => {
         if (reduce) {
           target.orbit = 0.45
-          target.radius = endRadius + 0.35
+          target.radius = zoom.end + 0.35
           target.fov = 46
+          netReveal = 1
+          netRevealTarget = 1
           placeCamera()
           return
         }
@@ -323,9 +372,11 @@ export default function GlobeOrbit({
             const globePhase = Math.min(p / 0.68, 1)
             const ease = gsap.parseEase('power2.inOut')(globePhase)
             target.orbit = globePhase * Math.PI * 2 * 1.2
-            target.radius = gsap.utils.interpolate(startRadius, endRadius, ease)
-            target.fov = gsap.utils.interpolate(40, 52, ease)
+            target.radius = gsap.utils.interpolate(startRadius, zoom.end, ease)
+            target.fov = gsap.utils.interpolate(START_FOV, END_FOV, ease)
             target.tilt = 0.1 + Math.sin(globePhase * Math.PI) * 0.32
+            // La red se enciende a medida que la cámara se acerca
+            netRevealTarget = 0.45 + globePhase * 0.55
 
             const fadeStart = 0.64
             const fadeEnd = 0.78
@@ -413,18 +464,22 @@ export default function GlobeOrbit({
         state.fov += (target.fov - state.fov) * 0.1
         state.earthSpin += lite ? 0.0009 : 0.00115
         glowTime += lite ? 0.014 : 0.018
+        if (!reduce) netTime += lite ? 0.011 : 0.014
         const glowPulse = reduce
           ? 1
           : 0.78 + 0.22 * Math.sin(glowTime * 1.35)
 
-        if (coastPulseMaterials.length) {
-          coastPulseMaterials.forEach((entry) => {
-            if (entry.uniforms) {
-              entry.uniforms.uPulse.value = glowPulse
-            } else if (entry.baseOpacity != null) {
-              entry.material.opacity = entry.baseOpacity * glowPulse
-            }
-          })
+        if (network) {
+          netReveal += (netRevealTarget - netReveal) * 0.06
+          network.setReveal(netReveal)
+          network.update(netTime, glowPulse)
+        }
+
+        if (earthStyle) {
+          // Presencia global sin oscilar: solo entrada suave al cargar y el
+          // acercamiento del scroll. El relieve por cursor va en el shader.
+          meshFade += ((meshReady ? 1 : 0) - meshFade) * 0.04
+          earthStyle.setMeshOpacity(meshFade * netReveal)
         }
 
         if (earth) earth.rotation.y = state.earthSpin
@@ -450,12 +505,6 @@ export default function GlobeOrbit({
           mouseUniforms.uMousePoint.value.lerp(mouseTarget.point, 0.16)
           mouseUniforms.uMouseActive.value +=
             (mouseTarget.active - mouseUniforms.uMouseActive.value) * 0.14
-
-          if (mouseLight) {
-            mouseLight.position.copy(mouseUniforms.uMousePoint.value)
-            mouseLight.intensity =
-              mouseUniforms.uMouseActive.value * (lite ? 1.55 : 2.85)
-          }
         }
 
         renderer.render(scene, camera)
@@ -463,6 +512,9 @@ export default function GlobeOrbit({
       tick()
 
       let disposeScene = () => {
+        // Vive en un uniform propio: la traversal de abajo no la ve
+        earthStyle?.uniforms.uMeshMap.value?.dispose()
+        earthStyle?.dispose()
         earthGeo.dispose()
         const disposedMaterials = new Set()
         scene.traverse((obj) => {

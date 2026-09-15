@@ -26,6 +26,8 @@ export default function DataConsentField({
   onChange,
   disabled = false,
   notice,
+  label = 'Autorizo el tratamiento de mis datos personales de acuerdo con la',
+  policyLabel = DATA_POLICY_TITLE,
 }) {
   return (
     <div className={`legal-consent${checked ? ' is-checked' : ''}${disabled ? ' is-disabled' : ''}`}>
@@ -44,14 +46,14 @@ export default function DataConsentField({
           <ConsentCheckIcon />
         </span>
         <span className="legal-consent__copy">
-          Autorizo el tratamiento de mis datos personales de acuerdo con la{' '}
+          {label}{' '}
           <Link
             to={DATA_POLICY_PATH}
             target="_blank"
             rel="noreferrer"
             onClick={(event) => event.stopPropagation()}
           >
-            {DATA_POLICY_TITLE}
+            {policyLabel}
           </Link>
           .
         </span>

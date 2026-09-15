@@ -2,12 +2,9 @@ import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Turnstile } from '@marsidev/react-turnstile'
 import DataConsentField from '../../legal/components/DataConsentField'
-import {
-  DATA_POLICY_VERSION,
-  LEAD_PRIVACY_NOTICE,
-} from '../../legal/content/dataConsent'
+import { DATA_POLICY_VERSION } from '../../legal/content/dataConsent'
 import { createLead } from '../api/createLead'
-import { QUOTE_PATH, CONTACT_CTA } from '../content/landingNarrative'
+import { QUOTE_PATH, SECTION_IDS, useLandingCopy } from '../content/landingNarrative'
 
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY
 
@@ -23,6 +20,10 @@ const DIAL_CODES = [
 ]
 
 export default function LearnMorePanel() {
+  const copy = useLandingCopy()
+  const cta = copy.contactCta
+  const form = cta.form
+
   const [step, setStep] = useState(1)
   const [submitted, setSubmitted] = useState(false)
   const [submitting, setSubmitting] = useState(false)
@@ -44,9 +45,9 @@ export default function LearnMorePanel() {
 
   const handlePhoneStep = (event) => {
     event.preventDefault()
-    const form = event.currentTarget
-    const countryCode = form.countryCode.value
-    const phone = form.phone.value.trim()
+    const stepForm = event.currentTarget
+    const countryCode = stepForm.countryCode.value
+    const phone = stepForm.phone.value.trim()
 
     if (!phone) return
 
@@ -58,8 +59,8 @@ export default function LearnMorePanel() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const form = event.currentTarget
-    const name = form.name.value.trim()
+    const stepForm = event.currentTarget
+    const name = stepForm.name.value.trim()
 
     if (!name || !captchaToken || !acceptedDataPolicy || submitting) return
 
@@ -81,9 +82,9 @@ export default function LearnMorePanel() {
       setContact({ countryCode: '+57', phone: '' })
       setAcceptedDataPolicy(false)
       clearCaptcha()
-      form.reset()
+      stepForm.reset()
     } catch (error) {
-      setErrorMessage(error.message || 'No se pudo enviar el formulario')
+      setErrorMessage(error.message || form.genericError)
       resetCaptcha()
     } finally {
       setSubmitting(false)
@@ -91,12 +92,12 @@ export default function LearnMorePanel() {
   }
 
   return (
-    <div className="lp-trust-cta" id="contacto" data-rise>
+    <div className="lp-trust-cta" id={SECTION_IDS.contact} data-rise>
       <div className="lp-trust-cta__head">
-        <p className="lp-trust-cta__label">{CONTACT_CTA.title}</p>
-        <p className="lp-trust-cta__lead">{CONTACT_CTA.lead}</p>
+        <p className="lp-trust-cta__label">{cta.title}</p>
+        <p className="lp-trust-cta__lead">{cta.lead}</p>
         <ul className="lp-trust-cta__points">
-          {CONTACT_CTA.points.map((point) => (
+          {cta.points.map((point) => (
             <li key={point}>{point}</li>
           ))}
         </ul>
@@ -104,7 +105,7 @@ export default function LearnMorePanel() {
 
       {submitted ? (
         <p className="lp-trust-cta__success" role="status">
-          Gracias. Te contactaremos pronto.
+          {form.success}
         </p>
       ) : (
         <div className="lp-trust-cta__panel">
@@ -113,7 +114,7 @@ export default function LearnMorePanel() {
               <form className="lp-trust-cta__form" onSubmit={handlePhoneStep} noValidate>
                 <div className="lp-trust-cta__phone-row">
                   <label className="visually-hidden" htmlFor="trust-dial">
-                    Código de país
+                    {form.dialLabel}
                   </label>
                   <select
                     id="trust-dial"
@@ -128,7 +129,7 @@ export default function LearnMorePanel() {
                     ))}
                   </select>
                   <label className="visually-hidden" htmlFor="trust-phone">
-                    Teléfono
+                    {form.phoneLabel}
                   </label>
                   <input
                     id="trust-phone"
@@ -136,18 +137,18 @@ export default function LearnMorePanel() {
                     name="phone"
                     className="lp-trust-cta__input"
                     autoComplete="tel-national"
-                    placeholder="320 123 4567"
+                    placeholder={form.phonePlaceholder}
                     required
                   />
                 </div>
                 <button type="submit" className="btn btn--ghost btn--ghost-light lp-trust-cta__send">
-                  Siguiente
+                  {form.next}
                 </button>
               </form>
             ) : (
               <form className="lp-trust-cta__form" onSubmit={handleSubmit} noValidate>
                 <label className="visually-hidden" htmlFor="trust-name">
-                  Nombre
+                  {form.nameLabel}
                 </label>
                 <input
                   ref={nameInputRef}
@@ -156,7 +157,7 @@ export default function LearnMorePanel() {
                   name="name"
                   className="lp-trust-cta__input"
                   autoComplete="name"
-                  placeholder="Tu nombre"
+                  placeholder={form.namePlaceholder}
                   required
                   disabled={submitting}
                 />
@@ -170,14 +171,14 @@ export default function LearnMorePanel() {
                     !TURNSTILE_SITE_KEY
                   }
                 >
-                  {submitting ? 'Enviando…' : 'Enviar'}
+                  {submitting ? form.submitting : form.submit}
                 </button>
               </form>
             )}
 
             <span className="lp-trust-cta__divider" aria-hidden="true" />
             <Link to={QUOTE_PATH} className="btn btn--primary lp-trust-cta__quote">
-              Cotizar
+              {copy.ui.quote}
             </Link>
           </div>
 
@@ -188,7 +189,9 @@ export default function LearnMorePanel() {
                 checked={acceptedDataPolicy}
                 onChange={setAcceptedDataPolicy}
                 disabled={submitting}
-                notice={LEAD_PRIVACY_NOTICE}
+                notice={form.privacyNotice}
+                label={form.consentLabel}
+                policyLabel={form.consentPolicy}
               />
 
               {TURNSTILE_SITE_KEY ? (
@@ -207,7 +210,7 @@ export default function LearnMorePanel() {
                 </div>
               ) : (
                 <p className="lp-trust-cta__error" role="alert">
-                  Falta configurar VITE_TURNSTILE_SITE_KEY.
+                  {form.captchaMissing}
                 </p>
               )}
 

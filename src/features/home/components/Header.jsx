@@ -1,16 +1,11 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import BrandLogo from './BrandLogo'
-import { QUOTE_PATH } from '../content/landingNarrative'
+import LanguageSwitch from './LanguageSwitch'
+import { QUOTE_PATH, SECTION_IDS, useLandingCopy } from '../content/landingNarrative'
 import { scrollToHomeTop } from '../utils/scrollToHomeTop'
 
-const NAV = [
-  { href: '/#inicio', label: 'Inicio', homeTop: true },
-  { href: '/#como', label: 'Cómo' },
-  { href: '/#easy', label: 'Easy' },
-  { href: '/#contacto', label: 'Contacto' },
-]
-
 export default function Header() {
+  const copy = useLandingCopy()
   const location = useLocation()
   const navigate = useNavigate()
   const isHome = location.pathname === '/'
@@ -40,32 +35,43 @@ export default function Header() {
       <Link
         to="/"
         className="site-logo"
-        aria-label="Easy Logistics inicio"
+        aria-label={copy.ui.homeAria}
         onClick={handleLogoClick}
       >
         <BrandLogo variant="onDark" size="sm" />
       </Link>
 
-      <nav className="site-nav" aria-label="Principal">
-        {NAV.map((item) => (
-          <a key={item.href} href={item.href} onClick={(event) => handleNavClick(event, item)}>
-            {item.label}
-          </a>
-        ))}
+      <nav className="site-nav" aria-label={copy.ui.navAria}>
+        {copy.nav.map((item) => {
+          const anchor = { href: `/#${item.key}`, homeTop: item.key === SECTION_IDS.hero }
+          return (
+            <a
+              key={item.key}
+              href={anchor.href}
+              onClick={(event) => handleNavClick(event, anchor)}
+            >
+              {item.label}
+            </a>
+          )
+        })}
       </nav>
 
-      <Link to={QUOTE_PATH} className="btn-cotizar">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
-          <path
-            d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3"
-            stroke="currentColor"
-            strokeWidth="1.8"
-            strokeLinecap="round"
-          />
-        </svg>
-        Cotizar
-      </Link>
+      <div className="site-header__actions">
+        <LanguageSwitch label={copy.ui.langAria} />
+
+        <Link to={QUOTE_PATH} className="btn-cotizar">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <rect x="5" y="3" width="14" height="18" rx="2" stroke="currentColor" strokeWidth="2" />
+            <path
+              d="M8 7h8M8 11h3M13 11h3M8 15h3M13 15h3"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+            />
+          </svg>
+          {copy.ui.quoteShort}
+        </Link>
+      </div>
     </header>
   )
 }

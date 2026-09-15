@@ -4,42 +4,30 @@ import {
   DATA_POLICY_PATH,
 } from '../../legal/content/dataConsent'
 import BrandLogo from './BrandLogo'
-import { CONTACT } from '../content/landingNarrative'
+import { CONTACT, SECTION_IDS, useLandingCopy } from '../content/landingNarrative'
 import { scrollToHomeTop } from '../utils/scrollToHomeTop'
 
-const LINKS = [
-  { href: '#inicio', label: 'Inicio', homeTop: true },
-  { href: '#como', label: 'Cómo trabajamos' },
-  { href: '#easy', label: 'Easy' },
-  { href: '#contacto', label: 'Contacto' },
-]
-
-const SOLUTIONS = [
-  { href: '#confianza', label: 'Flete marítimo FCL / LCL' },
-  { href: '#confianza', label: 'Carga aérea' },
-]
-
 export default function Footer() {
+  const copy = useLandingCopy()
+  const { footer } = copy
+
   return (
     <footer className="site-footer">
       <div className="site-footer__main">
         <div className="site-footer__brand-col">
           <BrandLogo variant="onDark" size="sm" />
-          <p>
-            Freight broker B2B para importadores en Colombia,
-            con criterio y con alguien que responde.
-          </p>
+          <p>{footer.blurb}</p>
         </div>
 
         <div className="site-footer__col">
-          <h3>Enlaces</h3>
+          <h3>{footer.linksTitle}</h3>
           <ul>
-            {LINKS.map((item) => (
-              <li key={item.href}>
+            {footer.links.map((item) => (
+              <li key={item.key}>
                 <a
-                  href={item.href}
+                  href={`#${item.key}`}
                   onClick={
-                    item.homeTop
+                    item.key === SECTION_IDS.hero
                       ? (event) => {
                           event.preventDefault()
                           scrollToHomeTop()
@@ -59,18 +47,18 @@ export default function Footer() {
         </div>
 
         <div className="site-footer__col">
-          <h3>Servicios</h3>
+          <h3>{footer.servicesTitle}</h3>
           <ul>
-            {SOLUTIONS.map((item) => (
-              <li key={item.label}>
-                <a href={item.href}>{item.label}</a>
+            {footer.services.map((label) => (
+              <li key={label}>
+                <a href={`#${SECTION_IDS.trust}`}>{label}</a>
               </li>
             ))}
           </ul>
         </div>
 
         <div className="site-footer__col site-footer__contact">
-          <h3>Contacto en Colombia</h3>
+          <h3>{footer.contactTitle}</h3>
           <ul>
             <li>
               <span className="site-footer__icon" aria-hidden="true">
@@ -83,7 +71,7 @@ export default function Footer() {
                   <circle cx="12" cy="10" r="2.2" fill="currentColor" />
                 </svg>
               </span>
-              <span>Avenida calle 26 # 69 - 76 TORRE 3 OF 1501</span>
+              <span>{CONTACT.address}</span>
             </li>
             <li>
               <span className="site-footer__icon" aria-hidden="true">
@@ -159,13 +147,12 @@ export default function Footer() {
 
       <div className="site-footer__legal">
         <div className="site-footer__policies">
-          <Link to={DATA_POLICY_PATH}>Política de tratamiento de datos</Link>
+          <Link to={DATA_POLICY_PATH}>{footer.dataPolicy}</Link>
           <span aria-hidden="true">|</span>
-          <Link to={COOKIES_POLICY_PATH}>Política de cookies</Link>
+          <Link to={COOKIES_POLICY_PATH}>{footer.cookiesPolicy}</Link>
         </div>
         <p className="site-footer__copy">
-          Copyright © {new Date().getFullYear()} Easy Logistics. Todos los
-          derechos reservados.
+          Copyright © {new Date().getFullYear()} Easy Logistics. {footer.rights}
         </p>
       </div>
     </footer>

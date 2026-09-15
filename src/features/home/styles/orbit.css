@@ -271,7 +271,7 @@
 }
 
 .lp-brand-assembly__mark {
-  width: clamp(4.25rem, 11vw, 6.25rem);
+  width: clamp(5.1rem, 13.2vw, 7.5rem);
   height: auto;
   flex-shrink: 0;
   overflow: visible;
@@ -293,7 +293,7 @@
   margin: 0;
   font-family: var(--sans);
   font-weight: 800;
-  font-size: clamp(2.35rem, 6.5vw, 3.85rem);
+  font-size: clamp(2.82rem, 7.8vw, 4.62rem);
   letter-spacing: -0.045em;
   line-height: 0.92;
   text-transform: lowercase;
@@ -308,7 +308,7 @@
 .lp-brand-assembly__sub {
   margin-top: 0.4rem;
   font-family: var(--sans);
-  font-size: clamp(0.48rem, 1.1vw, 0.66rem);
+  font-size: clamp(0.58rem, 1.32vw, 0.79rem);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -1542,17 +1542,73 @@
   user-select: none;
 }
 
-/* 5 · Casos de éxito — pasarela de logos */
+/* 5 · Clientes — banda clara con tarjetas en relieve.
+   La profundidad sale de tres capas: la placa hundida (sombras inset),
+   el resplandor central y el disco elevado sobre ella. */
 .lp-success-stories {
-  padding-top: clamp(2.5rem, 5vw, 3.5rem);
-  padding-bottom: clamp(2.5rem, 5vw, 3.5rem);
-  background: var(--o-bg);
-  border-top: 1px solid var(--o-line);
-  border-bottom: 1px solid var(--o-line);
+  /* el claro es un tinte del azul de marca, no un blanco neutro */
+  --sq-tint-hi: color-mix(in srgb, var(--o-accent) 9%, rgba(0, 229, 255, 0.45));
+  --sq-tint-lo: color-mix(in srgb, var(--o-accent) 17%, rgba(0, 229, 255, 0.45));
+  --sq-plate: #ccd3d9;
+  --sq-ink: #ffffff;
+  --sq-ink-soft: rgba(255, 255, 255, 0.86);
+  --sq-accent: #ffffff;
+  --sq-size: clamp(9rem, 15vw, 11.5rem);
+  /* el azul oscuro de las secciones vecinas: .lp-method arriba y
+     .lp-trust abajo usan --o-bg-soft */
+  --sq-edge: #152028;
+
+  position: relative;
+  padding-top: clamp(5.5rem, 11vw, 8.5rem);
+  padding-bottom: clamp(5.5rem, 11vw, 8.5rem);
+  color: var(--sq-ink);
+  /* El difuminado de cada borde llega hasta el centro (50%), con paradas
+     intermedias: la curva suaviza el paso y deja legible el texto, que cae
+     en la mitad superior. */
+  background:
+    linear-gradient(
+      180deg,
+      var(--sq-edge) 0%,
+      rgba(21, 32, 40, 0.55) 16%,
+      rgba(21, 32, 40, 0.16) 33%,
+      rgba(21, 32, 40, 0) 50%
+    ),
+    linear-gradient(
+      0deg,
+      var(--sq-edge) 0%,
+      rgba(21, 32, 40, 0.55) 16%,
+      rgba(21, 32, 40, 0.16) 33%,
+      rgba(21, 32, 40, 0) 50%
+    ),
+    linear-gradient(180deg, var(--sq-tint-hi) 0%, var(--sq-tint-lo) 100%);
+  border: 0;
+}
+
+/* la sección siguiente no debe dibujar su filo: cortaría el degradado */
+.lp-success-stories + .lp-section {
+  border-top: 0;
+}
+
+.lp-success-stories .orbit-kicker {
+  color: var(--sq-accent);
+  font-size: clamp(0.88rem, 1.4vw, 1.05rem);
+  letter-spacing: 0.18em;
+  margin-bottom: 1rem;
+}
+
+.lp-success-stories .lp-section__head h2 {
+  color: var(--sq-ink);
+}
+
+.lp-success-stories .lp-section__lead {
+  color: var(--sq-ink-soft);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .lp-success-stories__head {
-  margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
+  margin: 0 auto clamp(2rem, 4.5vw, 3rem);
+  text-align: center;
 }
 
 .lp-success-stories__viewport {
@@ -1567,69 +1623,105 @@
   );
 }
 
-.lp-success-stories__fade {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: clamp(2rem, 8vw, 5rem);
-  z-index: 1;
-  pointer-events: none;
-}
-
-.lp-success-stories__fade--left {
-  left: 0;
-  background: linear-gradient(90deg, var(--o-bg) 0%, transparent 100%);
-}
-
-.lp-success-stories__fade--right {
-  right: 0;
-  background: linear-gradient(270deg, var(--o-bg) 0%, transparent 100%);
-}
-
 .lp-success-stories__track {
   display: flex;
   align-items: center;
-  gap: clamp(2.5rem, 6vw, 4.5rem);
+  gap: clamp(1rem, 2.4vw, 1.75rem);
   width: max-content;
-  padding: 0.75rem 0;
-  animation: lp-success-marquee 48s linear infinite;
+  /* holgura vertical: el disco proyecta sombra fuera de la tarjeta */
+  padding: clamp(1.75rem, 3.5vw, 2.5rem) 0;
+  animation: lp-success-marquee 56s linear infinite;
 }
 
 .lp-success-stories__viewport:hover .lp-success-stories__track {
   animation-play-state: paused;
 }
 
-.lp-success-stories__logo {
+/* —— Tarjeta de cliente ——
+   Sin placa ni marco: la tarjeta es solo la caja de maquetación.
+   Todo el relieve lo lleva el disco. */
+.lp-logo-card {
+  position: relative;
   flex: 0 0 auto;
+  width: var(--sq-size);
+  height: var(--sq-size);
+}
+
+/* Disco elevado. Va aparte del logo para que el desenfoque
+   que le da el canto blando no toque la marca. */
+.lp-logo-card__puck {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 80%;
+  height: 80%;
+  margin-left: -40%;
+  margin-top: -40%;
+  border-radius: 30%;
+  background: var(--sq-plate);
+  filter: blur(1px);
+  box-shadow:
+    0 15px 25px -4px rgba(0, 0, 0, 0.5),
+    inset 0 -3px 4px -1px rgba(0, 0, 0, 0.2),
+    inset 0 3px 4px -1px rgba(255, 255, 255, 0.2),
+    inset 0 0 5px 1px rgba(255, 255, 255, 0.8),
+    inset 0 20px 30px 0 rgba(255, 255, 255, 0.2);
+  transition: box-shadow 300ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.lp-logo-card__media {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: clamp(2.75rem, 5vw, 3.75rem);
-  min-width: clamp(5.5rem, 12vw, 8.5rem);
-  padding: 0 0.5rem;
+  padding: calc(var(--sq-size) * 0.2);
 }
 
-.lp-success-stories__logo img {
+.lp-logo-card__media img {
   display: block;
+  max-width: 100%;
   max-height: 100%;
-  max-width: clamp(5rem, 11vw, 7.5rem);
   width: auto;
   height: auto;
   object-fit: contain;
-  filter: grayscale(1) brightness(1.15) contrast(0.92);
-  opacity: 0.72;
+  /* en reposo la marca se lee como un grabado oscuro sobre la placa:
+     el oscurecido iguala logos claros y oscuros */
+  opacity: 0.78;
+  filter: grayscale(1) brightness(0.45) contrast(1.15)
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8));
   transition:
-    filter 0.4s ease,
-    opacity 0.4s ease,
-    transform 0.35s ease;
+    filter 400ms ease,
+    opacity 400ms ease,
+    transform 300ms cubic-bezier(0.23, 1, 0.32, 1);
   user-select: none;
 }
 
-.lp-success-stories__logo:hover img,
-.lp-success-stories__logo:focus-within img {
-  filter: grayscale(0) brightness(1) contrast(1);
+/* Al pasar por encima el disco se hunde y la marca recupera color */
+.lp-logo-card:hover .lp-logo-card__puck,
+.lp-logo-card:focus-within .lp-logo-card__puck {
+  box-shadow:
+    0 15px 25px -4px rgba(0, 0, 0, 0.4),
+    inset 0 -8px 30px 1px rgba(255, 255, 255, 0.9),
+    inset 0 8px 25px 0 rgba(0, 0, 0, 0.4),
+    inset 0 0 10px 1px rgba(255, 255, 255, 0.6);
+}
+
+.lp-logo-card:hover .lp-logo-card__media img,
+.lp-logo-card:focus-within .lp-logo-card__media img {
   opacity: 1;
-  transform: scale(1.06);
+  filter: grayscale(0) brightness(1) contrast(1)
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8));
+  transform: scale(0.96);
+}
+
+/* Marcas claras (tone: 'light'): nunca vuelven a su color real,
+   sobre la placa clara se perderían. */
+.lp-logo-card[data-tone='light'] .lp-logo-card__media img,
+.lp-logo-card[data-tone='light']:hover .lp-logo-card__media img,
+.lp-logo-card[data-tone='light']:focus-within .lp-logo-card__media img {
+  filter: grayscale(1) brightness(0.4) contrast(1.1)
+    drop-shadow(0 1px 0 rgba(255, 255, 255, 0.8));
 }
 
 @keyframes lp-success-marquee {
@@ -1641,13 +1733,19 @@
   }
 }
 
+@media (max-width: 720px) {
+  .lp-success-stories {
+    --sq-size: clamp(7.5rem, 34vw, 9rem);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .lp-success-stories__track {
     animation: none;
     flex-wrap: wrap;
     justify-content: center;
     width: 100%;
-    gap: clamp(1.5rem, 4vw, 2.5rem);
+    gap: clamp(1rem, 2.4vw, 1.75rem);
   }
 
   .lp-success-stories__viewport {
@@ -1655,13 +1753,18 @@
     overflow: visible;
   }
 
-  .lp-success-stories__fade {
+  /* sin marquesina el duplicado sobra */
+  .lp-logo-card[data-clone] {
     display: none;
   }
 
-  .lp-success-stories__logo img {
-    filter: grayscale(0);
-    opacity: 1;
+  .lp-logo-card__media img {
+    opacity: 0.9;
+  }
+
+  .lp-logo-card__puck,
+  .lp-logo-card__media img {
+    transition: none;
   }
 }
 
